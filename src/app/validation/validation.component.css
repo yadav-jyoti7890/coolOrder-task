@@ -1,0 +1,19 @@
+.is-invalid {
+  border: 1px solid red;
+}
+.is-valid {
+  border: 1px solid rgb(32, 105, 3);
+}
+.text-danger{
+    color: red;
+}
+/* app-validation.component.css */
+
+input{
+  padding: 0.6vw;
+  /* border: 1px solid #ccc !important ; */
+  /* border-radius: 5px; */
+  border: none;
+  outline: none;
+  width: 90%;
+}

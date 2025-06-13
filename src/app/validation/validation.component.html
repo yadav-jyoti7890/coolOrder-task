@@ -1,0 +1,19 @@
+<div class="form-group">
+  <input
+    *ngIf="type !== 'select'"
+    [type]="type"
+    [formControl]="control"
+    [placeholder]="placeholder"
+    class="form-control"
+    [appValidateBorder]="control"
+  style="border-bottom: 1px solid #ccc;" />
+  
+  <small class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</small>
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+{
+  "OrderType": [
+    { "id": 1, "name": "Commercial" },
+    { "id": 2, "name": "CourtesyMove" },
+    { "id": 3, "name": "ChargeasblePosition" },
+    { "id": 4, "name": "ProductDemo" }
+  ],
+
+  "supplier": [
+    { "id": 1, "name": "Lufthansa" },
+    { "id": 2, "name": "Envirotainer" },
+    {"id": 3, "name": "CSafe"}
+  ],
+
+  "location":[
+    { "id": 1, "name": "Lufthansa1", "supplierId": 1},
+    { "id": 2, "name": "Lufthansa2", "supplierId": 1},
+    { "id": 3, "name": "Envirotainer 1", "supplierId": 2},
+    { "id": 4, "name": "Envirotainer 2", "supplierId": 2},
+    {"id":  5, "name": "CSafe 1", "supplierId":3},
+    { "id": 6, "name": "CSafe 2", "supplierId":3}
+  ],
+
+
+  "group": [
+    {
+      "id": 1,
+      "name": "Group A",
+      "product-code": "#83749878",
+      "supplierId": 1
+    },
+    {
+      "id": 2,
+      "name": "Group B",
+      "product-code": "#38747933",
+      "supplierId": 1
+    },
+    {
+      "id": 3,
+      "name": "Group C",
+      "product-code": "#7823767832",
+      "supplierId": 2
+    },
+    {
+      "id": 4,
+      "name": "Group D",
+      "product-code": "#83749878",
+      "supplierId": 2
+    },
+    {
+      "id": 5,
+      "name": "Group E",
+      "product-code": "#38747933",
+      "supplierId": 3
+    },
+    {
+      "id": 6,
+      "name": "Group F",
+      "product-code": "#7823767832",
+      "supplierId": 3
+    }
+  ],
+
+   "temp":[
+    { "id": 1, "name": "temp 14 deg c", "groupId": 1},
+    { "id": 2, "name": "temp 13 deg c", "groupId": 1},
+    { "id": 3, "name": "temp 15 deg c", "groupId": 2},
+    { "id": 4, "name": "temp 9 deg c", "groupId": 2},
+    {"id":  5, "name": "temp 10 deg c", "groupId":3},
+    { "id": 6, "name": "temp 11 deg c", "groupId":3}
+  ],
+
+
+  "products": [
+    { "id": 1, "name": "product 1", "groupId": 1 },
+    { "id": 2, "name": "product 2", "groupId": 2 },
+    { "id": 3, "name": "product 3", "groupId": 2 },
+    { "id": 4, "name": "product 4", "groupId": 1 },
+    { "id": 5, "name": "product 5", "groupId": 2 },
+    { "id": 6, "name": "product 6", "groupId": 3 },
+    { "id": 7, "name": "product 7", "groupId": 4 },
+    { "id": 8, "name": "product 8", "groupId": 3 },
+    { "id": 9, "name": "product 9", "groupId": 4 },
+    { "id": 10, "name": "product 10", "groupId": 5 },
+    { "id": 11, "name": "product 11", "groupId": 6 },
+    { "id": 12, "name": "product 12", "groupId": 6 },
+    { "id": 13, "name": "product 13", "groupId": 3 },
+    { "id": 14, "name": "product 14", "groupId": 4 }
+  ]
+}
