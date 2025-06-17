@@ -15,8 +15,10 @@ import {
 } from '@angular/forms';
 import { flight, form, ProductItem } from '../form-interface';
 import { ValidateBorderDirective } from '../validator';
-import { ValidationComponent } from '../validation/validation.component';
+
 import { AddInputService } from '../services/add-input.service';
+import { matchULDQtyWithTotalQuantity } from '../add-input-directive';
+import { ValidateTotalQuantityDirective } from '../validate-total-quantity.directive';
 
 @Component({
   selector: 'app-coolorder',
@@ -25,8 +27,8 @@ import { AddInputService } from '../services/add-input.service';
     CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
-    ValidationComponent,
-    DragDropModule
+    DragDropModule,
+    ValidateTotalQuantityDirective
   ],
   templateUrl: './coolorder.component.html',
   styleUrl: './coolorder.component.css',
@@ -92,14 +94,21 @@ export class CoolorderComponent implements OnInit {
     this.form.controls.leaseStart?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
+
     this.form.controls.rentalDays?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
+
+    // this.form.controls.flight.valueChanges.subscribe(()=>{
+    //   console.log("flight value change")
+    // })
+
+
   }
 
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
-      product: new FormControl(null),
+      product: new FormControl(null, Validators.required),
       quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$')]),
     });
   }
@@ -116,15 +125,17 @@ export class CoolorderComponent implements OnInit {
     }
   }
 
-  private createFlight(data : any = {}): FormGroup {
-    return new FormGroup({
-      flightId: new FormControl(data.flightId || '',),
-      flightDate: new FormControl(data.flightDate || ''),
-      flightOrg: new FormControl(data.flightOrg || ''),
-      flightDes: new FormControl(data.flightDes || ''),
-      flightProductType: new FormControl(data.flightProductType || ''),
-      flightOldQty: new FormControl(data.flightOldQty || ''),
+  private createFlight(data: any = {}): FormGroup {
+    const flight = new FormGroup({
+      flightId: new FormControl(data.flightId || '', Validators.required),
+      flightDate: new FormControl(data.flightDate || '', Validators.required),
+      flightOrg: new FormControl(data.flightOrg || '', Validators.required),
+      flightDes: new FormControl(data.flightDes || '', Validators.required),
+      flightProductType: new FormControl(''),
+      flightOldQty: new FormControl(''),
     });
+
+    return flight;
   }
 
   public addFlight(action: 'addFlight' | 'removeFlight', index?: number) {
@@ -137,23 +148,27 @@ export class CoolorderComponent implements OnInit {
     }
   }
 
-  // 1. copy previous value and create new formArray 
+  // 1. copy previous value and create new formArray
   // 2. user click copy so send the exist index (like 1/2/3)
-  public copyValue(i:number){
-   // get index value then get her formGroup and
-   const currentGroup = this.form.controls.flight.at(i) as FormGroup
-   //.log(currentGroup)
-   // get control value and get copy value and put other variable 
-   const copiedValue = currentGroup.value;
-   //.log(copiedValue)
-   // copy value send and create new form group with copy value
-   const newFromArrayWithCopiedValue = this.createFlight(copiedValue)
-   // and then push from group inside form array
-   this.form.controls.flight.push(newFromArrayWithCopiedValue)
+  public copyValue(i: number) {
+    const currentGroup = this.form.controls.flight.at(i) as FormGroup;
+    const copiedValue = currentGroup.value;
+    const newFromGroupWithCopiedValue = this.createFlight(copiedValue);
+    // console.log(newFromGroupWithCopiedValue)
+    this.form.controls.flight.push(newFromGroupWithCopiedValue);
   }
 
-  public drop(event:any){
-    console.log(event, "drag and drop event")
+  public getAllFormGroup() {}
+
+  public drop(event: any) {
+    const controls = this.form.controls.flight as FormArray;
+    // get the specific form group from form array
+    const previousIndex = controls.at(event.previousIndex);
+    console.log(previousIndex);
+    const remove = controls.removeAt(event.previousIndex);
+    // console.log(remove, "remove")
+    controls.insert(event.currentIndex, previousIndex);
+    // console.log(controls.insert(event.currentIndex, previousIndex))
   }
 
   private calculateLeaseEndDate() {

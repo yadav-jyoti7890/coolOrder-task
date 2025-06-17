@@ -291,7 +291,7 @@ app-validation select {
     display: flex;
     flex-direction: column;
     gap: 20px; /* Space between rows */
-    background-color: red;
+    /* background-color: red; */
 }
 
 .flight-row {
@@ -394,6 +394,15 @@ app-validation select {
 .reorder-btn i {
     color: #6c757d; /* Gray for reorder icon */
 }
+
+.flight-row {
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  padding: 10px;
+  background-color: white;
+  cursor: move;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
