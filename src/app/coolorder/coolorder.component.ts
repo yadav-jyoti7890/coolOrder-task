@@ -412,8 +412,6 @@ export class CoolorderComponent implements OnInit {
     this.form.reset();
   }
 
-  public update() {}
-
   private getTemp() {
     ////.log(this.groupId);
     this.coolOrderService.getTemp(this.groupId).subscribe({
