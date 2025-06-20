@@ -1,90 +1,546 @@
 {
   "OrderType": [
-    { "id": 1, "name": "Commercial" },
-    { "id": 2, "name": "CourtesyMove" },
-    { "id": 3, "name": "ChargeasblePosition" },
-    { "id": 4, "name": "ProductDemo" }
+    {
+      "id": "1",
+      "name": "Commercial"
+    },
+    {
+      "id": "2",
+      "name": "CourtesyMove"
+    },
+    {
+      "id": "3",
+      "name": "ChargeasblePosition"
+    },
+    {
+      "id": "4",
+      "name": "ProductDemo"
+    }
   ],
-
   "supplier": [
-    { "id": 1, "name": "Lufthansa" },
-    { "id": 2, "name": "Envirotainer" },
-    {"id": 3, "name": "CSafe"}
+    {
+      "id": "1",
+      "name": "Lufthansa"
+    },
+    {
+      "id": "2",
+      "name": "Envirotainer"
+    },
+    {
+      "id": "3",
+      "name": "CSafe"
+    }
   ],
-
-  "location":[
-    { "id": 1, "name": "Lufthansa1", "supplierId": 1},
-    { "id": 2, "name": "Lufthansa2", "supplierId": 1},
-    { "id": 3, "name": "Envirotainer 1", "supplierId": 2},
-    { "id": 4, "name": "Envirotainer 2", "supplierId": 2},
-    {"id":  5, "name": "CSafe 1", "supplierId":3},
-    { "id": 6, "name": "CSafe 2", "supplierId":3}
+  "location": [
+    {
+      "id": "1",
+      "name": "Lufthansa1",
+      "supplierId": 1
+    },
+    {
+      "id": "2",
+      "name": "Lufthansa2",
+      "supplierId": 1
+    },
+    {
+      "id": "3",
+      "name": "Envirotainer 1",
+      "supplierId": 2
+    },
+    {
+      "id": "4",
+      "name": "Envirotainer 2",
+      "supplierId": 2
+    },
+    {
+      "id": "5",
+      "name": "CSafe 1",
+      "supplierId": 3
+    },
+    {
+      "id": "6",
+      "name": "CSafe 2",
+      "supplierId": 3
+    }
   ],
-
-
   "group": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Group A",
       "product-code": "#83749878",
       "supplierId": 1
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Group B",
       "product-code": "#38747933",
       "supplierId": 1
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Group C",
       "product-code": "#7823767832",
       "supplierId": 2
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Group D",
       "product-code": "#83749878",
       "supplierId": 2
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Group E",
       "product-code": "#38747933",
       "supplierId": 3
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Group F",
       "product-code": "#7823767832",
       "supplierId": 3
     }
   ],
-
-   "temp":[
-    { "id": 1, "name": "temp 14 deg c", "groupId": 1},
-    { "id": 2, "name": "temp 13 deg c", "groupId": 1},
-    { "id": 3, "name": "temp 15 deg c", "groupId": 2},
-    { "id": 4, "name": "temp 9 deg c", "groupId": 2},
-    {"id":  5, "name": "temp 10 deg c", "groupId":3},
-    { "id": 6, "name": "temp 11 deg c", "groupId":3}
+  "temp": [
+    {
+      "id": "1",
+      "name": "temp 14 deg c",
+      "groupId": 1
+    },
+    {
+      "id": "2",
+      "name": "temp 13 deg c",
+      "groupId": 1
+    },
+    {
+      "id": "3",
+      "name": "temp 15 deg c",
+      "groupId": 2
+    },
+    {
+      "id": "4",
+      "name": "temp 9 deg c",
+      "groupId": 2
+    },
+    {
+      "id": "5",
+      "name": "temp 10 deg c",
+      "groupId": 3
+    },
+    {
+      "id": "6",
+      "name": "temp 11 deg c",
+      "groupId": 3
+    }
   ],
-
-
   "products": [
-    { "id": 1, "name": "product 1", "groupId": 1 },
-    { "id": 2, "name": "product 2", "groupId": 2 },
-    { "id": 3, "name": "product 3", "groupId": 2 },
-    { "id": 4, "name": "product 4", "groupId": 1 },
-    { "id": 5, "name": "product 5", "groupId": 2 },
-    { "id": 6, "name": "product 6", "groupId": 3 },
-    { "id": 7, "name": "product 7", "groupId": 4 },
-    { "id": 8, "name": "product 8", "groupId": 3 },
-    { "id": 9, "name": "product 9", "groupId": 4 },
-    { "id": 10, "name": "product 10", "groupId": 5 },
-    { "id": 11, "name": "product 11", "groupId": 6 },
-    { "id": 12, "name": "product 12", "groupId": 6 },
-    { "id": 13, "name": "product 13", "groupId": 3 },
-    { "id": 14, "name": "product 14", "groupId": 4 }
+    {
+      "id": "1",
+      "name": "product 1",
+      "groupId": 1
+    },
+    {
+      "id": "2",
+      "name": "product 2",
+      "groupId": 2
+    },
+    {
+      "id": "3",
+      "name": "product 3",
+      "groupId": 2
+    },
+    {
+      "id": "4",
+      "name": "product 4",
+      "groupId": 1
+    },
+    {
+      "id": "5",
+      "name": "product 5",
+      "groupId": 2
+    },
+    {
+      "id": "6",
+      "name": "product 6",
+      "groupId": 3
+    },
+    {
+      "id": "7",
+      "name": "product 7",
+      "groupId": 4
+    },
+    {
+      "id": "8",
+      "name": "product 8",
+      "groupId": 3
+    },
+    {
+      "id": "9",
+      "name": "product 9",
+      "groupId": 4
+    },
+    {
+      "id": "10",
+      "name": "product 10",
+      "groupId": 5
+    },
+    {
+      "id": "11",
+      "name": "product 11",
+      "groupId": 6
+    },
+    {
+      "id": "12",
+      "name": "product 12",
+      "groupId": 6
+    },
+    {
+      "id": "13",
+      "name": "product 13",
+      "groupId": 3
+    },
+    {
+      "id": "14",
+      "name": "product 14",
+      "groupId": 4
+    }
+  ],
+  "order": [
+    {
+      "id": "1",
+      "orderType": "Commercial",
+      "org": "JBP",
+      "des": "MUM",
+      "pickUpPort": "MUM",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "2025-06-17",
+      "leaseEnd": "2025-06-27",
+      "supplierId": "1",
+      "commodity": "MUMBAI",
+      "precondition": false,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "1",
+      "locationId": "1",
+      "productCode": "879",
+      "productItems": [
+        {
+          "product": "1",
+          "quantity2": "100"
+        },
+        {
+          "product": "4",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-16",
+          "flightOrg": "JBP",
+          "flightDes": "DELHI",
+          "flightProductType": "1",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-16",
+          "flightOrg": "DELHI",
+          "flightDes": "GUJ",
+          "flightProductType": "1",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1002",
+          "flightDate": "2025-06-29",
+          "flightOrg": "GUJ",
+          "flightDes": "MUM",
+          "flightProductType": "4",
+          "flightOldQty": "100"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "delhi",
+      "pickUpPort": "10",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "2025-06-17",
+      "leaseEnd": "2025-06-27",
+      "supplierId": "1",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "2",
+      "locationId": "1",
+      "productCode": "100",
+      "productItems": [
+        {
+          "product": "2",
+          "quantity2": "100"
+        },
+        {
+          "product": "3",
+          "quantity2": "50"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-24",
+          "flightOrg": "mumbai",
+          "flightDes": "jabalpur",
+          "flightProductType": "2",
+          "flightOldQty": "100"
+        },
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-24",
+          "flightOrg": "jabalpur",
+          "flightDes": "delhi",
+          "flightProductType": "3",
+          "flightOldQty": "50"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "jabalpur",
+      "pickUpPort": "10",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "0009-09-08",
+      "leaseEnd": "0009-09-18",
+      "supplierId": "1",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "2",
+      "locationId": "1",
+      "productCode": "8878",
+      "productItems": [
+        {
+          "product": "2",
+          "quantity2": "100"
+        },
+        {
+          "product": "3",
+          "quantity2": "50"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-29",
+          "flightOrg": "mumbai",
+          "flightDes": "delhi",
+          "flightProductType": "2",
+          "flightOldQty": "100"
+        },
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-29",
+          "flightOrg": "delhi",
+          "flightDes": "jabalpur",
+          "flightProductType": "3",
+          "flightOldQty": "50"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "jabalpur",
+      "pickUpPort": "10",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "0008-08-09",
+      "leaseEnd": "0008-08-19",
+      "supplierId": "1",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "2",
+      "locationId": "1",
+      "productCode": "8787",
+      "productItems": [
+        {
+          "product": "2",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-16",
+          "flightOrg": "mumbai",
+          "flightDes": "delhi",
+          "flightProductType": "2",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-16",
+          "flightOrg": "delhi",
+          "flightDes": "jabalpur",
+          "flightProductType": "2",
+          "flightOldQty": "50"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "jabalpur",
+      "pickUpPort": "10",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "2025-06-10",
+      "leaseEnd": "2025-06-20",
+      "supplierId": "3",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "6",
+      "locationId": "6",
+      "productCode": "789",
+      "productItems": [
+        {
+          "product": "11",
+          "quantity2": "200"
+        },
+        {
+          "product": "12",
+          "quantity2": "300"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "panjab",
+          "flightProductType": "11",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1002",
+          "flightDate": "2025-06-10",
+          "flightOrg": "panjab",
+          "flightDes": "delhi",
+          "flightProductType": "11",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1003",
+          "flightDate": "2025-06-10",
+          "flightOrg": "delhi",
+          "flightDes": "gujrat",
+          "flightProductType": "11",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1004",
+          "flightDate": "2025-06-10",
+          "flightOrg": "gujrat",
+          "flightDes": "banaras",
+          "flightProductType": "11",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "1005",
+          "flightDate": "2025-06-10",
+          "flightOrg": "banaras",
+          "flightDes": "goa",
+          "flightProductType": "12",
+          "flightOldQty": "200"
+        },
+        {
+          "flightId": "1006",
+          "flightDate": "2025-06-10",
+          "flightOrg": "goa",
+          "flightDes": "jabalpur",
+          "flightProductType": "12",
+          "flightOldQty": "100"
+        }
+      ]
+    },
+    {
+      "data": {
+        "commodity": "DELHI"
+      },
+      "id": "6"
+    },
+    {
+      "id": "7",
+      "orderType": "Commercial",
+      "org": "delhi",
+      "des": "goa",
+      "pickUpPort": "10",
+      "rentalDays": "101",
+      "returnPort": "19",
+      "leaseStart": "2025-06-17",
+      "leaseEnd": "2025-09-26",
+      "supplierId": "3",
+      "commodity": "MUMUBAI",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "6",
+      "locationId": "CSafe 1",
+      "productCode": "89789",
+      "productItems": [
+        {
+          "product": "12",
+          "quantity2": "10"
+        },
+        {
+          "product": "11",
+          "quantity2": "12"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-25",
+          "flightOrg": "delhi",
+          "flightDes": "jabalpur",
+          "flightProductType": "12",
+          "flightOldQty": "10"
+        },
+        {
+          "flightId": "1003",
+          "flightDate": "2025-06-17",
+          "flightOrg": "jabalpur",
+          "flightDes": "goa",
+          "flightProductType": "11",
+          "flightOldQty": "12"
+        }
+      ]
+    }
   ]
 }

@@ -1,10 +1,9 @@
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 
-
 @Directive({
-  selector: '[appValidateTotalQuantity]'
+  selector: '[appValidateTotalQuantity]',
 })
 export class ValidateTotalQuantityDirective implements OnInit {
   @Input('appValidateTotalQuantity') config!: {
@@ -13,29 +12,25 @@ export class ValidateTotalQuantityDirective implements OnInit {
     currentGroup: FormGroup;
   };
 
-
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
-
-
-    console.log(this.config.currentGroup)
-    // console.log(this.el, "el"); // return object 
+    // console.log(this.config.currentGroup)
+    // console.log(this.el, "el"); // return object
     // console.log(this.el.nativeElement, "element"); // return actual element where direct is applied
 
-   this.config.productArray.valueChanges
-  .pipe(debounceTime(500)) // Wait 500ms after typing stops
-  .subscribe(() => {
-    this.validateAndStyle();
-  });
+    this.config.productArray.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        this.validateAndStyle();
+      });
 
-// For flightArray
-this.config.flightArray.valueChanges
-  .pipe(debounceTime(500)) 
-  .subscribe(() => {
-    this.validateAndStyle();
-  });
-
+    // For flightArray
+    this.config.flightArray.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        this.validateAndStyle();
+      });
   }
 
   validateAndStyle() {
@@ -43,15 +38,16 @@ this.config.flightArray.valueChanges
     const flightArray = this.config.flightArray;
     const currentGroup = this.config.currentGroup;
 
-    console.log(productArray, "productarray")
-    console.log(flightArray, "flightarray")
-    console.log(currentGroup, "currentfligtgroup")
-
+    // console.log(productArray, "productarray")
+    // console.log(flightArray, "flightarray")
+    // console.log(currentGroup, "currentfligtgroup")
     // console.log(productArray, "product array")
 
     const currentProduct = currentGroup.controls['flightProductType']?.value;
+
     const currentQty = +currentGroup.controls['flightOldQty']?.value || 0;
-      // console.log(currentProduct,"current product")
+
+    // console.log(currentProduct,"current product")
     // console.log(currentQty)
     // console.log(currentProduct)
     // console.log(Array.isArray(productArray.controls), "productArray")
@@ -60,7 +56,7 @@ this.config.flightArray.valueChanges
       return productGroup.get('product')?.value === currentProduct;
     });
 
-    console.log(matchedProduct, "match")
+    // console.log(matchedProduct, "match")
 
     const allowedQty = +matchedProduct?.get('quantity2')?.value || 0;
 
@@ -69,9 +65,7 @@ this.config.flightArray.valueChanges
     let usedQty = 0;
 
     flightArray.controls.forEach((flightGroup) => {
-      if (
-        flightGroup.get('flightProductType')?.value === currentProduct
-      ) {
+      if (flightGroup.get('flightProductType')?.value === currentProduct) {
         usedQty += +flightGroup.get('flightOldQty')?.value || 0;
       }
     });
@@ -83,14 +77,16 @@ this.config.flightArray.valueChanges
       return;
     }
 
+    if (usedQty !== allowedQty) {
+      currentGroup.get('flightOldQty')?.setErrors({ qtyMismatch: true });
+    } else {
+      currentGroup.get('flightOldQty')?.setErrors(null);
+    }
+
     if (usedQty === allowedQty) {
       inputElement.style.borderBottom = '2px solid green';
     } else {
       inputElement.style.borderBottom = '2px solid red';
     }
-
   }
-
 }
-
-

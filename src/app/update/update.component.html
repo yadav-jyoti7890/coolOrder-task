@@ -9,7 +9,7 @@
           </option>
         </select>
 
-        <select formControlName="supplierId" (change)="getSupplierId($event)">
+        <select formControlName="supplierId" >
           <option selected disabled>choose supplier</option>
           <option *ngFor="let s of supplier" [value]="s.id">
             {{ s.name }}
@@ -18,9 +18,8 @@
       </div>
 
       <div class="action-buttons">
-        <button type="button" (click)="reset()">⟳</button>
-        <button type="submit" class="orange" (click)="submit()" [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
-        <button type="button" class="orange" [routerLink]="['/update', 7]" >Update</button>
+      
+        <button type="button" class="orange" (click)="update()">Update</button>
 
 
       </div>
@@ -63,7 +62,7 @@
             <label>Select Location</label>
             <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
               <option selected disabled>choose Location</option>
-              <option *ngFor="let location of location" [value]="location.id">
+              <option *ngFor="let location of location" [value]="location.name">
                 {{ location.name }}
               </option>
             </select>
@@ -135,7 +134,7 @@
         <div class="form-group">
           <div class="form-control">
             <label>Group</label>
-            <select (change)="getProductByGroupId($event)" formControlName="groupId"
+            <select  formControlName="groupId"
               [appValidateBorder]="form.controls.groupId">
               <option disabled selected>select supplier first*</option>
               <option *ngFor="let g of group" [value]="g.id">
@@ -270,9 +269,4 @@
 
 
   </form>
-</div>
-
-<div class="submitted-data-section">
-  <h3>Submitted Form Data:</h3>
-  <pre>{{ formData | json }}</pre>
 </div>
