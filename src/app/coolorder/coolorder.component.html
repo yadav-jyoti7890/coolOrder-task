@@ -22,7 +22,6 @@
         <button type="submit" class="orange" (click)="submit()" [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
         <button type="button" class="orange" [routerLink]="['/update', 7]" >Update</button>
 
-
       </div>
     </div>
 
@@ -166,10 +165,10 @@
               <div class="" style="display: flex;">
                 <div class="form-control">
                   <label>Product*</label>
-                  <select formControlName="product" class="input" 
+                  <select formControlName="product" class="input" (change)="checkValue($event, i)"
                     [appValidateBorder]="item.controls.product!">
                     <option value="" disabled>Select Product</option>
-                    <option *ngFor="let product of products" [value]="product.id"
+                    <option *ngFor="let product of products" [value]="product.id" [disabled]="disabled(product.id, i)"
                       >
                       {{ product.name }}
                     </option>

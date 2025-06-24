@@ -65,6 +65,7 @@ export class UpdateComponent {
   public flightDisable: boolean = false;
   public unique = new Set<string>();
   public updateId!: number;
+  public initialFormValues!: any;
 
   ngOnInit(): void {
     forkJoin([
@@ -76,10 +77,10 @@ export class UpdateComponent {
       this.fetchData();
     });
 
+    this.getGroupBySupplierId(this.selectedValue);
+    this.getLocation();
     // this.fetchData()
-
     this.updateId = Number(this.route.snapshot.paramMap.get('id'));
-
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
       org: new FormControl(null, [Validators.required]),
@@ -116,7 +117,7 @@ export class UpdateComponent {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
-    // console.log(this.form.controls, 'controls');
+    this.initialFormValues = this.form.value;
 
     this.form.controls.leaseStart?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
@@ -143,8 +144,6 @@ export class UpdateComponent {
       .subscribe(() => {
         this.matchValues();
       });
-
-     
   }
 
   private createProductItemGroup(): FormGroup {
@@ -164,17 +163,17 @@ export class UpdateComponent {
       flightDes: flightGroup.controls.flightDes.value,
     }));
 
-    // console.log(flights)
+    // //.log(flights)
     const isCompleteRoute = this.isRouteValid(org, des, flights);
     this.flightDisable = isCompleteRoute;
 
     this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
 
     this.flightOrgInputs.forEach((orgInputRef, index) => {
-      //  console.log( orgInputRef, index)  // console.log(this.flightDesInputs)
+      //  //.log( orgInputRef, index)  // //.log(this.flightDesInputs)
       const desInputRef = this.flightDesInputs.get(index);
       const flight = flightArray[index];
-      console.log(flight);
+      // //.log(flight);
 
       const color = isCompleteRoute ? 'green' : 'red';
 
@@ -248,7 +247,7 @@ export class UpdateComponent {
       if (product) {
         this.unique.delete(product);
       }
-      console.log(this.unique);
+      //.log(this.unique);
       arr.removeAt(index);
     }
   }
@@ -317,12 +316,11 @@ export class UpdateComponent {
 
   private fetchData() {
     this.coolOrderService.fetchData(this.updateId).subscribe({
-
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
 
-        console.log(supplierId, groupId);
+        //.log(supplierId, groupId);
 
         forkJoin({
           group: this.coolOrderService.getGroup(supplierId),
@@ -359,8 +357,10 @@ export class UpdateComponent {
           });
 
           const productArray = this.form.controls.productItems as FormArray;
-          productArray.clear()
-          const items = Array.isArray(response.productItems) ? response.productItems : [];
+          productArray.clear();
+          const items = Array.isArray(response.productItems)
+            ? response.productItems
+            : [];
 
           items.forEach((item: any) => {
             productArray.push(
@@ -373,10 +373,9 @@ export class UpdateComponent {
             );
           });
 
-
           // ✅ handle flight safely
           const flightArray = this.form.controls.flight as FormArray;
-          flightArray.clear()
+          flightArray.clear();
           const flightItems = Array.isArray(response.flight)
             ? response.flight
             : [];
@@ -385,10 +384,7 @@ export class UpdateComponent {
             flightArray.push(
               new FormGroup({
                 flightId: new FormControl(f.flightId, Validators.required),
-                flightDate: new FormControl(
-                  f.flightDate,
-                  Validators.required
-                ),
+                flightDate: new FormControl(f.flightDate, Validators.required),
                 flightOrg: new FormControl(f.flightOrg, Validators.required),
                 flightDes: new FormControl(f.flightDes, Validators.required),
                 flightProductType: new FormControl(
@@ -402,66 +398,158 @@ export class UpdateComponent {
               })
             );
           });
-
         });
       },
     });
   }
 
   public update() {
+
     console.log('click update');
+    const updateData: any = {}; // STORE DIRTY DATA!
 
-    // create object where will be store data
-    const updateData: any = {};
-
-    console.log(
-      this.form.controls,
-      'object',
-      Object.keys(this.form.controls),
-      'convert into array'
-    );
-
+    //CONVERT OBJECT INTO ARRAY !
     Object.keys(this.form.controls).forEach((key: string) => {
       const control = this.form.get(key);
+      //.log(key)
+      // //.log(control, "dirty controls")
 
       if (control instanceof FormControl) {
         if (control.dirty) {
           updateData[key] = control.value;
-          console.log((updateData[key] = control.value));
         }
       } else if (control instanceof FormArray) {
         const dirtyArray: any[] = [];
+        // //.log(control)
+        control.controls.forEach((row: AbstractControl, index: number) => {
+          // //.log(row, index)
 
-        control.controls.forEach((group: AbstractControl, index: number) => {
-          if (group instanceof FormGroup) {
+          if (row instanceof FormGroup) {
             const dirtyGroup: any = {};
-
-            Object.keys(group.controls).forEach((fieldName) => {
-              const field = group.get(fieldName);
+            //.log(row, "row")
+            Object.keys(row.controls).forEach((fieldName) => {
+              // //.log(fieldName)
+              const field = row.controls[fieldName];
+              // //.log(row.controls[fieldName], "fieldname")
               if (field?.dirty) {
                 dirtyGroup[fieldName] = field.value;
               }
             });
 
-            if (Object.keys(dirtyArray).length > 0) {
+            //.log(dirtyGroup, dirtyGroup.length)
+
+            if (Object.keys(dirtyGroup).length > 0) {
               dirtyArray[index] = dirtyGroup;
             }
           }
         });
+
+        if (dirtyArray.length > 0) {
+          updateData[key] = dirtyArray;
+        }
       }
     });
 
     console.log('Dirty updated data:', updateData);
+  }
 
-    // if (Object.keys(updateData).length > 0) {
-    //   this.coolOrderService.updateOrder(updateData).subscribe({
-    //     next: (response) => {
-    //       alert('update successfully');
-    //     },
-    //     error: (error) => {
-    //       alert('update successfully');
-    //     },
-    //   });
-    // }
+  // public getSupplierId(event: Event): void {
+  //   const selectElement = event.target as HTMLSelectElement;
+  //   this.selectedValue = selectElement.value;
+  //   const productArray = this.form.controls.productItems as FormArray;
+  //   this.form.controls.productCode.reset();
+  //    const productItems  = this.form.controls.productItems as FormArray
+  //    Object.keys(this.form.controls).forEach(item => {
+  //     //.log(item)
+  //   })
+
+  //   this.getGroupBySupplierId(this.selectedValue);
+  //   this.getLocation();
+  // }
+
+  public getSupplierId(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedValue = selectElement.value;
+
+    const productArray = this.form.controls.productItems as FormArray;
+    while (productArray.length !== 0) {
+      productArray.removeAt(0);
+    }
+
+    this.form.controls.productCode.reset();
+    this.form.controls.groupId.reset();
+    this.form.controls.locationId.reset();
+
+    const flightArray = this.form.controls.flight as FormArray;
+
+    flightArray.controls.forEach((control) => {
+      const group = control as FormGroup;
+      group.controls['flightOldQty'].reset();
+    });
+
+    this.group = [];
+    this.products = [];
+    this.options = [];
+
+    productArray.push(this.createProductItemGroup());
+    this.getGroupBySupplierId(this.selectedValue);
+    this.getLocation();
+  }
+
+  private getLocation() {
+    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+      next: (response) => {
+        this.location = response;
+      },
+    });
+  }
+
+  public getGroupBySupplierId(supplierId: any) {
+    this.coolOrderService.getGroup(supplierId).subscribe({
+      next: (response) => {
+        this.group = response;
+        //.log(response.id, this.group)
+        this.groupId = response.id;
+      },
+    });
+  }
+
+  public getProductByGroupId(event: any) {
+    this.groupId = event.target.value as HTMLSelectElement;
+    this.getProductsById();
+    this.getTemp();
+  }
+
+  public getProductsById() {
+    this.coolOrderService.getProduct(this.groupId).subscribe({
+      next: (response) => {
+        this.products = response;
+        this.options = this.products.map((item) => item.name);
+      },
+    });
+  }
+
+  private getTemp() {
+    this.coolOrderService.getTemp(this.groupId).subscribe({
+      next: (response) => {
+        this.temp = response;
+      },
+    });
+  }
+
+  public disabled(productName: string, currentIndex: number): boolean {
+   
+    for (let i = 0; i < this.form.controls.productItems.length; i++) {
+     
+      if (i !== currentIndex) {
+      
+        const Row = this.form.controls.productItems.at(i);
+        const selectedValue = Row.controls.product.value;
+        if (selectedValue === productName) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

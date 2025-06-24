@@ -53,7 +53,7 @@ export class CoolorderComponent implements OnInit {
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
     private el: ElementRef
-  ) {}
+  ) { }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -342,7 +342,7 @@ export class CoolorderComponent implements OnInit {
     });
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
-    
+
   }
 
   public getGroupBySupplierId(supplierId: any) {
@@ -382,7 +382,6 @@ export class CoolorderComponent implements OnInit {
     this.coolOrderService.getLocation(this.selectedValue).subscribe({
       next: (response) => {
         this.location = response;
-        ////.log(this.location, 'location get by supplier id');
       },
     });
   }
@@ -422,7 +421,38 @@ export class CoolorderComponent implements OnInit {
     });
   }
 
- 
+  public checkValue(event: any, i: number) {
+    const selectedValue = event.target.value
+    //  console.log(selectedValue, i)
+    const Row = this.form.controls.productItems.at(i)
+    const PreviousValue = (Row.controls.product.value)
+    //  console.log(Row, PreviousValue)
+    if (PreviousValue && this.unique.has(PreviousValue)) {
+      this.unique.delete(PreviousValue)
+      // console.log(deletevalue)
+    }
+
+    this.unique.add(selectedValue)
+    // console.log(this.unique)  
+  }
+
+  public disabled(productName: string, currentIndex: number): boolean {
+    console.log(productName, "product name")
+   
+    for (let i = 0; i < this.form.controls.productItems.length; i++) {
+    
+      if (i !== currentIndex) {
+        const Row = this.form.controls.productItems.at(i)
+        const selectedValue = (Row.controls.product.value)
+        if (selectedValue === productName) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+
 
 
 }

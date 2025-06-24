@@ -77,7 +77,9 @@ export class ValidateTotalQuantityDirective implements OnInit {
       return;
     }
 
-    if (usedQty !== allowedQty) {
+    
+
+    if (usedQty !== allowedQty ) {
       currentGroup.get('flightOldQty')?.setErrors({ qtyMismatch: true });
     } else {
       currentGroup.get('flightOldQty')?.setErrors(null);

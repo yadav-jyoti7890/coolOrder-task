@@ -489,7 +489,7 @@
     },
     {
       "data": {
-        "commodity": "DELHI"
+        "commodity": "delhi"
       },
       "id": "6"
     },
@@ -539,6 +539,55 @@
           "flightDes": "goa",
           "flightProductType": "11",
           "flightOldQty": "12"
+        }
+      ]
+    },
+    {
+      "id": "3a78",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "jabalpur",
+      "pickUpPort": "jabalpur",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "2025-06-18",
+      "leaseEnd": "2025-06-28",
+      "supplierId": "1",
+      "commodity": "jabalpur",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "1",
+      "locationId": "1",
+      "productCode": "7877",
+      "productItems": [
+        {
+          "product": "1",
+          "quantity2": "78"
+        },
+        {
+          "product": "4",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "1001",
+          "flightDate": "2025-06-22",
+          "flightOrg": "mumbai",
+          "flightDes": "panjab",
+          "flightProductType": "1",
+          "flightOldQty": "78"
+        },
+        {
+          "flightId": "1002",
+          "flightDate": "2025-06-15",
+          "flightOrg": "panjab",
+          "flightDes": "jabalpur",
+          "flightProductType": "4",
+          "flightOldQty": "100"
         }
       ]
     }
