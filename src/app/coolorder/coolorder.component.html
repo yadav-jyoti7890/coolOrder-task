@@ -20,8 +20,7 @@
       <div class="action-buttons">
         <button type="button" (click)="reset()">⟳</button>
         <button type="submit" class="orange" (click)="submit()" [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
-        <button type="button" class="orange" [routerLink]="['/update', 7]" >Update</button>
-
+        <button type="button" class="orange" [routerLink]="['/update', 8]" >Update</button>
       </div>
     </div>
 
@@ -177,7 +176,7 @@
 
                 <div class="form-control">
                   <label>Quantity*</label>
-                  <input type="text" formControlName="quantity2" class="input">
+                  <input type="text" formControlName="quantity2" class="input"  [appValidateBorder]="item.controls.quantity2!">
                 </div>
 
               </div>
@@ -244,7 +243,9 @@
                    productArray: form.controls.productItems,
                    flightArray: form.controls.flight,
                    currentGroup: flightDetail
-                   }">
+                   }"
+                   [appValidateBorder]="flightDetail.controls.flightOldQty!"
+                   >
               </div>
 
               <div class="row-actions">
@@ -256,7 +257,7 @@
                   <i class="ri-file-copy-line"></i>
                 </button>
                 <button class="action-btn reorder-btn" aria-label="Reorder Row">
-                  <i class="ri-menu-line"></i>
+                  <i class="ri-menu-line" cdkDragHandle></i>
                 </button>
               </div>
             </div>

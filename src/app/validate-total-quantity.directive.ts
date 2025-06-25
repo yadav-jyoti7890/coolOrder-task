@@ -12,7 +12,7 @@ export class ValidateTotalQuantityDirective implements OnInit {
     currentGroup: FormGroup;
   };
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef) { }
 
   ngOnInit(): void {
     // console.log(this.config.currentGroup)
@@ -56,6 +56,8 @@ export class ValidateTotalQuantityDirective implements OnInit {
       return productGroup.get('product')?.value === currentProduct;
     });
 
+  
+
     // console.log(matchedProduct, "match")
 
     const allowedQty = +matchedProduct?.get('quantity2')?.value || 0;
@@ -72,14 +74,19 @@ export class ValidateTotalQuantityDirective implements OnInit {
 
     const inputElement = this.el.nativeElement as HTMLElement;
 
+      if (!matchedProduct) {
+      // Product type in flight does not exist in product section!
+       inputElement.style.borderBottom = '2px solid red';
+      currentGroup.get('flightProductType')?.setErrors({ invalidProduct: true });
+      return;
+    }
+
     if (!currentProduct || allowedQty === 0 || currentQty === 0) {
       inputElement.style.borderBottom = '1px solid lightgray';
       return;
     }
 
-    
-
-    if (usedQty !== allowedQty ) {
+    if (usedQty !== allowedQty) {
       currentGroup.get('flightOldQty')?.setErrors({ qtyMismatch: true });
     } else {
       currentGroup.get('flightOldQty')?.setErrors(null);

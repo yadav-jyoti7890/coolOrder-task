@@ -590,6 +590,51 @@
           "flightOldQty": "100"
         }
       ]
+    },
+    {
+      "id": "8",
+      "orderType": "Commercial",
+      "org": "jabalpur",
+      "des": "mumbai",
+      "pickUpPort": "goa",
+      "rentalDays": "10",
+      "returnPort": "10",
+      "leaseStart": "2025-06-17",
+      "leaseEnd": "2025-06-27",
+      "supplierId": "1",
+      "commodity": "jabalpur",
+      "precondition": false,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "1",
+      "locationId": "1",
+      "productCode": "2098",
+      "productItems": [
+        {
+          "product": "1",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH100",
+          "flightDate": "2025-06-23",
+          "flightOrg": "jabalpur",
+          "flightDes": "delhi",
+          "flightProductType": "1",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "LH100",
+          "flightDate": "2025-06-23",
+          "flightOrg": "delhi",
+          "flightDes": "mumbai",
+          "flightProductType": "1",
+          "flightOldQty": "50"
+        }
+      ]
     }
   ]
 }

@@ -44,6 +44,7 @@ export class UpdateComponent {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
+
   constructor(
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
@@ -66,6 +67,7 @@ export class UpdateComponent {
   public unique = new Set<string>();
   public updateId!: number;
   public initialFormValues!: any;
+  public showErrors: boolean = false;
 
   ngOnInit(): void {
     forkJoin([
@@ -149,11 +151,18 @@ export class UpdateComponent {
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$')]),
+      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required]),
     });
   }
 
   private matchValues() {
+
+    const flight = this.form.controls.flight as FormArray
+
+    // flight.controls.forEach((group, index) => {
+    //   console.log('Index:', index, 'Flight Group:', group.value);
+    // });
+
     const org = this.form.controls.org.value;
     const des = this.form.controls.des.value;
     const flightArray = this.form.controls.flight.controls;
@@ -163,17 +172,15 @@ export class UpdateComponent {
       flightDes: flightGroup.controls.flightDes.value,
     }));
 
-    // //.log(flights)
+
     const isCompleteRoute = this.isRouteValid(org, des, flights);
-    this.flightDisable = isCompleteRoute;
 
     this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
 
     this.flightOrgInputs.forEach((orgInputRef, index) => {
-      //  //.log( orgInputRef, index)  // //.log(this.flightDesInputs)
+
       const desInputRef = this.flightDesInputs.get(index);
       const flight = flightArray[index];
-      // //.log(flight);
 
       const color = isCompleteRoute ? 'green' : 'red';
 
@@ -285,13 +292,10 @@ export class UpdateComponent {
 
   public drop(event: any) {
     const controls = this.form.controls.flight as FormArray;
-    // get the specific form group from form array
     const previousIndex = controls.at(event.previousIndex);
-    //.log(previousIndex);
     const remove = controls.removeAt(event.previousIndex);
-    // //.log(remove, "remove")
     controls.insert(event.currentIndex, previousIndex);
-    // //.log(controls.insert(event.currentIndex, previousIndex))
+    this.matchValues()
   }
 
   private calculateLeaseEndDate() {
@@ -373,7 +377,6 @@ export class UpdateComponent {
             );
           });
 
-          // ✅ handle flight safely
           const flightArray = this.form.controls.flight as FormArray;
           flightArray.clear();
           const flightItems = Array.isArray(response.flight)
@@ -404,68 +407,79 @@ export class UpdateComponent {
   }
 
   public update() {
+    if (this.form.valid) {
+      console.log("form is invalid")
+      console.log('click update');
+      const updateData: any = {}; // STORE DIRTY DATA!
 
-    console.log('click update');
-    const updateData: any = {}; // STORE DIRTY DATA!
 
-    //CONVERT OBJECT INTO ARRAY !
-    Object.keys(this.form.controls).forEach((key: string) => {
-      const control = this.form.get(key);
-      //.log(key)
-      // //.log(control, "dirty controls")
+      //CONVERT OBJECT INTO ARRAY !
+      Object.keys(this.form.controls).forEach((key: string) => {
+        const control = this.form.get(key);
 
-      if (control instanceof FormControl) {
-        if (control.dirty) {
-          updateData[key] = control.value;
-        }
-      } else if (control instanceof FormArray) {
-        const dirtyArray: any[] = [];
-        // //.log(control)
-        control.controls.forEach((row: AbstractControl, index: number) => {
-          // //.log(row, index)
-
-          if (row instanceof FormGroup) {
-            const dirtyGroup: any = {};
-            //.log(row, "row")
-            Object.keys(row.controls).forEach((fieldName) => {
-              // //.log(fieldName)
-              const field = row.controls[fieldName];
-              // //.log(row.controls[fieldName], "fieldname")
-              if (field?.dirty) {
-                dirtyGroup[fieldName] = field.value;
-              }
-            });
-
-            //.log(dirtyGroup, dirtyGroup.length)
-
-            if (Object.keys(dirtyGroup).length > 0) {
-              dirtyArray[index] = dirtyGroup;
-            }
+        if (control instanceof FormControl) {
+          if (control.dirty) {
+            updateData[key] = control.value;
           }
-        });
-
-        if (dirtyArray.length > 0) {
-          updateData[key] = dirtyArray;
         }
-      }
-    });
+        else if (control instanceof FormArray) {
+          const dirtyArray: any[] = [];
+          control.controls.forEach((row: AbstractControl, index: number) => {
+            if (row instanceof FormGroup) {
+              const dirtyGroup: any = {};
 
-    console.log('Dirty updated data:', updateData);
+              Object.keys(row.controls).forEach((fieldName) => {
+                const field = row.controls[fieldName];
+
+                if (field?.dirty) {
+                  dirtyGroup[fieldName] = field.value;
+                }
+              });
+
+              if (Object.keys(dirtyGroup).length > 0) {
+                dirtyArray[index] = dirtyGroup;
+              }
+            }
+          });
+
+          if (dirtyArray.length > 0) {
+            updateData[key] = dirtyArray;
+          }
+        }
+      });
+      console.log('Dirty updated data:', updateData);
+    }
+    else {
+      this.form.markAllAsTouched();
+
+      Object.keys(this.form.controls).forEach((key: string) => {
+        const control = this.form.get(key);
+
+        if (control instanceof FormControl) {
+          control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+        }
+
+        else if (control instanceof FormArray) {
+          control.controls.forEach((row: AbstractControl) => {
+            if (row instanceof FormGroup) {
+              Object.keys(row.controls).forEach((fieldName) => {
+                const field = row.get(fieldName) as FormControl;
+                if (field) {
+                  field.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+                }
+              });
+            }
+          });
+        }
+      });
+
+      alert("All required fields are highlighted!");
+    }
+
   }
 
-  // public getSupplierId(event: Event): void {
-  //   const selectElement = event.target as HTMLSelectElement;
-  //   this.selectedValue = selectElement.value;
-  //   const productArray = this.form.controls.productItems as FormArray;
-  //   this.form.controls.productCode.reset();
-  //    const productItems  = this.form.controls.productItems as FormArray
-  //    Object.keys(this.form.controls).forEach(item => {
-  //     //.log(item)
-  //   })
 
-  //   this.getGroupBySupplierId(this.selectedValue);
-  //   this.getLocation();
-  // }
+
 
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -538,11 +552,8 @@ export class UpdateComponent {
   }
 
   public disabled(productName: string, currentIndex: number): boolean {
-   
     for (let i = 0; i < this.form.controls.productItems.length; i++) {
-     
       if (i !== currentIndex) {
-      
         const Row = this.form.controls.productItems.at(i);
         const selectedValue = Row.controls.product.value;
         if (selectedValue === productName) {

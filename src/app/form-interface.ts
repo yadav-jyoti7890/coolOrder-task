@@ -2,7 +2,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface ProductItem {
   product: FormControl<string | null>;
-  quantity: FormControl<string | null>;
+  quantity2: FormControl<string | null>;
 }
 
 export interface flight {

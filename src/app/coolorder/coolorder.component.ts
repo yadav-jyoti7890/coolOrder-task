@@ -159,7 +159,7 @@ export class CoolorderComponent implements OnInit {
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$')]),
+      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required])
     });
   }
 
@@ -337,6 +337,7 @@ export class CoolorderComponent implements OnInit {
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedValue = selectElement.value;
+    console.log(this.selectedValue, "supplier id")
     this.form.reset({
       supplierId: this.selectedValue,
     });
@@ -344,6 +345,7 @@ export class CoolorderComponent implements OnInit {
     this.getLocation();
 
   }
+
 
   public getGroupBySupplierId(supplierId: any) {
     this.coolOrderService.getGroup(supplierId).subscribe({
