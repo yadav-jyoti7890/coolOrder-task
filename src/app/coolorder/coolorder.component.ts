@@ -252,6 +252,14 @@ export class CoolorderComponent implements OnInit {
 
     const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
 
+    if (!valid) {
+      this.form.setErrors({ routeInvalid: true });
+      // alert("route is incomplete or wrong")
+    } else {
+      this.form.setErrors(null);
+    }
+
+
     this.flightOrgInputs.forEach((orgRef, index) => {
       const desRef = this.flightDesInputs.get(index);
       const org = formArray.at(index).get('flightOrg')?.value;
@@ -446,6 +454,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   public submit() {
+    this.matchValues()
     this.formData = this.form.value;
     if (this.form.valid) {
       const formData = this.form.value;
@@ -455,7 +464,12 @@ export class CoolorderComponent implements OnInit {
           console.log(' Data saved:', res);
           alert('Form submitted successfully!');
           this.form.reset();
+          this.form.controls.productItems.clear()
+          this.form.controls.productItems.push(this.createProductItemGroup())
+          this.form.controls.flight.clear()
+          this.form.controls.flight.push(this.createFlight())
         },
+
         error: (err) => {
           console.error('❌ Error saving:', err);
           alert('Error saving data.');
@@ -490,7 +504,7 @@ export class CoolorderComponent implements OnInit {
         }
       });
 
-      alert('All required fields are highlighted!');
+
     }
   }
 

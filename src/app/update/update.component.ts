@@ -159,7 +159,7 @@ export class UpdateComponent {
 
   private matchValues() {
     const formArray = this.form.controls.flight as FormArray;
-    
+
     const flights = formArray.controls.map((ctrl: any) => ({
       flightOrg: ctrl.controls.flightOrg.value,
       flightDes: ctrl.controls.flightDes.value
@@ -170,6 +170,13 @@ export class UpdateComponent {
 
     const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
     console.log(valid, visitedOrgs)
+
+    if (!valid) {
+      this.form.setErrors({ routeInvalid: true });
+      // alert("route is incomplete or wrong")
+    } else {
+      this.form.setErrors(null);
+    }
 
     this.flightOrgInputs.forEach((orgRef, index) => {
       const desRef = this.flightDesInputs.get(index);
@@ -188,7 +195,6 @@ export class UpdateComponent {
   }
 
   private isRouteValid(flights: any[], mainOrigin: string | null | any, mainDest: string | null): { valid: boolean, visitedOrgs: Set<string> } {
-    // if (flights.length === 0) return { valid: false, visitedOrgs: new Set() };
 
     const originMap = new Map<string, any>();
     const destSet = new Set<string>();
@@ -198,12 +204,12 @@ export class UpdateComponent {
       destSet.add(flight.flightDes);
     });
 
-      console.log(originMap, destSet)
+    console.log(originMap, destSet)
 
 
     // Force start from mainOrigin
     let currentFlight = originMap.get(mainOrigin);
-    // console.log(currentFlight, !currentFlight)
+    
     if (!currentFlight) return { valid: false, visitedOrgs: new Set() };
 
     const visited = new Set<string>();
@@ -395,6 +401,7 @@ export class UpdateComponent {
   }
 
   public update() {
+    this.matchValues()
     if (this.form.valid) {
       console.log('form is invalid', this.form.valid);
       console.log('click update');
@@ -434,14 +441,14 @@ export class UpdateComponent {
         }
       });
       console.log('Dirty updated data:', updateData);
-    } 
+    }
     else {
       this.form.markAllAsTouched();
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
         if (control instanceof FormControl) {
-          console.log(`Field '${key}' touched:`, control.touched);
+          // console.log(`Field '${key}' touched:`, control.touched);
           if (control.invalid && control.touched) {
             control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
             // console.log(`Field '${key}' is invalid and should show error`);
@@ -452,7 +459,7 @@ export class UpdateComponent {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
-                  console.log(`Field [${key}][${index}].${fieldName} touched:`, field.touched);
+                // console.log(`Field [${key}][${index}].${fieldName} touched:`, field.touched);
                 if (field && field.invalid && field.touched) {
                   field.updateValueAndValidity({
                     onlySelf: true,
@@ -465,7 +472,7 @@ export class UpdateComponent {
         }
       });
 
-      alert('All required fields are highlighted!');
+    
     }
   }
 
