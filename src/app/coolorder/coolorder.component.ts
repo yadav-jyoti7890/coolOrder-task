@@ -13,6 +13,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -163,84 +164,143 @@ export class CoolorderComponent implements OnInit {
     });
   }
 
-  private matchValues() {
-    const org = this.form.controls.org.value;
-    const des = this.form.controls.des.value;
-    const flightArray = this.form.controls.flight.controls;
+  // private matchValues() {
+  //   // console.log("flight change")
+  //   const flight = this.form.controls.flight as FormArray;
 
-    const flights = flightArray.map((flightGroup) => ({
-      flightOrg: flightGroup.controls.flightOrg.value,
-      flightDes: flightGroup.controls.flightDes.value,
+  //   const org = this.form.controls.org.value;
+  //   const des = this.form.controls.des.value;
+  //   const flightArray = this.form.controls.flight.controls;
+
+  //   const flights = flightArray.map((flightGroup) => ({
+  //     flightOrg: flightGroup.controls.flightOrg.value,
+  //     flightDes: flightGroup.controls.flightDes.value,
+  //   }));
+
+  //   const isCompleteRoute = this.isRouteValid(org, des, flights);
+
+  //   this.flightOrgInputs.forEach((orgInputRef, index) => {
+  //     const desInputRef = this.flightDesInputs.get(index);
+  //     const flight = flightArray[index];
+
+  //     const color = isCompleteRoute ? 'green' : 'red';
+
+  //     if (orgInputRef?.nativeElement) {
+  //       orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+  //     }
+
+  //     if (desInputRef?.nativeElement) {
+  //       desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+  //     }
+  //   });
+  // }
+
+  // private isRouteValid(
+  //   origin: string | null,
+  //   destination: string | null,
+  //   flights: any[]
+  // ): boolean {
+  //   if (!origin || !destination || flights.length === 0) return false;
+
+  //   const firstFlight = flights[0];
+  //   const firstOrigin = firstFlight.flightOrg;
+  //   const firstDes = firstFlight.flightDes;
+
+  //   for (let i = 1; i < flights.length; i++) {
+  //     const prevFlight = flights[i - 1];
+  //     const currentFlight = flights[i];
+
+  //     if (
+  //       currentFlight.flightOrg === firstOrigin
+  //     ) {
+  //       return false;
+  //     }
+
+  //     if (prevFlight.flightDes !== currentFlight.flightOrg) {
+  //       return false;
+  //     }
+  //   }
+
+  //   const visited = new Set<string>();
+  //   const stack: string[] = [origin];
+
+  //   while (stack.length) {
+  //     const current = stack.pop()!;
+  //     if (current === destination) return true;
+  //     if (visited.has(current)) continue;
+
+  //     visited.add(current);
+  //     for (const flight of flights) {
+  //       if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
+  //         stack.push(flight.flightDes);
+  //       }
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
+  private matchValues() {
+    const formArray = this.form.controls.flight as FormArray;
+    const flights = formArray.controls.map((ctrl: any) => ({
+      flightOrg: ctrl.controls.flightOrg.value,
+      flightDes: ctrl.controls.flightDes.value
     }));
 
-    // console.log(flights)
-    const isCompleteRoute = this.isRouteValid(org, des, flights);
-    this.flightDisable = isCompleteRoute;
+    const mainOrigin = this.form.controls.org.value;
+    const mainDest = this.form.controls.des.value;
 
-    this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
+    const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
 
-    this.flightOrgInputs.forEach((orgInputRef, index) => {
-      //  console.log( orgInputRef, index)  // console.log(this.flightDesInputs)
-      const desInputRef = this.flightDesInputs.get(index);
-      const flight = flightArray[index];
-      console.log(flight);
+    this.flightOrgInputs.forEach((orgRef, index) => {
+      const desRef = this.flightDesInputs.get(index);
+      const org = formArray.at(index).get('flightOrg')?.value;
+      const des = formArray.at(index).get('flightDes')?.value;
 
-      const color = isCompleteRoute ? 'green' : 'red';
+      const color = valid && visitedOrgs.has(org) ? 'green' : 'red';
 
-      if (orgInputRef?.nativeElement) {
-        orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      if (orgRef?.nativeElement) {
+        orgRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
-
-      if (desInputRef?.nativeElement) {
-        desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      if (desRef?.nativeElement) {
+        desRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
     });
   }
 
-  private isRouteValid(
-    origin: string | null,
-    destination: string | null,
-    flights: any[]
-  ): boolean {
-    if (!origin || !destination || flights.length === 0) return false;
+  private isRouteValid(flights: any[], mainOrigin: string | null | any, mainDest: string | null): { valid: boolean, visitedOrgs: Set<string> } {
+    if (flights.length === 0) return { valid: false, visitedOrgs: new Set() };
 
-    const firstFlight = flights[0];
-    const firstOrigin = firstFlight.flightOrg;
-    const firstDes = firstFlight.flightDes;
+    const originMap = new Map<string, any>();
+    const destSet = new Set<string>();
 
-    for (let i = 1; i < flights.length; i++) {
-      const prevFlight = flights[i - 1];
-      const currentFlight = flights[i];
+    flights.forEach(flight => {
+      originMap.set(flight.flightOrg, flight);
+      destSet.add(flight.flightDes);
+    });
 
-      if (
-        currentFlight.flightOrg === firstOrigin ||
-        currentFlight.flightDes === firstOrigin
-      ) {
-        return false;
-      }
-
-      if (prevFlight.flightDes !== currentFlight.flightOrg) {
-        return false;
-      }
-    }
+    // Force start from mainOrigin
+    let currentFlight = originMap.get(mainOrigin);
+    if (!currentFlight) return { valid: false, visitedOrgs: new Set() };
 
     const visited = new Set<string>();
-    const stack: string[] = [origin];
 
-    while (stack.length) {
-      const current = stack.pop()!;
-      if (current === destination) return true;
-      if (visited.has(current)) continue;
-
-      visited.add(current);
-      for (const flight of flights) {
-        if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
-          stack.push(flight.flightDes);
-        }
+    while (currentFlight) {
+      if (visited.has(currentFlight.flightOrg)) {
+        return { valid: false, visitedOrgs: visited }; // loop
       }
+
+      visited.add(currentFlight.flightOrg);
+
+      if (currentFlight.flightDes === mainDest) {
+        visited.add(currentFlight.flightDes);
+        return { valid: visited.size === flights.length + 1, visitedOrgs: visited };
+      }
+
+      currentFlight = originMap.get(currentFlight.flightDes);
     }
 
-    return false;
+    return { valid: false, visitedOrgs: visited };
   }
 
   public updateProductItems(action: 'add' | 'remove', index?: number) {
@@ -296,14 +356,12 @@ export class CoolorderComponent implements OnInit {
   }
 
   public drop(event: any) {
+    console.log(event, 'event');
     const controls = this.form.controls.flight as FormArray;
-    // get the specific form group from form array
     const previousIndex = controls.at(event.previousIndex);
-    //.log(previousIndex);
     const remove = controls.removeAt(event.previousIndex);
-    // //.log(remove, "remove")
     controls.insert(event.currentIndex, previousIndex);
-    // //.log(controls.insert(event.currentIndex, previousIndex))
+    this.matchValues();
   }
 
   private calculateLeaseEndDate() {
@@ -345,7 +403,6 @@ export class CoolorderComponent implements OnInit {
     this.getLocation();
 
   }
-
 
   public getGroupBySupplierId(supplierId: any) {
     this.coolOrderService.getGroup(supplierId).subscribe({
@@ -404,8 +461,36 @@ export class CoolorderComponent implements OnInit {
           alert('Error saving data.');
         },
       });
-    } else {
-      alert('Please fill the form correctly.');
+    }
+    else {
+      this.form.markAllAsTouched();
+      Object.keys(this.form.controls).forEach((key: string) => {
+        const control = this.form.get(key);
+
+        if (control instanceof FormControl) {
+          console.log(`Field '${key}' touched:`, control.touched);
+          if (control.invalid && control.touched) {
+            control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+          }
+        }
+        else if (control instanceof FormArray) {
+          control.controls.forEach((row: AbstractControl, index: number) => {
+            if (row instanceof FormGroup) {
+              Object.keys(row.controls).forEach((fieldName) => {
+                const field = row.get(fieldName) as FormControl;
+                if (field && field.invalid && field.touched) {
+                  field.updateValueAndValidity({
+                    onlySelf: true,
+                    emitEvent: true,
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+
+      alert('All required fields are highlighted!');
     }
   }
 
@@ -439,10 +524,10 @@ export class CoolorderComponent implements OnInit {
   }
 
   public disabled(productName: string, currentIndex: number): boolean {
-    console.log(productName, "product name")
-   
+    // console.log(productName, "product name")
+
     for (let i = 0; i < this.form.controls.productItems.length; i++) {
-    
+
       if (i !== currentIndex) {
         const Row = this.form.controls.productItems.at(i)
         const selectedValue = (Row.controls.product.value)

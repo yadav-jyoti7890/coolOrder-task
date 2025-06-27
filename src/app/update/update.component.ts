@@ -44,7 +44,6 @@ export class UpdateComponent {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
-
   constructor(
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
@@ -151,94 +150,82 @@ export class UpdateComponent {
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required]),
+      quantity2: new FormControl(null, [
+        Validators.pattern('^[0-9]+$'),
+        Validators.required,
+      ]),
     });
   }
 
   private matchValues() {
-
-    const flight = this.form.controls.flight as FormArray
-
-    // flight.controls.forEach((group, index) => {
-    //   console.log('Index:', index, 'Flight Group:', group.value);
-    // });
-
-    const org = this.form.controls.org.value;
-    const des = this.form.controls.des.value;
-    const flightArray = this.form.controls.flight.controls;
-
-    const flights = flightArray.map((flightGroup) => ({
-      flightOrg: flightGroup.controls.flightOrg.value,
-      flightDes: flightGroup.controls.flightDes.value,
+    const formArray = this.form.controls.flight as FormArray;
+    
+    const flights = formArray.controls.map((ctrl: any) => ({
+      flightOrg: ctrl.controls.flightOrg.value,
+      flightDes: ctrl.controls.flightDes.value
     }));
 
+    const mainOrigin = this.form.controls.org.value;
+    const mainDest = this.form.controls.des.value;
 
-    const isCompleteRoute = this.isRouteValid(org, des, flights);
+    const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
+    console.log(valid, visitedOrgs)
 
-    this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
+    this.flightOrgInputs.forEach((orgRef, index) => {
+      const desRef = this.flightDesInputs.get(index);
+      const org = formArray.at(index).get('flightOrg')?.value;
+      const des = formArray.at(index).get('flightDes')?.value;
 
-    this.flightOrgInputs.forEach((orgInputRef, index) => {
+      const color = valid && visitedOrgs.has(org) ? 'green' : 'red';
 
-      const desInputRef = this.flightDesInputs.get(index);
-      const flight = flightArray[index];
-
-      const color = isCompleteRoute ? 'green' : 'red';
-
-      if (orgInputRef?.nativeElement) {
-        orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      if (orgRef?.nativeElement) {
+        orgRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
-
-      if (desInputRef?.nativeElement) {
-        desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      if (desRef?.nativeElement) {
+        desRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
     });
   }
 
-  private isRouteValid(
-    origin: string | null,
-    destination: string | null,
-    flights: any[]
-  ): boolean {
-    if (!origin || !destination || flights.length === 0) return false;
+  private isRouteValid(flights: any[], mainOrigin: string | null | any, mainDest: string | null): { valid: boolean, visitedOrgs: Set<string> } {
+    // if (flights.length === 0) return { valid: false, visitedOrgs: new Set() };
 
-    const firstFlight = flights[0];
-    const firstOrigin = firstFlight.flightOrg;
-    const firstDes = firstFlight.flightDes;
+    const originMap = new Map<string, any>();
+    const destSet = new Set<string>();
 
-    for (let i = 1; i < flights.length; i++) {
-      const prevFlight = flights[i - 1];
-      const currentFlight = flights[i];
+    flights.forEach(flight => {
+      originMap.set(flight.flightOrg, flight);
+      destSet.add(flight.flightDes);
+    });
 
-      if (
-        currentFlight.flightOrg === firstOrigin ||
-        currentFlight.flightDes === firstOrigin
-      ) {
-        return false;
-      }
+      console.log(originMap, destSet)
 
-      if (prevFlight.flightDes !== currentFlight.flightOrg) {
-        return false;
-      }
-    }
+
+    // Force start from mainOrigin
+    let currentFlight = originMap.get(mainOrigin);
+    // console.log(currentFlight, !currentFlight)
+    if (!currentFlight) return { valid: false, visitedOrgs: new Set() };
 
     const visited = new Set<string>();
-    const stack: string[] = [origin];
 
-    while (stack.length) {
-      const current = stack.pop()!;
-      if (current === destination) return true;
-      if (visited.has(current)) continue;
-
-      visited.add(current);
-      for (const flight of flights) {
-        if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
-          stack.push(flight.flightDes);
-        }
+    while (currentFlight) {
+      if (visited.has(currentFlight.flightOrg)) {
+        return { valid: false, visitedOrgs: visited };
       }
+
+      visited.add(currentFlight.flightOrg);
+
+      if (currentFlight.flightDes === mainDest) {
+        visited.add(currentFlight.flightDes);
+        return { valid: visited.size === flights.length + 1, visitedOrgs: visited };
+      }
+
+      currentFlight = originMap.get(currentFlight.flightDes);
     }
 
-    return false;
+    return { valid: false, visitedOrgs: visited };
   }
+
 
   public updateProductItems(action: 'add' | 'remove', index?: number) {
     // //.log(action, index);
@@ -291,11 +278,12 @@ export class UpdateComponent {
   }
 
   public drop(event: any) {
+    console.log(event, 'event');
     const controls = this.form.controls.flight as FormArray;
     const previousIndex = controls.at(event.previousIndex);
     const remove = controls.removeAt(event.previousIndex);
     controls.insert(event.currentIndex, previousIndex);
-    this.matchValues()
+    this.matchValues();
   }
 
   private calculateLeaseEndDate() {
@@ -408,10 +396,9 @@ export class UpdateComponent {
 
   public update() {
     if (this.form.valid) {
-      console.log("form is invalid")
+      console.log('form is invalid', this.form.valid);
       console.log('click update');
       const updateData: any = {}; // STORE DIRTY DATA!
-
 
       //CONVERT OBJECT INTO ARRAY !
       Object.keys(this.form.controls).forEach((key: string) => {
@@ -421,8 +408,7 @@ export class UpdateComponent {
           if (control.dirty) {
             updateData[key] = control.value;
           }
-        }
-        else if (control instanceof FormArray) {
+        } else if (control instanceof FormArray) {
           const dirtyArray: any[] = [];
           control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
@@ -448,24 +434,30 @@ export class UpdateComponent {
         }
       });
       console.log('Dirty updated data:', updateData);
-    }
+    } 
     else {
       this.form.markAllAsTouched();
-
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
         if (control instanceof FormControl) {
-          control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+          console.log(`Field '${key}' touched:`, control.touched);
+          if (control.invalid && control.touched) {
+            control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+            // console.log(`Field '${key}' is invalid and should show error`);
+          }
         }
-
         else if (control instanceof FormArray) {
-          control.controls.forEach((row: AbstractControl) => {
+          control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
-                if (field) {
-                  field.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+                  console.log(`Field [${key}][${index}].${fieldName} touched:`, field.touched);
+                if (field && field.invalid && field.touched) {
+                  field.updateValueAndValidity({
+                    onlySelf: true,
+                    emitEvent: true,
+                  });
                 }
               });
             }
@@ -473,13 +465,9 @@ export class UpdateComponent {
         }
       });
 
-      alert("All required fields are highlighted!");
+      alert('All required fields are highlighted!');
     }
-
   }
-
-
-
 
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;

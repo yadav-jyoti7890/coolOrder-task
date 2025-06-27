@@ -19,8 +19,9 @@
 
       <div class="action-buttons">
         <button type="button" (click)="reset()">⟳</button>
-        <button type="submit" class="orange" (click)="submit()" [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
-        <button type="button" class="orange" [routerLink]="['/update', 8]" >Update</button>
+        <button type="submit" class="orange" (click)="submit()"
+          [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
+        <button type="button" class="orange" [routerLink]="['/update', 10]">Update</button>
       </div>
     </div>
 
@@ -167,8 +168,7 @@
                   <select formControlName="product" class="input" (change)="checkValue($event, i)"
                     [appValidateBorder]="item.controls.product!">
                     <option value="" disabled>Select Product</option>
-                    <option *ngFor="let product of products" [value]="product.id" [disabled]="disabled(product.id, i)"
-                      >
+                    <option *ngFor="let product of products" [value]="product.id" [disabled]="disabled(product.id, i)">
                       {{ product.name }}
                     </option>
                   </select>
@@ -176,7 +176,8 @@
 
                 <div class="form-control">
                   <label>Quantity*</label>
-                  <input type="text" formControlName="quantity2" class="input"  [appValidateBorder]="item.controls.quantity2!">
+                  <input type="text" formControlName="quantity2" class="input"
+                    [appValidateBorder]="item.controls.quantity2!">
                 </div>
 
               </div>
@@ -198,75 +199,72 @@
         </button>
       </div>
 
-      <div class="flight-rows-container" formArrayName="flight">
-        <div>
-          <div cdkDropList [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
-            <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index"
-              [formGroupName]="i" cdkDrag>
+      <div class="flight-rows-container" formArrayName="flight" cdkDropList
+        [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
 
-              <div class="form-group">
-                <label for="flight-id-1">Flight Id *</label>
-                <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
-                  [appValidateBorder]="flightDetail.controls.flightId">
-              </div>
-              <div class="form-group date-picker">
-                <label for="flight-date-1">Flight Date (LT) *</label>
-                <input type="date" id="flight-date-1" placeholder="DD Mon YYYY" formControlName="flightDate"
-                  [appValidateBorder]="flightDetail.controls.flightDate">
-                <i class="fas fa-calendar-alt"></i>
-              </div>
-              <div class="form-group">
-                <label for="origin-1">Origin *</label>
-                <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs>
-              </div>
-              <div class="form-group">
-                <label for="destination-1">Destination *</label>
-                <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
-                  #flightDesInputs>
-              </div>
+        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index" style="padding: 10px;"
+          [formGroupName]="i" cdkDrag cdkDragLockAxis="y" [cdkDragBoundary]="'.flight-rows-container'">
 
-              <div class="form-group">
-                <label for="product-type-1">Product Type *</label>
-                <select formControlName="flightProductType" class="input"
-                  [appValidateBorder]="flightDetail.controls.flightProductType">
-                  <option value="" disabled>Select Product</option>
-                  <option *ngFor="let product of products" [value]="product.id">
-                    {{ product.name }}
-                  </option>
-                </select>
-              </div>
+          <div class="form-group">
+            <label for="flight-id-1">Flight Id *</label>
+            <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
+              [appValidateBorder]="flightDetail.controls.flightId">
+          </div>
+          <div class="form-group date-picker">
+            <label for="flight-date-1">Flight Date (LT) *</label>
+            <input type="date" id="flight-date-1" placeholder="DD Mon YYYY" formControlName="flightDate"
+              [appValidateBorder]="flightDetail.controls.flightDate">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <div class="form-group">
+            <label for="origin-1">Origin *</label>
+            <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs [appValidateBorder]="flightDetail.controls.flightOrg">
+          </div>
+          <div class="form-group">
+            <label for="destination-1">Destination *</label>
+            <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
+              #flightDesInputs [appValidateBorder]="flightDetail.controls.flightDes">
+          </div>
 
-              <div class="form-group">
-                <label for="uld-qty-1">ULD Qty *</label>
-                <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
-                  [appValidateTotalQuantity]="{
+          <div class="form-group">
+            <label for="product-type-1">Product Type *</label>
+            <select formControlName="flightProductType" class="input"
+              [appValidateBorder]="flightDetail.controls.flightProductType">
+              <option value="" disabled>Select Product</option>
+              <option *ngFor="let product of products" [value]="product.id">
+                {{ product.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="uld-qty-1">ULD Qty *</label>
+            <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
+              [appValidateTotalQuantity]="{
                    productArray: form.controls.productItems,
                    flightArray: form.controls.flight,
                    currentGroup: flightDetail
-                   }"
-                   [appValidateBorder]="flightDetail.controls.flightOldQty!"
-                   >
-              </div>
+                   }" [appValidateBorder]="flightDetail.controls.flightOldQty!">
+          </div>
 
-              <div class="row-actions">
-                <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)" aria-label="Remove Row">
-                  <i class="ri-subtract-line"></i>
-                </button>
-                <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)"
-                  [disabled]="flightDisable">
-                  <i class="ri-file-copy-line"></i>
-                </button>
-                <button class="action-btn reorder-btn" aria-label="Reorder Row">
-                  <i class="ri-menu-line" cdkDragHandle></i>
-                </button>
-              </div>
-            </div>
+          <div class="row-actions">
+            <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)" >
+              <i class="ri-subtract-line"></i>
+            </button>
+            <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)">
+              <i class="ri-file-copy-line"></i>
+            </button>
+            <button class="action-btn reorder-btn" id="move">
+              <i class="ri-menu-line" cdkDragHandle></i>
+            </button>
           </div>
         </div>
 
+
+
       </div>
     </div>
-  
+
 
 
   </form>
