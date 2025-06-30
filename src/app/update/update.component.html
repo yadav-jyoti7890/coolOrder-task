@@ -18,7 +18,7 @@
       </div>
 
       <div class="action-buttons">
-        <button type="button" class="orange" (click)="update()" [disabled]="form.invalid">
+        <button type="button" class="orange" (click)="update()" [disabled]="!form.valid || !RouteValid">
           Update
         </button>
       </div>
@@ -60,7 +60,7 @@
             <label>Select Location</label>
             <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
               <option selected disabled>choose Location</option>
-              <option *ngFor="let location of location" [value]="location.name">
+              <option *ngFor="let location of location" [value]="location.id">
                 {{ location.name }}
               </option>
             </select>
@@ -219,13 +219,13 @@
           <div class="form-group">
             <label for="origin-1">Origin *</label>
             <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs
-            [appValidateBorder]="flightDetail.controls.flightOrg"
+           
              />
           </div>
           <div class="form-group">
             <label for="destination-1">Destination *</label>
             <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes" #flightDesInputs
-            [appValidateBorder]="flightDetail.controls.flightDes"
+           
               />
           </div>
 

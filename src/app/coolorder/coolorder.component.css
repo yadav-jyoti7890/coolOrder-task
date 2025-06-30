@@ -1,5 +1,6 @@
 .container {
   max-width: 1400px;
+  min-height: 100vh;
   margin: 0 auto;
   background-color: #e0787867;
   border-radius: 8px;
@@ -289,8 +290,6 @@ app-validation select {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  max-height: 500px;  /* Add scroll if needed */
-  /* overflow-y: auto; */
 }
 
 .flight-row {

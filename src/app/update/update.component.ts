@@ -44,6 +44,7 @@ export class UpdateComponent {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
+
   constructor(
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
@@ -66,7 +67,7 @@ export class UpdateComponent {
   public unique = new Set<string>();
   public updateId!: number;
   public initialFormValues!: any;
-  public showErrors: boolean = false;
+  public RouteValid: boolean = false
 
   ngOnInit(): void {
     forkJoin([
@@ -150,94 +151,103 @@ export class UpdateComponent {
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [
-        Validators.pattern('^[0-9]+$'),
-        Validators.required,
-      ]),
+      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required]),
     });
   }
 
   private matchValues() {
-    const formArray = this.form.controls.flight as FormArray;
+    console.log("matchvalue call")
+    const flight = this.form.controls.flight as FormArray;
 
-    const flights = formArray.controls.map((ctrl: any) => ({
-      flightOrg: ctrl.controls.flightOrg.value,
-      flightDes: ctrl.controls.flightDes.value
+    const org = this.form.controls.org.value;
+    const des = this.form.controls.des.value;
+    const flightArray = this.form.controls.flight.controls;
+
+    const flights = flightArray.map((flightGroup) => ({
+      flightOrg: flightGroup.controls.flightOrg.value,
+      flightDes: flightGroup.controls.flightDes.value,
     }));
 
-    const mainOrigin = this.form.controls.org.value;
-    const mainDest = this.form.controls.des.value;
+    const isCompleteRoute = this.isRouteValid(org, des, flights);
 
-    const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
-    console.log(valid, visitedOrgs)
 
-    if (!valid) {
-      this.form.setErrors({ routeInvalid: true });
-      // alert("route is incomplete or wrong")
-    } else {
-      this.form.setErrors(null);
-    }
+    this.form.setErrors(isCompleteRoute.valid ? null : { routeInvalid: true });
 
-    this.flightOrgInputs.forEach((orgRef, index) => {
-      const desRef = this.flightDesInputs.get(index);
-      const org = formArray.at(index).get('flightOrg')?.value;
-      const des = formArray.at(index).get('flightDes')?.value;
+    this.RouteValid = isCompleteRoute.valid;
 
-      const color = valid && visitedOrgs.has(org) ? 'green' : 'red';
+    this.flightOrgInputs.forEach((orgInputRef, index) => {
+      const desInputRef = this.flightDesInputs.get(index);
+      const color = isCompleteRoute.index.includes(index) ? 'red' : 'green';
 
-      if (orgRef?.nativeElement) {
-        orgRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      if (orgInputRef?.nativeElement) {
+        orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
-      if (desRef?.nativeElement) {
-        desRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+
+      if (desInputRef?.nativeElement) {
+        desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
     });
+
   }
 
-  private isRouteValid(flights: any[], mainOrigin: string | null | any, mainDest: string | null): { valid: boolean, visitedOrgs: Set<string> } {
+  private isRouteValid(
+    origin: string | null,
+    destination: string | null,
+    flights: any[]
+  ): { valid: boolean; index: number[] } {
+    const invalidIndexes: number[] = []; // CREATE THIS FOR STORE INVALID ROUTE
 
-    const originMap = new Map<string, any>();
-    const destSet = new Set<string>();
+    if (!origin || !destination || flights.length === 0) {
+      invalidIndexes.push(0);
+      return { valid: false, index: invalidIndexes };
+    }
 
-    flights.forEach(flight => {
-      originMap.set(flight.flightOrg, flight);
-      destSet.add(flight.flightDes);
-    });
+    for (let i = 1; i < flights.length; i++) {
+      const prev = flights[i - 1];
+      const current = flights[i];
 
-    console.log(originMap, destSet)
+      if (i > 0 && current.flightOrg === origin) {
+        invalidIndexes.push(i);
+      }
 
-
-    // Force start from mainOrigin
-    let currentFlight = originMap.get(mainOrigin);
-    
-    if (!currentFlight) return { valid: false, visitedOrgs: new Set() };
+      if (prev.flightDes !== current.flightOrg) {
+        invalidIndexes.push(i);
+      }
+    }
 
     const visited = new Set<string>();
+    const stack: string[] = [origin];
+    let reached = false;
 
-    while (currentFlight) {
-      if (visited.has(currentFlight.flightOrg)) {
-        return { valid: false, visitedOrgs: visited };
+    while (stack.length) {
+      const current = stack.pop()!;
+      if (current === destination) {
+        reached = true
+        break;
       }
+      visited.add(current);
 
-      visited.add(currentFlight.flightOrg);
-
-      if (currentFlight.flightDes === mainDest) {
-        visited.add(currentFlight.flightDes);
-        return { valid: visited.size === flights.length + 1, visitedOrgs: visited };
+      for (const flight of flights) {
+        if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
+          stack.push(flight.flightDes);
+        }
       }
-
-      currentFlight = originMap.get(currentFlight.flightDes);
     }
 
-    return { valid: false, visitedOrgs: visited };
+    if (!reached) {
+      for (let i = 0; i < flights.length; i++) {
+        if (!invalidIndexes.includes(i)) {
+          invalidIndexes.push(i);
+        }
+      }
+    }
+
+    return { valid: invalidIndexes.length === 0, index: invalidIndexes };
   }
 
-
   public updateProductItems(action: 'add' | 'remove', index?: number) {
-    // //.log(action, index);
     const arr = this.form.controls.productItems as FormArray;
     if (action === 'add') {
-      //.log(action);
       arr.push(this.createProductItemGroup());
     } else if (action === 'remove' && index !== undefined) {
       const removeFromUnique =
@@ -247,7 +257,6 @@ export class UpdateComponent {
       if (product) {
         this.unique.delete(product);
       }
-      //.log(this.unique);
       arr.removeAt(index);
     }
   }
@@ -272,6 +281,7 @@ export class UpdateComponent {
       arr.push(this.createFlight());
     } else if (action === 'removeFlight' && index !== undefined) {
       arr.removeAt(index);
+      this.matchValues()
     }
   }
 
@@ -284,12 +294,11 @@ export class UpdateComponent {
   }
 
   public drop(event: any) {
-    console.log(event, 'event');
     const controls = this.form.controls.flight as FormArray;
     const previousIndex = controls.at(event.previousIndex);
     const remove = controls.removeAt(event.previousIndex);
     controls.insert(event.currentIndex, previousIndex);
-    this.matchValues();
+    this.matchValues()
   }
 
   private calculateLeaseEndDate() {
@@ -317,8 +326,6 @@ export class UpdateComponent {
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
-
-        //.log(supplierId, groupId);
 
         forkJoin({
           group: this.coolOrderService.getGroup(supplierId),
@@ -401,12 +408,12 @@ export class UpdateComponent {
   }
 
   public update() {
-    this.matchValues()
+    if (!this.form.valid || !this.RouteValid) {
+      alert('Please fix the errors before updating.');
+      return;
+    }
     if (this.form.valid) {
-      console.log('form is invalid', this.form.valid);
-      console.log('click update');
       const updateData: any = {}; // STORE DIRTY DATA!
-
       //CONVERT OBJECT INTO ARRAY !
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
@@ -415,7 +422,8 @@ export class UpdateComponent {
           if (control.dirty) {
             updateData[key] = control.value;
           }
-        } else if (control instanceof FormArray) {
+        }
+        else if (control instanceof FormArray) {
           const dirtyArray: any[] = [];
           control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
@@ -444,27 +452,21 @@ export class UpdateComponent {
     }
     else {
       this.form.markAllAsTouched();
+
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
         if (control instanceof FormControl) {
-          // console.log(`Field '${key}' touched:`, control.touched);
-          if (control.invalid && control.touched) {
-            control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-            // console.log(`Field '${key}' is invalid and should show error`);
-          }
+          control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
         }
+
         else if (control instanceof FormArray) {
-          control.controls.forEach((row: AbstractControl, index: number) => {
+          control.controls.forEach((row: AbstractControl) => {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
-                // console.log(`Field [${key}][${index}].${fieldName} touched:`, field.touched);
-                if (field && field.invalid && field.touched) {
-                  field.updateValueAndValidity({
-                    onlySelf: true,
-                    emitEvent: true,
-                  });
+                if (field) {
+                  field.updateValueAndValidity({ onlySelf: true, emitEvent: true });
                 }
               });
             }
@@ -472,9 +474,11 @@ export class UpdateComponent {
         }
       });
 
-    
+
     }
+
   }
+
 
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -488,6 +492,10 @@ export class UpdateComponent {
     this.form.controls.productCode.reset();
     this.form.controls.groupId.reset();
     this.form.controls.locationId.reset();
+    this.form.controls.straps.reset()
+    this.form.controls.precondition.reset();
+    this.form.controls.strapsValue.reset();
+
 
     const flightArray = this.form.controls.flight as FormArray;
 
@@ -499,6 +507,8 @@ export class UpdateComponent {
     this.group = [];
     this.products = [];
     this.options = [];
+    this.location = [];
+    this.temp = [];
 
     productArray.push(this.createProductItemGroup());
     this.getGroupBySupplierId(this.selectedValue);

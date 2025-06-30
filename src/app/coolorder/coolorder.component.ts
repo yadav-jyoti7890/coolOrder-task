@@ -241,74 +241,88 @@ export class CoolorderComponent implements OnInit {
   // }
 
   private matchValues() {
-    const formArray = this.form.controls.flight as FormArray;
-    const flights = formArray.controls.map((ctrl: any) => ({
-      flightOrg: ctrl.controls.flightOrg.value,
-      flightDes: ctrl.controls.flightDes.value
+
+    const flight = this.form.controls.flight as FormArray
+
+    const org = this.form.controls.org.value;
+    const des = this.form.controls.des.value;
+    const flightArray = this.form.controls.flight.controls;
+
+    const flights = flightArray.map((flightGroup) => ({
+      flightOrg: flightGroup.controls.flightOrg.value,
+      flightDes: flightGroup.controls.flightDes.value,
     }));
 
-    const mainOrigin = this.form.controls.org.value;
-    const mainDest = this.form.controls.des.value;
 
-    const { valid, visitedOrgs } = this.isRouteValid(flights, mainOrigin, mainDest);
+    const isCompleteRoute = this.isRouteValid(org, des, flights);
+    // console.log(isCompleteRoute)
 
-    if (!valid) {
-      this.form.setErrors({ routeInvalid: true });
-      // alert("route is incomplete or wrong")
-    } else {
-      this.form.setErrors(null);
-    }
+    this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
 
-
-    this.flightOrgInputs.forEach((orgRef, index) => {
-      const desRef = this.flightDesInputs.get(index);
-      const org = formArray.at(index).get('flightOrg')?.value;
-      const des = formArray.at(index).get('flightDes')?.value;
-
-      const color = valid && visitedOrgs.has(org) ? 'green' : 'red';
-
-      if (orgRef?.nativeElement) {
-        orgRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+    this.flightOrgInputs.forEach((orgInputRef, index) => {
+      let color = 'green'
+      const desInputRef = this.flightDesInputs.get(index);
+      if (isCompleteRoute.index === index) {
+        color = 'red'
       }
-      if (desRef?.nativeElement) {
-        desRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      // const color = isCompleteRoute ? 'green' : 'red';
+
+      if (orgInputRef?.nativeElement) {
+        orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
+      }
+
+      if (desInputRef?.nativeElement) {
+        desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
     });
   }
 
-  private isRouteValid(flights: any[], mainOrigin: string | null | any, mainDest: string | null): { valid: boolean, visitedOrgs: Set<string> } {
-    if (flights.length === 0) return { valid: false, visitedOrgs: new Set() };
+  private isRouteValid(
+    origin: string | null,
+    destination: string | null,
+    flights: any[]
+  ): { valid: Boolean, index: number | null } {
+    if (!origin || !destination || flights.length === 0) return { valid: false, index: 0 };
 
-    const originMap = new Map<string, any>();
-    const destSet = new Set<string>();
+    const firstFlight = flights[0];
+    const firstOrigin = firstFlight.flightOrg;
+    const firstDes = firstFlight.flightDes;
 
-    flights.forEach(flight => {
-      originMap.set(flight.flightOrg, flight);
-      destSet.add(flight.flightDes);
-    });
+    for (let i = 1; i < flights.length; i++) {
+      const prevFlight = flights[i - 1];
+      const currentFlight = flights[i];
 
-    // Force start from mainOrigin
-    let currentFlight = originMap.get(mainOrigin);
-    if (!currentFlight) return { valid: false, visitedOrgs: new Set() };
-
-    const visited = new Set<string>();
-
-    while (currentFlight) {
-      if (visited.has(currentFlight.flightOrg)) {
-        return { valid: false, visitedOrgs: visited }; // loop
+      if (
+        currentFlight.flightOrg === firstOrigin
+      ) {
+        return { valid: false, index: i };
       }
 
-      visited.add(currentFlight.flightOrg);
-
-      if (currentFlight.flightDes === mainDest) {
-        visited.add(currentFlight.flightDes);
-        return { valid: visited.size === flights.length + 1, visitedOrgs: visited };
+      if (prevFlight.flightDes !== currentFlight.flightOrg) {
+        return { valid: false, index: i };
       }
-
-      currentFlight = originMap.get(currentFlight.flightDes);
     }
 
-    return { valid: false, visitedOrgs: visited };
+    const visited = new Set<string>();
+    const stack: string[] = [origin];
+
+    while (stack.length) {
+      const current = stack.pop()!;
+
+      if (current === destination) return { valid: true, index: null };
+
+      // if (visited.has(current)) continue;
+
+      visited.add(current);
+
+      for (const flight of flights) {
+        if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
+          stack.push(flight.flightDes);
+        }
+      }
+    }
+
+    return { valid: false, index: flights.length - 1 };
   }
 
   public updateProductItems(action: 'add' | 'remove', index?: number) {
