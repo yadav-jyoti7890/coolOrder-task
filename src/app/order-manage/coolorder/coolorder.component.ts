@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { CoolorderService } from '../services/coolorder.service';
+import { CoolorderService } from '../../services/coolorder.service';
 import { CommonModule, formatDate } from '@angular/common';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -21,12 +21,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { flight, form, ProductItem } from '../form-interface';
-import { ValidateBorderDirective } from '../validator';
+import { flight, form, ProductItem } from '../../form-interface';
+import { ValidateBorderDirective } from '../../validator';
 
-import { AddInputService } from '../services/add-input.service';
-import { matchULDQtyWithTotalQuantity } from '../add-input-directive';
-import { ValidateTotalQuantityDirective } from '../validate-total-quantity.directive';
+import { AddInputService } from '../../services/add-input.service';
+import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 import { debounceTime } from 'rxjs';
 import { Console } from 'node:console';
 import { RouterLink, RouterOutlet } from '@angular/router';

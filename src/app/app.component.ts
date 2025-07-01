@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CoolorderComponent } from './coolorder/coolorder.component';
+import { CoolorderComponent } from './order-manage/coolorder/coolorder.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

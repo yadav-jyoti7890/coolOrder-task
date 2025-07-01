@@ -6,7 +6,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
-import { flight, form, ProductItem } from '../form-interface';
+import { flight, form, ProductItem } from '../../form-interface';
 import {
   AbstractControl,
   FormArray,
@@ -16,14 +16,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { CoolorderService } from '../services/coolorder.service';
+import { CoolorderService } from '../../services/coolorder.service';
 import { debounceTime, forkJoin } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
-import { ValidateTotalQuantityDirective } from '../validate-total-quantity.directive';
-import { ValidateBorderDirective } from '../validator';
+import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
+import { ValidateBorderDirective } from '../../validator';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-update',
@@ -146,6 +147,14 @@ export class UpdateComponent {
       .subscribe(() => {
         this.matchValues();
       });
+    this.matchValues();
+
+    this.form.controls.productItems.valueChanges
+      .pipe(debounceTime(800))
+      .subscribe(() => {
+        this.matchValues();
+      });
+
   }
 
   private createProductItemGroup(): FormGroup {
@@ -156,7 +165,7 @@ export class UpdateComponent {
   }
 
   private matchValues() {
-    console.log("matchvalue call")
+    // console.log("matchvalue call")
     const flight = this.form.controls.flight as FormArray;
 
     const org = this.form.controls.org.value;
@@ -169,8 +178,6 @@ export class UpdateComponent {
     }));
 
     const isCompleteRoute = this.isRouteValid(org, des, flights);
-
-
     this.form.setErrors(isCompleteRoute.valid ? null : { routeInvalid: true });
 
     this.RouteValid = isCompleteRoute.valid;
@@ -202,13 +209,10 @@ export class UpdateComponent {
       return { valid: false, index: invalidIndexes };
     }
 
+    // console.log(origin, destination, flights)
     for (let i = 1; i < flights.length; i++) {
       const prev = flights[i - 1];
       const current = flights[i];
-
-      if (i > 0 && current.flightOrg === origin) {
-        invalidIndexes.push(i);
-      }
 
       if (prev.flightDes !== current.flightOrg) {
         invalidIndexes.push(i);
@@ -249,6 +253,7 @@ export class UpdateComponent {
     const arr = this.form.controls.productItems as FormArray;
     if (action === 'add') {
       arr.push(this.createProductItemGroup());
+
     } else if (action === 'remove' && index !== undefined) {
       const removeFromUnique =
         this.form.controls.productItems.controls.at(index)?.value;
@@ -258,6 +263,7 @@ export class UpdateComponent {
         this.unique.delete(product);
       }
       arr.removeAt(index);
+
     }
   }
 
@@ -281,7 +287,7 @@ export class UpdateComponent {
       arr.push(this.createFlight());
     } else if (action === 'removeFlight' && index !== undefined) {
       arr.removeAt(index);
-      this.matchValues()
+
     }
   }
 
@@ -298,7 +304,7 @@ export class UpdateComponent {
     const previousIndex = controls.at(event.previousIndex);
     const remove = controls.removeAt(event.previousIndex);
     controls.insert(event.currentIndex, previousIndex);
-    this.matchValues()
+    this.matchValues();
   }
 
   private calculateLeaseEndDate() {
@@ -410,9 +416,38 @@ export class UpdateComponent {
   public update() {
     if (!this.form.valid || !this.RouteValid) {
       alert('Please fix the errors before updating.');
-      return;
+
+      // this.form.markAllAsTouched();
+
+      Object.keys(this.form.controls).forEach((key: string) => {
+        const control = this.form.get(key);
+
+        if (control instanceof FormControl) {
+          if (control.invalid) {
+            control.markAsTouched();
+            control.updateValueAndValidity({ onlySelf: true });
+          }
+
+        }
+
+        else if (control instanceof FormArray) {
+          control.controls.forEach((row: AbstractControl) => {
+            if (row instanceof FormGroup) {
+              Object.keys(row.controls).forEach((fieldName) => {
+                const field = row.get(fieldName) as FormControl;
+                if (field.invalid) {
+                  field.markAsTouched();
+                  field.updateValueAndValidity({ onlySelf: true });
+                }
+              });
+            }
+          });
+        }
+      });
+
+
     }
-    if (this.form.valid) {
+    else {
       const updateData: any = {}; // STORE DIRTY DATA!
       //CONVERT OBJECT INTO ARRAY !
       Object.keys(this.form.controls).forEach((key: string) => {
@@ -450,35 +485,7 @@ export class UpdateComponent {
       });
       console.log('Dirty updated data:', updateData);
     }
-    else {
-      this.form.markAllAsTouched();
-
-      Object.keys(this.form.controls).forEach((key: string) => {
-        const control = this.form.get(key);
-
-        if (control instanceof FormControl) {
-          control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-        }
-
-        else if (control instanceof FormArray) {
-          control.controls.forEach((row: AbstractControl) => {
-            if (row instanceof FormGroup) {
-              Object.keys(row.controls).forEach((fieldName) => {
-                const field = row.get(fieldName) as FormControl;
-                if (field) {
-                  field.updateValueAndValidity({ onlySelf: true, emitEvent: true });
-                }
-              });
-            }
-          });
-        }
-      });
-
-
-    }
-
   }
-
 
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;

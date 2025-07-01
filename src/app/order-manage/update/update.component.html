@@ -218,20 +218,18 @@
           </div>
           <div class="form-group">
             <label for="origin-1">Origin *</label>
-            <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs
-           
-             />
+            <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs />
           </div>
           <div class="form-group">
             <label for="destination-1">Destination *</label>
-            <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes" #flightDesInputs
-           
-              />
+            <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
+              #flightDesInputs />
           </div>
 
           <div class="form-group">
             <label for="product-type-1">Product Type *</label>
-            <select formControlName="flightProductType" [appValidateBorder]="flightDetail.controls.flightProductType">
+            <select formControlName="flightProductType" class="input"
+              [appValidateBorder]="flightDetail.controls.flightProductType">
               <option value="" disabled>Select Product</option>
               <option *ngFor="let product of products" [value]="product.id">
                 {{ product.name }}
@@ -246,7 +244,7 @@
                     productArray: form.controls.productItems,
                     flightArray: form.controls.flight,
                     currentGroup: flightDetail
-                  }"  [appValidateBorder]="flightDetail.controls.flightOldQty"/>
+                  }" [appValidateBorder]="flightDetail.controls.flightOldQty" />
           </div>
 
           <div class="row-actions">
@@ -257,8 +255,8 @@
               [disabled]="flightDisable">
               <i class="ri-file-copy-line"></i>
             </button>
-            <button class="action-btn reorder-btn" id="move" >
-              <i class="ri-menu-line"  cdkDragHandle></i>
+            <button class="action-btn reorder-btn" id="move">
+              <i class="ri-menu-line" cdkDragHandle></i>
             </button>
           </div>
 

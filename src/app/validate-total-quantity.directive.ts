@@ -38,31 +38,16 @@ export class ValidateTotalQuantityDirective implements OnInit {
     const flightArray = this.config.flightArray;
     const currentGroup = this.config.currentGroup;
 
-    // console.log(productArray, "productarray")
-    // console.log(flightArray, "flightarray")
-    // console.log(currentGroup, "currentfligtgroup")
-    // console.log(productArray, "product array")
-
     const currentProduct = currentGroup.controls['flightProductType']?.value;
-
     const currentQty = +currentGroup.controls['flightOldQty']?.value || 0;
+    const inputElement = this.el.nativeElement as HTMLElement;
 
-    // console.log(currentProduct,"current product")
-    // console.log(currentQty)
-    // console.log(currentProduct)
-    // console.log(Array.isArray(productArray.controls), "productArray")
-
+    // Find matching product from products section
     const matchedProduct = productArray.controls.find((productGroup) => {
       return productGroup.get('product')?.value === currentProduct;
     });
 
-  
-
-    // console.log(matchedProduct, "match")
-
     const allowedQty = +matchedProduct?.get('quantity2')?.value || 0;
-
-    //  console.log(allowedQty, "allowedqty")
 
     let usedQty = 0;
 
@@ -72,30 +57,47 @@ export class ValidateTotalQuantityDirective implements OnInit {
       }
     });
 
-    const inputElement = this.el.nativeElement as HTMLElement;
-
-      if (!matchedProduct) {
-      // Product type in flight does not exist in product section!
-       inputElement.style.borderBottom = '2px solid red';
+    // ✅ If product used in flight doesn't exist in product section → ERROR
+    if (!matchedProduct) {
+      inputElement.style.borderBottom = '2px solid red';
       currentGroup.get('flightProductType')?.setErrors({ invalidProduct: true });
       return;
     }
 
+    // ✅ If values are empty → reset style
     if (!currentProduct || allowedQty === 0 || currentQty === 0) {
       inputElement.style.borderBottom = '1px solid lightgray';
       return;
     }
 
+    // ✅ Validate mismatch in quantity
     if (usedQty !== allowedQty) {
       currentGroup.get('flightOldQty')?.setErrors({ qtyMismatch: true });
     } else {
       currentGroup.get('flightOldQty')?.setErrors(null);
     }
 
-    if (usedQty === allowedQty) {
-      inputElement.style.borderBottom = '2px solid green';
-    } else {
-      inputElement.style.borderBottom = '2px solid red';
-    }
+    inputElement.style.borderBottom = usedQty === allowedQty ? '2px solid green' : '2px solid red';
+
+    // ✅ NEW: Check for orphan product (exists in productArray but not used in any flight)
+    productArray.controls.forEach(productGroup => {
+      const prodName = productGroup.get('product')?.value;
+      const matchingFlight = flightArray.controls.find(fg =>
+        fg.get('flightProductType')?.value === prodName
+      );
+
+      if (!matchingFlight) {
+        productGroup.get('product')?.setErrors({ notUsedInFlight: true });
+      } else {
+        // ✅ Clear the error
+        productGroup.get('product')?.setErrors(null);
+      }
+
+      // ✅ Force Angular to re-evaluate status immediately
+      productGroup.get('product')?.updateValueAndValidity({ emitEvent: false });
+    });
+
+
   }
+
 }
