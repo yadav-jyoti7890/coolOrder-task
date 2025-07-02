@@ -1,7 +1,7 @@
 <div class="header">
     <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900;">Order List</h2>
 </div>
-<div class="container">
+<div class="order-detail-container">
     <!-- Member List Table -->
     <table class="member-table">
         <thead>
@@ -14,6 +14,7 @@
                 <th>Lease End</th>
                 <th>Group</th>
                 <th>Product Code</th>
+                <th>status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -27,9 +28,29 @@
                 <td>{{order.leaseEnd}} </td>
                 <td>{{order.groupId}} </td>
                 <td>{{order.productCode}} </td>
-                <td><button class="login-btn" [routerLink]="['/update', order.id]">Update</button>
-                <button class="login-btn" style="background-color: rgb(195, 8, 8) !important;" (click)="delete(order.id)">Delete</button>
+                <td>{{order.status}} </td>
+                @if(order.status === 'draft'){
+                 <td>
+                   <div class="action" style="display: flex; gap: 1vw;">
+                      <i class="ri-edit-fill" [routerLink]="['/update', order.id]"></i>
+                     <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+                     <i class="ri-file-copy-fill" (click)="copy"></i>
+                   </div>
+                 </td>
+                }
+                @else{
+                    <td>
+                     <div class="action" style="display: flex; gap: 1vw;">
+                      <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
+                       <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+                     </div>
+                
                 </td>
+                }
+                  <!-- <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i> -->
+                <!-- <td><button class="login-btn" [routerLink]="['/update', order.id]">Update</button>
+                <button class="login-btn" style="background-color: rgb(195, 8, 8) !important;" (click)="delete(order.id)">Delete</button>
+                </td> -->
              
             </tr>
         </tbody>

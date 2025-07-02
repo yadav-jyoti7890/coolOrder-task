@@ -87,7 +87,7 @@ export class CoolorderComponent implements OnInit {
       ]),
       returnPort: new FormControl(null, Validators.required),
       leaseStart: new FormControl(null, Validators.required),
-      leaseEnd: new FormControl(null, Validators.required),
+      leaseEnd: new FormControl( null,  Validators.required),
       supplierId: new FormControl(null, Validators.required),
       commodity: new FormControl(null, Validators.required),
       precondition: new FormControl(false),
@@ -167,82 +167,6 @@ export class CoolorderComponent implements OnInit {
       ]),
     });
   }
-
-  // private matchValues() {
-  //   // console.log("flight change")
-  //   const flight = this.form.controls.flight as FormArray;
-
-  //   const org = this.form.controls.org.value;
-  //   const des = this.form.controls.des.value;
-  //   const flightArray = this.form.controls.flight.controls;
-
-  //   const flights = flightArray.map((flightGroup) => ({
-  //     flightOrg: flightGroup.controls.flightOrg.value,
-  //     flightDes: flightGroup.controls.flightDes.value,
-  //   }));
-
-  //   const isCompleteRoute = this.isRouteValid(org, des, flights);
-
-  //   this.flightOrgInputs.forEach((orgInputRef, index) => {
-  //     const desInputRef = this.flightDesInputs.get(index);
-  //     const flight = flightArray[index];
-
-  //     const color = isCompleteRoute ? 'green' : 'red';
-
-  //     if (orgInputRef?.nativeElement) {
-  //       orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
-  //     }
-
-  //     if (desInputRef?.nativeElement) {
-  //       desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
-  //     }
-  //   });
-  // }
-
-  // private isRouteValid(
-  //   origin: string | null,
-  //   destination: string | null,
-  //   flights: any[]
-  // ): boolean {
-  //   if (!origin || !destination || flights.length === 0) return false;
-
-  //   const firstFlight = flights[0];
-  //   const firstOrigin = firstFlight.flightOrg;
-  //   const firstDes = firstFlight.flightDes;
-
-  //   for (let i = 1; i < flights.length; i++) {
-  //     const prevFlight = flights[i - 1];
-  //     const currentFlight = flights[i];
-
-  //     if (
-  //       currentFlight.flightOrg === firstOrigin
-  //     ) {
-  //       return false;
-  //     }
-
-  //     if (prevFlight.flightDes !== currentFlight.flightOrg) {
-  //       return false;
-  //     }
-  //   }
-
-  //   const visited = new Set<string>();
-  //   const stack: string[] = [origin];
-
-  //   while (stack.length) {
-  //     const current = stack.pop()!;
-  //     if (current === destination) return true;
-  //     if (visited.has(current)) continue;
-
-  //     visited.add(current);
-  //     for (const flight of flights) {
-  //       if (flight.flightOrg === current && !visited.has(flight.flightDes)) {
-  //         stack.push(flight.flightDes);
-  //       }
-  //     }
-  //   }
-
-  //   return false;
-  // }
 
   private matchValues() {
     // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
@@ -405,6 +329,7 @@ export class CoolorderComponent implements OnInit {
 
       const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
       this.form.controls.leaseEnd.setValue(formattedDate);
+  
     }
   }
 
@@ -468,15 +393,31 @@ export class CoolorderComponent implements OnInit {
     });
   }
 
-  public submit() {
-    console.log(this.form.invalid, "click submit")
+  public submit(status: 'New' | 'draft') {
+
+    // console.log(status)
+    // console.log(this.form.invalid, "click submit")
+
+     const formData = {
+        ...this.form.value,
+        status
+       }
+      this.calculateLeaseEndDate();
+       console.log(formData)
+
+    
+
     if (this.form.valid && this.RouteValid) {
-      const formData = this.form.value;
+      // const formData = this.form.value;
+       const formData = {
+        ...this.form.value,
+        status
+       }
 
       this.coolOrderService.saveProduct(formData).subscribe({
         next: (res) => {
           console.log(' Data saved:', res);
-          alert('Form submitted successfully!');
+          alert(`${status} Form submitted successfully`);
           this.router.navigate(['/order-list'])
           this.form.reset();
           this.form.controls.productItems.clear();

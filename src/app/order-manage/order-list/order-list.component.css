@@ -1,4 +1,4 @@
-   .container {
+   .order-detail-container {
             width: 100%;
             margin: 0 auto;
         }
@@ -89,6 +89,9 @@
         
         .detail-value {
             font-weight: 400;
+        }
+        i{
+            cursor: pointer;
         }
         
         /* Responsive */

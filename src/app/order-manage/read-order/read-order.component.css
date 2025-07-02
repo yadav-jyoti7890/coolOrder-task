@@ -83,10 +83,10 @@ button.orange:hover {
   background-color: #e07b00;
 }
 
-button:disabled {
+button:disabled{
   opacity: 0.6;
   cursor: not-allowed;
-  background-color: red;
+  background-color: red !important;
   color: white;
 }
 
@@ -243,10 +243,10 @@ app-validation select {
 /* Form container */
 .form-container {
  max-width: 1800px;
-  background-color: #ffffff !important;
+  background-color: #fff !important;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 2vw 3vw;
+  padding: 2vw 2vw;
   /* max-width: 1400px; */
 }
 
@@ -266,7 +266,7 @@ app-validation select {
 }
 
 .add-row-btn {
-  background-color: #ff6a00;
+  background-color: #e65c00;
   color: white;
   border: none;
   border-radius: 50%;
@@ -289,12 +289,10 @@ app-validation select {
 /* Flight rows and container */
 .flight-rows-container {
   width: 100%;
-  /* min-height: 100vh; */
-  background-color: #fff !important;
+  /* background-color: red; */
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 1vw;
 }
 
 .flight-row {

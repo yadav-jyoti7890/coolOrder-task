@@ -5,7 +5,12 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { flight, form, ProductItem } from '../../form-interface';
 import {
   AbstractControl,
@@ -24,7 +29,6 @@ import { ValidateBorderDirective } from '../../validator';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
 
 @Component({
   selector: 'app-update',
@@ -45,14 +49,13 @@ export class UpdateComponent {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
-
   constructor(
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
     private el: ElementRef,
     private route: ActivatedRoute,
-    private router:Router
-  ) { }
+    private router: Router
+  ) {}
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -69,7 +72,7 @@ export class UpdateComponent {
   public unique = new Set<string>();
   public updateId!: string | null;
   public initialFormValues!: any;
-  public RouteValid: boolean = false
+  public RouteValid: boolean = false;
 
   ngOnInit(): void {
     forkJoin([
@@ -85,9 +88,8 @@ export class UpdateComponent {
     this.getLocation();
     // this.fetchData()
     this.updateId = this.route.snapshot.paramMap.get('id');
-    console.log(this.updateId)
+    console.log(this.updateId);
     console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
-
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
@@ -159,13 +161,15 @@ export class UpdateComponent {
       .subscribe(() => {
         this.matchValues();
       });
-
   }
 
   private createProductItemGroup(): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required]),
+      quantity2: new FormControl(null, [
+        Validators.pattern('^[0-9]+$'),
+        Validators.required,
+      ]),
     });
   }
 
@@ -198,7 +202,6 @@ export class UpdateComponent {
         desInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
       }
     });
-
   }
 
   private isRouteValid(
@@ -230,7 +233,7 @@ export class UpdateComponent {
     while (stack.length) {
       const current = stack.pop()!;
       if (current === destination) {
-        reached = true
+        reached = true;
         break;
       }
       visited.add(current);
@@ -257,7 +260,6 @@ export class UpdateComponent {
     const arr = this.form.controls.productItems as FormArray;
     if (action === 'add') {
       arr.push(this.createProductItemGroup());
-
     } else if (action === 'remove' && index !== undefined) {
       const removeFromUnique =
         this.form.controls.productItems.controls.at(index)?.value;
@@ -267,7 +269,6 @@ export class UpdateComponent {
         this.unique.delete(product);
       }
       arr.removeAt(index);
-
     }
   }
 
@@ -291,7 +292,6 @@ export class UpdateComponent {
       arr.push(this.createFlight());
     } else if (action === 'removeFlight' && index !== undefined) {
       arr.removeAt(index);
-
     }
   }
 
@@ -316,7 +316,7 @@ export class UpdateComponent {
     const start = this.form.controls.leaseStart.value;
     // get rentalDays in a number format
     const rentalDays = (this.form.controls.rentalDays.value || 0, 10);
-  
+
     // check if value null or empty
     if (start && rentalDays) {
       const startDate = new Date(start);
@@ -329,7 +329,7 @@ export class UpdateComponent {
   }
 
   private fetchData() {
-    console.log(this.updateId, "update id from update ")
+    console.log(this.updateId, 'update id from update ');
     this.coolOrderService.fetchData(this.updateId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
@@ -346,6 +346,8 @@ export class UpdateComponent {
           this.options = this.products.map((item) => item.name);
           this.location = all.location;
           this.temp = all.temp;
+
+          // console.log(this.temp, "temp")
 
           // patch basic values
           this.form.patchValue({
@@ -368,10 +370,15 @@ export class UpdateComponent {
             locationId: response.locationId,
             productCode: response.productCode,
           });
+          this.selectedValue = response.supplierId;
 
-          const productArray = this.form.controls.productItems as FormArray<FormGroup<ProductItem>>;
+          const productArray = this.form.controls.productItems as FormArray<
+            FormGroup<ProductItem>
+          >;
           productArray.clear();
-          const items: ProductItem[] = Array.isArray(response.productItems) ? response.productItems : [];
+          const items: ProductItem[] = Array.isArray(response.productItems)
+            ? response.productItems
+            : [];
 
           items.forEach((item: ProductItem) => {
             productArray.push(
@@ -382,9 +389,13 @@ export class UpdateComponent {
             );
           });
 
-          const flightArray = this.form.controls.flight as FormArray<FormGroup<flight>>;;
+          const flightArray = this.form.controls.flight as FormArray<
+            FormGroup<flight>
+          >;
           flightArray.clear();
-          const flightItems: flight[] = Array.isArray(response.flight) ? response.flight : [];
+          const flightItems: flight[] = Array.isArray(response.flight)
+            ? response.flight
+            : [];
 
           flightItems.forEach((f: flight) => {
             flightArray.push(
@@ -403,7 +414,7 @@ export class UpdateComponent {
     });
   }
 
-  public update() {
+  public update(status: 'New' | 'draft') {
     if (!this.form.valid || !this.RouteValid) {
       alert('Please fix the errors before updating.');
 
@@ -417,10 +428,7 @@ export class UpdateComponent {
             control.markAsTouched();
             control.updateValueAndValidity({ onlySelf: true });
           }
-
-        }
-
-        else if (control instanceof FormArray) {
+        } else if (control instanceof FormArray) {
           control.controls.forEach((row: AbstractControl) => {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
@@ -434,10 +442,7 @@ export class UpdateComponent {
           });
         }
       });
-
-
-    }
-    else {
+    } else {
       const updateData: any = {}; // STORE DIRTY DATA!
       //CONVERT OBJECT INTO ARRAY !
       Object.keys(this.form.controls).forEach((key: string) => {
@@ -447,8 +452,7 @@ export class UpdateComponent {
           if (control.dirty) {
             updateData[key] = control.value;
           }
-        }
-        else if (control instanceof FormArray) {
+        } else if (control instanceof FormArray) {
           const dirtyArray: any[] = [];
           control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
@@ -473,16 +477,22 @@ export class UpdateComponent {
           }
         }
       });
-      console.log('Dirty updated data:', updateData, this.updateId);
-      this.coolOrderService.updateOrder(updateData, this.updateId).subscribe({
-        next: (response)=>{
-          alert("update successfully")
-          this.router.navigate(['/order-list'])
+
+      const copy = {
+        ...updateData,
+        status,
+      };
+      console.log(copy, 'copy data');
+      console.log('Dirty updated data:', copy, this.updateId);
+      this.coolOrderService.updateOrder(copy, this.updateId).subscribe({
+        next: (response) => {
+          alert('update successfully');
+          this.router.navigate(['/order-list']);
         },
-        error: (err)=>{
-          alert("something went wrong")
-        }
-      })
+        error: (err) => {
+          alert('something went wrong');
+        },
+      });
     }
   }
 
@@ -498,10 +508,9 @@ export class UpdateComponent {
     this.form.controls.productCode.reset();
     this.form.controls.groupId.reset();
     this.form.controls.locationId.reset();
-    this.form.controls.straps.reset()
+    this.form.controls.straps.reset();
     this.form.controls.precondition.reset();
     this.form.controls.strapsValue.reset();
-
 
     const flightArray = this.form.controls.flight as FormArray;
 
@@ -558,6 +567,7 @@ export class UpdateComponent {
     this.coolOrderService.getTemp(this.groupId).subscribe({
       next: (response) => {
         this.temp = response;
+        console.log(this.temp)
       },
     });
   }
@@ -574,4 +584,6 @@ export class UpdateComponent {
     }
     return false;
   }
+
+  public reset() {}
 }

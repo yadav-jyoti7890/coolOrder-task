@@ -44,16 +44,14 @@ export class CoolorderService {
    return  this.http.get(`${this.apiUrl}order/${updateId}`);
   }
 
+  // update only specific filled using patch method
+   
   updateOrder(data:any, updateId:string | null){
     return this.http.patch(`${this.apiUrl}order/${updateId}`, data);
   }
 
   getAllOrderData():Observable<any>{
     return this.http.get(`${this.apiUrl}order`)
-  }
-
-  getOrderWithId(updateId:string | null):Observable<any>{
-  return this.http.get(`${this.apiUrl}order/${updateId}`)
   }
 
   deleteOrder(id:string | null){

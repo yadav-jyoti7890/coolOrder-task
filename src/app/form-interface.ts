@@ -59,6 +59,7 @@ export interface order {
   preconditionDropDownValue:string
   preconditionInputValue: string
   strapsValue: string
+  status:string
   productItems: FormArray<FormGroup<ProductItem>>;
   flight: FormArray<FormGroup<flight>>;
 }

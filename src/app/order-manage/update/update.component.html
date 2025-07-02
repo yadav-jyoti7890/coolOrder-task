@@ -17,9 +17,24 @@
         </select>
       </div>
 
-      <div class="action-buttons">
+      <!-- <div class="action-buttons">
         <button type="button" class="orange" (click)="update()" [disabled]="!form.valid || !RouteValid">
           Update
+        </button>
+      </div> -->
+
+
+       <div class="action-buttons">
+        <button type="button" (click)="reset()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reset">
+          ⟳
+        </button>
+
+        <button type="button" (click)="update('draft')">
+          <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
+        </button>
+
+        <button type="button" class="orange" data-bs-toggle="tooltip" data-bs-placement="bottom" (click)="update('New')">
+          <i class="ri-arrow-right-line" title="submit"></i>
         </button>
       </div>
     </div>
@@ -106,7 +121,7 @@
                 " style="width: 100%">
                 <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
                 <input type="text" formControlName="preconditionInputValue"
-                  [appValidateBorder]="form.controls.preconditionInputValue" />
+                  [appValidateBorder]="form.controls.preconditionInputValue"/>
               </div>
 
               <!-- Straps -->
@@ -160,7 +175,7 @@
 
               <div class="remove">
                 <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
-                  <i class="ri-delete-bin-6-line"></i>
+                 <i class="ri-subtract-line"></i>
                 </button>
               </div>
 

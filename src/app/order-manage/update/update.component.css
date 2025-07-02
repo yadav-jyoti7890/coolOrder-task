@@ -1,8 +1,8 @@
 .container {
-  max-width: 1400px;
+  max-width: 1800px;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #e0787867;
+  background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -242,11 +242,12 @@ app-validation select {
 
 /* Form container */
 .form-container {
-  background-color: #ffffff !important;
+ max-width: 1800px;
+  background-color: #fff !important;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 2vw;
-  max-width: 1400px;
+  padding: 2vw 2vw;
+  /* max-width: 1400px; */
 }
 
 .header {
@@ -265,7 +266,7 @@ app-validation select {
 }
 
 .add-row-btn {
-  background-color: #ff6a00;
+  background-color: #e65c00;
   color: white;
   border: none;
   border-radius: 50%;
@@ -287,6 +288,8 @@ app-validation select {
 
 /* Flight rows and container */
 .flight-rows-container {
+  width: 100%;
+  /* background-color: red; */
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -389,7 +392,7 @@ app-validation select {
 }
 
 .flight-rows-container {
-  min-height: 100vh !important;
+  /* min-height: 100vh !important; */
   border: 1px solid #ccc;
   /* background-color: red !important; */
 }

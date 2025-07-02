@@ -1,0 +1,274 @@
+<div class="container">
+    <form [formGroup]="form" >
+        <div class="top-bar">
+            <div class="select-bar">
+                <select formControlName="orderType">
+                    <option selected disabled>Commercial</option>
+                    <option *ngFor="let ot of orderType" [value]="ot.name">
+                        {{ ot.name }}
+                    </option>
+                </select>
+
+                <select formControlName="supplierId" (change)="getSupplierId($event)">
+                    <option selected disabled>choose supplier</option>
+                    <option *ngFor="let s of supplier" [value]="s.id">
+                        {{ s.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="action-buttons">
+                <!-- <button type="button" class="orange" (click)="update()" [disabled]="!form.valid || !RouteValid">
+                    Update
+                </button> -->
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Order details</h3>
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>AWB Org</label>
+                        <input type="text" formControlName="org" [appValidateBorder]="form.controls.org" />
+                    </div>
+                    <div class="form-control">
+                        <label>AWB Dest</label>
+                        <input type="text" formControlName="des" [appValidateBorder]="form.controls.des" />
+                    </div>
+                    <div class="form-control">
+                        <label>Customer Pickup Port</label>
+                        <input type="text" formControlName="pickUpPort"
+                            [appValidateBorder]="form.controls.pickUpPort" />
+                    </div>
+                    <div class="form-control">
+                        <label>Booked Rental Days</label>
+                        <input type="text" formControlName="rentalDays"
+                            [appValidateBorder]="form.controls.rentalDays" />
+                    </div>
+                    <div class="form-control">
+                        <label>Customer Return Port</label>
+                        <input type="text" formControlName="returnPort"
+                            [appValidateBorder]="form.controls.returnPort" />
+                    </div>
+                    <div class="form-control">
+                        <label>Planned Lease Start</label>
+                        <input type="date" name id formControlName="leaseStart"
+                            [appValidateBorder]="form.controls.leaseStart" />
+                    </div>
+                    <div class="form-control">
+                        <label>Planned Lease End</label>
+                        <input type="date" formControlName="leaseEnd" readonly />
+                    </div>
+                    <div class="form-control">
+                        <label>Select Location</label>
+                        <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
+                            <option selected disabled>choose Location</option>
+                            <option *ngFor="let location of location" [value]="location.id">
+                                {{ location.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Other Requirements</h3>
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>Commodity</label>
+                        <input type="text" placeholder="Enter commodity" formControlName="commodity" readonly
+                            [appValidateBorder]="form.controls.commodity" />
+
+                        <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
+                            <!-- Preconditioning -->
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="preconditioning"
+                                    [formControl]="form.controls['precondition']" />
+                                <label for="preconditioning">Preconditioning (By Supplier)</label>
+                            </div>
+
+                            <!-- Show dropdown only if preconditioning is true -->
+
+                            <div *ngIf="
+                  form.controls['precondition'].value && selectedValue == 1
+                ">
+                                <!-- //leaseEnd -->
+
+                                <select [formControl]="form.controls.preconditionDropDownValue"
+                                    [appValidateBorder]="form.controls.preconditionDropDownValue">
+                                    <option disabled>select group first*</option>
+                                    <option *ngFor="let t of temp" [value]="t.id">
+                                        {{ t.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Show index input if preconditioning and selectedValue == 3 -->
+
+                            <div *ngIf="
+                  form.controls['precondition'].value && selectedValue == 3
+                " style="width: 100%">
+                                <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
+                                <input type="text" formControlName="preconditionInputValue"
+                                    [appValidateBorder]="form.controls.preconditionInputValue" />
+                            </div>
+
+                            <!-- Straps -->
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
+                                    [appValidateBorder]="form.controls.straps" />
+                                <label for="straps">Straps</label>
+                            </div>
+
+                            <!-- Show input if straps is checked -->
+                            <div *ngIf="form.controls['straps'].value" style="width: 100%">
+                                <input type="text" formControlName="strapsValue"
+                                    [appValidateBorder]="form.controls.strapsValue" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between">
+                    <h3>Products</h3>
+                    <!-- <button type="button" style="padding: 0vw 1vw; font-size: 1vw" (click)="updateProductItems('add')">
+                        +
+                    </button> -->
+                </div>
+
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>Group</label>
+                        <select formControlName="groupId" (change)="getProductByGroupId($event)"
+                            [appValidateBorder]="form.controls.groupId">
+                            <option disabled selected>select supplier first*</option>
+                            <option *ngFor="let g of group" [value]="g.id">
+                                {{ g.name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label>Product Code</label>
+                        <input type="text" formControlName="productCode"
+                            [appValidateBorder]="form.controls.productCode" />
+                    </div>
+                </div>
+
+                <div>
+                    <div formArrayName="productItems">
+                        <div *ngFor="
+                let item of form.controls.productItems.controls;
+                let i = index
+              " [formGroupName]="i" class="product-item-row">
+                            <!-- <p>{{i}}</p> -->
+                            <!-- 
+                            <div class="remove">
+                                <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
+                                    <i class="ri-delete-bin-6-line"></i>
+                                </button>
+                            </div> -->
+
+                            <div class style="display: flex">
+                                <div class="form-control">
+                                    <label>Product*</label>
+                                    <select formControlName="product" class="input"
+                                        [appValidateBorder]="item.controls.product!">
+                                        <option value disabled>Select Product</option>
+                                        <option *ngFor="let product of products" [value]="product.id"
+                                         >
+                                            {{ product.name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-control">
+                                    <label>Quantity*</label>
+                                    <input type="text" formControlName="quantity2"
+                                        [appValidateBorder]="item.controls.quantity2!" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- flight detail -->
+        <div class="form-container">
+            <div class="header">
+                <h2>Flight details</h2>
+                <!-- <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
+                    [disabled]="flightDisable">
+                    +
+                </button> -->
+            </div>
+
+            <div class="flight-rows-container" formArrayName="flight">
+
+                <div class="flight-row" *ngFor="
+                let flightDetail of form.controls.flight.controls;
+                let i = index
+              " [formGroupName]="i">
+
+                    <div class="form-group">
+                        <label for="flight-id-1">Flight Id *</label>
+                        <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
+                            [appValidateBorder]="flightDetail.controls.flightId" />
+                    </div>
+                    <div class="form-group date-picker">
+                        <label for="flight-date-1">Flight Date (LT) *</label>
+                        <input type="date" id="flight-date-1" placeholder="DD Mon YYYY" formControlName="flightDate"
+                            [appValidateBorder]="flightDetail.controls.flightDate" />
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="origin-1">Origin *</label>
+                        <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg"
+                            #flightOrgInputs />
+                    </div>
+                    <div class="form-group">
+                        <label for="destination-1">Destination *</label>
+                        <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
+                            #flightDesInputs />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-type-1">Product Type *</label>
+                        <select formControlName="flightProductType" class="input"
+                            [appValidateBorder]="flightDetail.controls.flightProductType">
+                            <option value="" disabled>Select Product</option>
+                            <option *ngFor="let product of products" [value]="product.id">
+                                {{ product.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="uld-qty-1">ULD Qty *</label>
+                        <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
+                            [appValidateBorder]="flightDetail.controls.flightOldQty" />
+                    </div>
+
+                    <!-- <div class="row-actions">
+                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)"
+                            aria-label="Remove Row">
+                            <i class="ri-subtract-line"></i>
+                        </button>
+                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)"
+                            [disabled]="flightDisable">
+                            <i class="ri-file-copy-line"></i>
+                        </button>
+                        <button class="action-btn reorder-btn" id="move">
+                            <i class="ri-menu-line" cdkDragHandle></i>
+                        </button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
