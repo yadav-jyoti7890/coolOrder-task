@@ -20,8 +20,10 @@
       <div class="action-buttons">
         <button type="button" (click)="reset()">⟳</button>
         <button type="submit" class="orange" (click)="submit()"
-          [disabled]="form.invalid || form.hasError('routeInvalid')">Submit</button>
-        <button type="button" class="orange" [routerLink]="['/update', 18]">Update</button>
+          [disabled]="!form.valid || !RouteValid">Submit</button>
+        <!-- <button type="button" class="orange" [routerLink]="['/update', id]">Update</button> -->
+        <button type="button" class="orange" [routerLink]="['order-list']">Order List</button>
+        
       </div>
     </div>
 
@@ -202,8 +204,9 @@
       <div class="flight-rows-container" formArrayName="flight" cdkDropList
         [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
 
-        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index" style="padding: 10px;"
-          [formGroupName]="i" cdkDrag cdkDragLockAxis="y" [cdkDragBoundary]="'.flight-rows-container'">
+        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index"
+          style="padding: 10px;" [formGroupName]="i" cdkDrag cdkDragLockAxis="y"
+          [cdkDragBoundary]="'.flight-rows-container'">
 
           <div class="form-group">
             <label for="flight-id-1">Flight Id *</label>
@@ -218,12 +221,13 @@
           </div>
           <div class="form-group">
             <label for="origin-1">Origin *</label>
-            <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs [appValidateBorder]="flightDetail.controls.flightOrg">
+            <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg" #flightOrgInputs
+              [appValidateBorder]="flightDetail.controls.flightOrg">
           </div>
           <div class="form-group">
             <label for="destination-1">Destination *</label>
-            <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
-              #flightDesInputs [appValidateBorder]="flightDetail.controls.flightDes">
+            <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes" #flightDesInputs
+              [appValidateBorder]="flightDetail.controls.flightDes">
           </div>
 
           <div class="form-group">
@@ -248,7 +252,7 @@
           </div>
 
           <div class="row-actions">
-            <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)" >
+            <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)">
               <i class="ri-subtract-line"></i>
             </button>
             <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)">
@@ -270,7 +274,7 @@
   </form>
 </div>
 
-<div class="submitted-data-section">
+<!-- <div class="submitted-data-section">
   <h3>Submitted Form Data:</h3>
   <pre>{{ formData | json }}</pre>
-</div>
+</div> -->

@@ -37,3 +37,29 @@ export interface form {
   productItems: FormArray<FormGroup<ProductItem>>;
   flight: FormArray<FormGroup<flight>>;
 }
+
+
+export interface order {
+  id:number
+  orderType: string 
+  org:string
+  des: string
+  pickUpPort: string
+  rentalDays:string
+  returnPort: string
+  leaseStart: string
+  leaseEnd: string
+  groupId: string
+  productCode: string
+  commodity: string
+  precondition: string
+  straps: string
+  supplierId: string
+  locationId:string
+  preconditionDropDownValue:string
+  preconditionInputValue: string
+  strapsValue: string
+  productItems: FormArray<FormGroup<ProductItem>>;
+  flight: FormArray<FormGroup<flight>>;
+}
+

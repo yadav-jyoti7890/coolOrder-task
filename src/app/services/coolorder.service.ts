@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { form } from '../form-interface';
+import { form, ProductItem } from '../form-interface';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
   providedIn: 'root',
@@ -35,14 +36,27 @@ export class CoolorderService {
   }
 
   saveProduct(data:any){
+    console.log(data)
     return this.http.post(`${this.apiUrl}order`, data)
   }
 
-  fetchData(updateId:number):Observable<any>{
+  fetchData(updateId:string|null):Observable<any>{
    return  this.http.get(`${this.apiUrl}order/${updateId}`);
   }
 
-  updateOrder(data:any){
-   return this.http.put(`${this.apiUrl}order/${6}`, {data});
+  updateOrder(data:any, updateId:string | null){
+    return this.http.patch(`${this.apiUrl}order/${updateId}`, data);
+  }
+
+  getAllOrderData():Observable<any>{
+    return this.http.get(`${this.apiUrl}order`)
+  }
+
+  getOrderWithId(updateId:string | null):Observable<any>{
+  return this.http.get(`${this.apiUrl}order/${updateId}`)
+  }
+
+  deleteOrder(id:string | null){
+   return this.http.delete(`${this.apiUrl}order/${id}`)
   }
 }

@@ -5,7 +5,7 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { flight, form, ProductItem } from '../../form-interface';
 import {
   AbstractControl,
@@ -50,7 +50,8 @@ export class UpdateComponent {
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
     private el: ElementRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router:Router
   ) { }
 
   public supplier: any[] = [];
@@ -66,7 +67,7 @@ export class UpdateComponent {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
-  public updateId!: number;
+  public updateId!: string | null;
   public initialFormValues!: any;
   public RouteValid: boolean = false
 
@@ -83,7 +84,11 @@ export class UpdateComponent {
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
     // this.fetchData()
-    this.updateId = Number(this.route.snapshot.paramMap.get('id'));
+    this.updateId = this.route.snapshot.paramMap.get('id');
+    console.log(this.updateId)
+    console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
+
+
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
       org: new FormControl(null, [Validators.required]),
@@ -157,16 +162,15 @@ export class UpdateComponent {
 
   }
 
-  private createProductItemGroup(): FormGroup {
-    return new FormGroup({
+  private createProductItemGroup(): FormGroup<ProductItem> {
+    return new FormGroup<ProductItem>({
       product: new FormControl(null, Validators.required),
       quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required]),
     });
   }
 
   private matchValues() {
-    // console.log("matchvalue call")
-    const flight = this.form.controls.flight as FormArray;
+    // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
 
     const org = this.form.controls.org.value;
     const des = this.form.controls.des.value;
@@ -311,15 +315,12 @@ export class UpdateComponent {
     // get start date
     const start = this.form.controls.leaseStart.value;
     // get rentalDays in a number format
-    const rentalDays = parseInt(this.form.controls.rentalDays.value || '0', 10);
-    ////.log(rentalDays);
-
+    const rentalDays = (this.form.controls.rentalDays.value || 0, 10);
+  
     // check if value null or empty
-    if (start && !isNaN(rentalDays)) {
+    if (start && rentalDays) {
       const startDate = new Date(start);
-      ////.log(startDate);
       const endDate = new Date(startDate);
-      ////.log(endDate);
       endDate.setDate(startDate.getDate() + rentalDays); //getdate-> gets the day of the month from start date
 
       const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
@@ -328,6 +329,7 @@ export class UpdateComponent {
   }
 
   private fetchData() {
+    console.log(this.updateId, "update id from update ")
     this.coolOrderService.fetchData(this.updateId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
@@ -367,44 +369,32 @@ export class UpdateComponent {
             productCode: response.productCode,
           });
 
-          const productArray = this.form.controls.productItems as FormArray;
+          const productArray = this.form.controls.productItems as FormArray<FormGroup<ProductItem>>;
           productArray.clear();
-          const items = Array.isArray(response.productItems)
-            ? response.productItems
-            : [];
+          const items: ProductItem[] = Array.isArray(response.productItems) ? response.productItems : [];
 
-          items.forEach((item: any) => {
+          items.forEach((item: ProductItem) => {
             productArray.push(
               new FormGroup({
-                product: new FormControl(item.product, Validators.required),
-                quantity2: new FormControl(item.quantity2, [
-                  Validators.pattern('^[0-9]+$'),
-                ]),
+                product: new FormControl(item.product),
+                quantity2: new FormControl(item.quantity2),
               })
             );
           });
 
-          const flightArray = this.form.controls.flight as FormArray;
+          const flightArray = this.form.controls.flight as FormArray<FormGroup<flight>>;;
           flightArray.clear();
-          const flightItems = Array.isArray(response.flight)
-            ? response.flight
-            : [];
+          const flightItems: flight[] = Array.isArray(response.flight) ? response.flight : [];
 
-          flightItems.forEach((f: any) => {
+          flightItems.forEach((f: flight) => {
             flightArray.push(
               new FormGroup({
-                flightId: new FormControl(f.flightId, Validators.required),
-                flightDate: new FormControl(f.flightDate, Validators.required),
-                flightOrg: new FormControl(f.flightOrg, Validators.required),
-                flightDes: new FormControl(f.flightDes, Validators.required),
-                flightProductType: new FormControl(
-                  f.flightProductType,
-                  Validators.required
-                ),
-                flightOldQty: new FormControl(
-                  f.flightOldQty,
-                  Validators.required
-                ),
+                flightId: new FormControl(f.flightId),
+                flightDate: new FormControl(f.flightDate),
+                flightOrg: new FormControl(f.flightOrg),
+                flightDes: new FormControl(f.flightDes),
+                flightProductType: new FormControl(f.flightProductType),
+                flightOldQty: new FormControl(f.flightOldQty),
               })
             );
           });
@@ -483,7 +473,16 @@ export class UpdateComponent {
           }
         }
       });
-      console.log('Dirty updated data:', updateData);
+      console.log('Dirty updated data:', updateData, this.updateId);
+      this.coolOrderService.updateOrder(updateData, this.updateId).subscribe({
+        next: (response)=>{
+          alert("update successfully")
+          this.router.navigate(['/order-list'])
+        },
+        error: (err)=>{
+          alert("something went wrong")
+        }
+      })
     }
   }
 

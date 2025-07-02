@@ -28,7 +28,7 @@ import { AddInputService } from '../../services/add-input.service';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 import { debounceTime } from 'rxjs';
 import { Console } from 'node:console';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-coolorder',
@@ -52,7 +52,8 @@ export class CoolorderComponent implements OnInit {
   constructor(
     private coolOrderService: CoolorderService,
     private fb: FormBuilder,
-    private el: ElementRef
+    private el: ElementRef,
+    private router: Router
   ) { }
 
   public supplier: any[] = [];
@@ -68,6 +69,7 @@ export class CoolorderComponent implements OnInit {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
+  public RouteValid: boolean = false;
 
   ngOnInit(): void {
     this.getSupplier();
@@ -159,7 +161,10 @@ export class CoolorderComponent implements OnInit {
   private createProductItemGroup(): FormGroup {
     return new FormGroup({
       product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [Validators.pattern('^[0-9]+$'), Validators.required])
+      quantity2: new FormControl(null, [
+        Validators.pattern('^[0-9]+$'),
+        Validators.required,
+      ]),
     });
   }
 
@@ -240,8 +245,7 @@ export class CoolorderComponent implements OnInit {
   // }
 
   private matchValues() {
-
-    const flight = this.form.controls.flight as FormArray
+    // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
 
     const org = this.form.controls.org.value;
     const des = this.form.controls.des.value;
@@ -252,19 +256,14 @@ export class CoolorderComponent implements OnInit {
       flightDes: flightGroup.controls.flightDes.value,
     }));
 
-
     const isCompleteRoute = this.isRouteValid(org, des, flights);
-    // console.log(isCompleteRoute)
+    this.form.setErrors(isCompleteRoute.valid ? null : { routeInvalid: true });
 
-    this.form.setErrors(isCompleteRoute ? null : { routeInvalid: true });
+    this.RouteValid = isCompleteRoute.valid;
 
     this.flightOrgInputs.forEach((orgInputRef, index) => {
-      let color = 'green'
       const desInputRef = this.flightDesInputs.get(index);
-      if (isCompleteRoute.index === index) {
-        color = 'red'
-      }
-      // const color = isCompleteRoute ? 'green' : 'red';
+      const color = isCompleteRoute.index.includes(index) ? 'red' : 'green';
 
       if (orgInputRef?.nativeElement) {
         orgInputRef.nativeElement.style.borderBottom = `2px solid ${color}`;
@@ -280,38 +279,34 @@ export class CoolorderComponent implements OnInit {
     origin: string | null,
     destination: string | null,
     flights: any[]
-  ): { valid: Boolean, index: number | null } {
-    if (!origin || !destination || flights.length === 0) return { valid: false, index: 0 };
+  ): { valid: boolean; index: number[] } {
+    const invalidIndexes: number[] = []; // CREATE THIS FOR STORE INVALID ROUTE
 
-    const firstFlight = flights[0];
-    const firstOrigin = firstFlight.flightOrg;
-    const firstDes = firstFlight.flightDes;
+    if (!origin || !destination || flights.length === 0) {
+      invalidIndexes.push(0);
+      return { valid: false, index: invalidIndexes };
+    }
 
+    // console.log(origin, destination, flights)
     for (let i = 1; i < flights.length; i++) {
-      const prevFlight = flights[i - 1];
-      const currentFlight = flights[i];
+      const prev = flights[i - 1];
+      const current = flights[i];
 
-      if (
-        currentFlight.flightOrg === firstOrigin
-      ) {
-        return { valid: false, index: i };
-      }
-
-      if (prevFlight.flightDes !== currentFlight.flightOrg) {
-        return { valid: false, index: i };
+      if (prev.flightDes !== current.flightOrg) {
+        invalidIndexes.push(i);
       }
     }
 
     const visited = new Set<string>();
     const stack: string[] = [origin];
+    let reached = false;
 
     while (stack.length) {
       const current = stack.pop()!;
-
-      if (current === destination) return { valid: true, index: null };
-
-      // if (visited.has(current)) continue;
-
+      if (current === destination) {
+        reached = true;
+        break;
+      }
       visited.add(current);
 
       for (const flight of flights) {
@@ -321,7 +316,15 @@ export class CoolorderComponent implements OnInit {
       }
     }
 
-    return { valid: false, index: flights.length - 1 };
+    if (!reached) {
+      for (let i = 0; i < flights.length; i++) {
+        if (!invalidIndexes.includes(i)) {
+          invalidIndexes.push(i);
+        }
+      }
+    }
+
+    return { valid: invalidIndexes.length === 0, index: invalidIndexes };
   }
 
   public updateProductItems(action: 'add' | 'remove', index?: number) {
@@ -416,13 +419,12 @@ export class CoolorderComponent implements OnInit {
   public getSupplierId(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.selectedValue = selectElement.value;
-    console.log(this.selectedValue, "supplier id")
+    console.log(this.selectedValue, 'supplier id');
     this.form.reset({
       supplierId: this.selectedValue,
     });
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
-
   }
 
   public getGroupBySupplierId(supplierId: any) {
@@ -467,20 +469,20 @@ export class CoolorderComponent implements OnInit {
   }
 
   public submit() {
-    this.matchValues()
-    this.formData = this.form.value;
-    if (this.form.valid) {
+    console.log(this.form.invalid, "click submit")
+    if (this.form.valid && this.RouteValid) {
       const formData = this.form.value;
 
       this.coolOrderService.saveProduct(formData).subscribe({
         next: (res) => {
           console.log(' Data saved:', res);
           alert('Form submitted successfully!');
+          this.router.navigate(['/order-list'])
           this.form.reset();
-          this.form.controls.productItems.clear()
-          this.form.controls.productItems.push(this.createProductItemGroup())
-          this.form.controls.flight.clear()
-          this.form.controls.flight.push(this.createFlight())
+          this.form.controls.productItems.clear();
+          this.form.controls.productItems.push(this.createProductItemGroup());
+          this.form.controls.flight.clear();
+          this.form.controls.flight.push(this.createFlight());
         },
 
         error: (err) => {
@@ -488,27 +490,28 @@ export class CoolorderComponent implements OnInit {
           alert('Error saving data.');
         },
       });
-    }
-    else {
-      this.form.markAllAsTouched();
+    } else {
+      // this.form.markAllAsTouched();
+      alert('Please fix the errors before updating.');
+
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
         if (control instanceof FormControl) {
-          console.log(`Field '${key}' touched:`, control.touched);
-          if (control.invalid && control.touched) {
-            control.updateValueAndValidity({ onlySelf: true, emitEvent: true });
+          // console.log(`Field '${key}' touched:`, control.touched);
+          if (control.invalid) {
+            control.markAsTouched();
+            control.updateValueAndValidity({ onlySelf: true });
           }
-        }
-        else if (control instanceof FormArray) {
+        } else if (control instanceof FormArray) {
           control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
-                if (field && field.invalid && field.touched) {
+                if (field && field.invalid) {
+                  field.markAsTouched();
                   field.updateValueAndValidity({
                     onlySelf: true,
-                    emitEvent: true,
                   });
                 }
               });
@@ -516,8 +519,6 @@ export class CoolorderComponent implements OnInit {
           });
         }
       });
-
-
     }
   }
 
@@ -536,28 +537,27 @@ export class CoolorderComponent implements OnInit {
   }
 
   public checkValue(event: any, i: number) {
-    const selectedValue = event.target.value
+    const selectedValue = event.target.value;
     //  console.log(selectedValue, i)
-    const Row = this.form.controls.productItems.at(i)
-    const PreviousValue = (Row.controls.product.value)
+    const Row = this.form.controls.productItems.at(i);
+    const PreviousValue = Row.controls.product.value;
     //  console.log(Row, PreviousValue)
     if (PreviousValue && this.unique.has(PreviousValue)) {
-      this.unique.delete(PreviousValue)
+      this.unique.delete(PreviousValue);
       // console.log(deletevalue)
     }
 
-    this.unique.add(selectedValue)
-    // console.log(this.unique)  
+    this.unique.add(selectedValue);
+    // console.log(this.unique)
   }
 
   public disabled(productName: string, currentIndex: number): boolean {
     // console.log(productName, "product name")
 
     for (let i = 0; i < this.form.controls.productItems.length; i++) {
-
       if (i !== currentIndex) {
-        const Row = this.form.controls.productItems.at(i)
-        const selectedValue = (Row.controls.product.value)
+        const Row = this.form.controls.productItems.at(i);
+        const selectedValue = Row.controls.product.value;
         if (selectedValue === productName) {
           return true;
         }
@@ -565,8 +565,4 @@ export class CoolorderComponent implements OnInit {
     }
     return false;
   }
-
-
-
-
 }
