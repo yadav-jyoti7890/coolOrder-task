@@ -29,6 +29,8 @@ import { ValidateBorderDirective } from '../../validator';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-update',
@@ -40,7 +42,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
-    RouterOutlet,
+    MatTooltipModule,MatButtonModule
   ],
   templateUrl: './update.component.html',
   styleUrl: './update.component.css',

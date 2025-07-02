@@ -14,6 +14,7 @@
                 <th>Lease End</th>
                 <th>Group</th>
                 <th>Product Code</th>
+                <th>Create_At</th>
                 <th>status</th>
                 <th>Action</th>
             </tr>
@@ -28,13 +29,14 @@
                 <td>{{order.leaseEnd}} </td>
                 <td>{{order.groupId}} </td>
                 <td>{{order.productCode}} </td>
+                <td>{{order.create_at}}</td>
                 <td>{{order.status}} </td>
                 @if(order.status === 'draft'){
                  <td>
                    <div class="action" style="display: flex; gap: 1vw;">
                       <i class="ri-edit-fill" [routerLink]="['/update', order.id]"></i>
                      <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
-                     <i class="ri-file-copy-fill" (click)="copy"></i>
+                     <i class="ri-file-copy-fill" [routerLink]="['/copy-order', order.id]"></i>
                    </div>
                  </td>
                 }
@@ -43,6 +45,7 @@
                      <div class="action" style="display: flex; gap: 1vw;">
                       <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
                        <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+                       <a style="font-weight: 600 !important; cursor: pointer;">view</a>
                      </div>
                 
                 </td>

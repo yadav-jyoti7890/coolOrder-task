@@ -45,7 +45,4 @@ export class OrderListComponent implements OnInit{
     })
   }
 
-  copy(){
-    
-  }
 }

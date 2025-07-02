@@ -18,8 +18,8 @@
       </div>
 
       <!-- <div class="action-buttons">
-        <button type="button" class="orange" (click)="update()" [disabled]="!form.valid || !RouteValid">
-          Update
+        <button type="button" class="orange" (click)="submit()" [disabled]="!form.valid || !RouteValid">
+          submit
         </button>
       </div> -->
 
@@ -29,12 +29,12 @@
           ⟳
         </button>
 
-        <button type="button" (click)="update('draft')">
+        <button type="button" (click)="submit('draft')">
           <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
         </button>
 
-        <button type="button" class="orange"  (click)="update('New')"  mat-raised-button matTooltip="Update">
-          <i class="ri-arrow-right-line"></i>
+        <button type="button" class="orange" data-bs-toggle="tooltip" data-bs-placement="bottom" (click)="submit('New')">
+          <i class="ri-arrow-right-line" title="submit"></i>
         </button>
       </div>
     </div>

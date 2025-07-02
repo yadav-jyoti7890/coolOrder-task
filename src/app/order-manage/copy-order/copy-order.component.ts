@@ -3,58 +3,48 @@ import {
   ElementRef,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
-import { CommonModule, formatDate } from '@angular/common';
-import { response } from 'express';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AbstractControl,
   FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { flight, form, ProductItem } from '../../form-interface';
+import { debounceTime, forkJoin } from 'rxjs';
+import { CommonModule, formatDate } from '@angular/common';
 import { ValidateBorderDirective } from '../../validator';
-
-import { AddInputService } from '../../services/add-input.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
-import { debounceTime } from 'rxjs';
-import { Console } from 'node:console';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-coolorder',
-  standalone: true,
+  selector: 'app-copy-order',
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
-    RouterOutlet,
   ],
-  templateUrl: './coolorder.component.html',
-  styleUrl: './coolorder.component.css',
+  templateUrl: './copy-order.component.html',
+  styleUrl: './copy-order.component.css',
 })
-export class CoolorderComponent implements OnInit {
+export class CopyOrderComponent implements OnInit {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
   constructor(
     private coolOrderService: CoolorderService,
-    private fb: FormBuilder,
-    private el: ElementRef,
+    private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -69,11 +59,26 @@ export class CoolorderComponent implements OnInit {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
+  public updateId!: string | null;
+  public initialFormValues!: any;
   public RouteValid: boolean = false;
 
   ngOnInit(): void {
-    this.getSupplier();
-    this.getOrderType();
+    forkJoin([
+      this.coolOrderService.getSupplier(),
+      this.coolOrderService.getOrderTypeData(),
+    ]).subscribe(([supplierRes, orderTypeRes]) => {
+      this.supplier = supplierRes;
+      this.orderType = orderTypeRes;
+      this.fetchData();
+    });
+
+    this.getGroupBySupplierId(this.selectedValue);
+    this.getLocation();
+    // this.fetchData()
+    this.updateId = this.route.snapshot.paramMap.get('id');
+    console.log(this.updateId);
+    console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
@@ -111,7 +116,7 @@ export class CoolorderComponent implements OnInit {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
-    console.log(this.form.controls, 'controls');
+    this.initialFormValues = this.form.value;
 
     this.form.controls.leaseStart?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
@@ -127,12 +132,6 @@ export class CoolorderComponent implements OnInit {
         this.matchValues();
       });
 
-    // this.form.controls.flight.valueChanges
-    //   .pipe(debounceTime(500))
-    //   .subscribe(() => {
-    //     this.matchValues();
-    //   });
-
     this.form.controls.org.valueChanges
       .pipe(debounceTime(800))
       .subscribe(() => {
@@ -144,22 +143,11 @@ export class CoolorderComponent implements OnInit {
       .subscribe(() => {
         this.matchValues();
       });
-
-    // this.form.controls.flight.valueChanges
-    //   .pipe(debounceTime(500)) // Wait 500ms after typing stops
-    //   .subscribe(() => {
-    //     this.validateAndStyle();
-    //   });
-
-    // this.form.controls.productItems.valueChanges
-    //   .pipe(debounceTime(500))
-    //   .subscribe(() => {
-    //     this.validateAndStyle();
-    //   });
+    this.matchValues();
   }
 
-  private createProductItemGroup(): FormGroup {
-    return new FormGroup({
+  private createProductItemGroup(): FormGroup<ProductItem> {
+    return new FormGroup<ProductItem>({
       product: new FormControl(null, Validators.required),
       quantity2: new FormControl(null, [
         Validators.pattern('^[0-9]+$'),
@@ -252,10 +240,8 @@ export class CoolorderComponent implements OnInit {
   }
 
   public updateProductItems(action: 'add' | 'remove', index?: number) {
-    // //.log(action, index);
     const arr = this.form.controls.productItems as FormArray;
     if (action === 'add') {
-      //.log(action);
       arr.push(this.createProductItemGroup());
     } else if (action === 'remove' && index !== undefined) {
       const removeFromUnique =
@@ -265,7 +251,6 @@ export class CoolorderComponent implements OnInit {
       if (product) {
         this.unique.delete(product);
       }
-      console.log(this.unique);
       arr.removeAt(index);
     }
   }
@@ -293,8 +278,6 @@ export class CoolorderComponent implements OnInit {
     }
   }
 
-  // 1. copy previous value and create new formArray
-  // 2. user click copy so send the exist index (like 1/2/3)
   public copyValue(i: number) {
     const currentGroup = this.form.controls.flight.at(i) as FormGroup;
     const copiedValue = currentGroup.value;
@@ -304,7 +287,6 @@ export class CoolorderComponent implements OnInit {
   }
 
   public drop(event: any) {
-    console.log(event, 'event');
     const controls = this.form.controls.flight as FormArray;
     const previousIndex = controls.at(event.previousIndex);
     const remove = controls.removeAt(event.previousIndex);
@@ -316,114 +298,131 @@ export class CoolorderComponent implements OnInit {
     // get start date
     const start = this.form.controls.leaseStart.value;
     // get rentalDays in a number format
-    const rentalDays = parseInt(this.form.controls.rentalDays.value || '0', 10);
-    ////.log(rentalDays);
+    const rentalDays = (this.form.controls.rentalDays.value || 0, 10);
 
     // check if value null or empty
-    if (start && !isNaN(rentalDays)) {
+    if (start && rentalDays) {
       const startDate = new Date(start);
-      ////.log(startDate);
       const endDate = new Date(startDate);
-      ////.log(endDate);
       endDate.setDate(startDate.getDate() + rentalDays); //getdate-> gets the day of the month from start date
 
       const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
       this.form.controls.leaseEnd.setValue(formattedDate);
-
     }
   }
 
-  private getSupplier() {
-    this.coolOrderService.getSupplier().subscribe({
+  private fetchData() {
+    console.log(this.updateId, 'update id from update ');
+    this.coolOrderService.fetchData(this.updateId).subscribe({
       next: (response) => {
-        this.supplier = response;
-      },
-    });
-  }
+        const supplierId = response.supplierId;
+        const groupId = response.groupId;
 
-  public getSupplierId(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedValue = selectElement.value;
-    console.log(this.selectedValue, 'supplier id');
-    this.form.reset({
-      supplierId: this.selectedValue,
-    });
-    this.getGroupBySupplierId(this.selectedValue);
-    this.getLocation();
-  }
+        forkJoin({
+          group: this.coolOrderService.getGroup(supplierId),
+          product: this.coolOrderService.getProduct(groupId),
+          location: this.coolOrderService.getLocation(supplierId),
+          temp: this.coolOrderService.getTemp(groupId),
+        }).subscribe((all) => {
+          this.group = all.group;
+          this.products = all.product;
+          this.options = this.products.map((item) => item.name);
+          this.location = all.location;
+          this.temp = all.temp;
 
-  public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
-      next: (response) => {
-        this.group = response;
-      },
-    });
-  }
+          // console.log(this.temp, "temp")
 
-  public getProductByGroupId(event: any) {
-    this.groupId = event.target.value as HTMLSelectElement;
-    this.getProductsById();
-    this.getTemp();
-  }
+          // patch basic values
+          this.form.patchValue({
+            orderType: response.orderType,
+            org: response.org,
+            des: response.des,
+            pickUpPort: response.pickUpPort,
+            rentalDays: response.rentalDays,
+            returnPort: response.returnPort,
+            leaseStart: response.leaseStart,
+            leaseEnd: response.leaseEnd,
+            supplierId: response.supplierId,
+            commodity: response.commodity,
+            precondition: response.precondition,
+            straps: response.straps,
+            preconditionDropDownValue: response.preconditionDropDownValue,
+            preconditionInputValue: response.preconditionInputValue,
+            strapsValue: response.strapsValue,
+            groupId: response.groupId,
+            locationId: response.locationId,
+            productCode: response.productCode,
+          });
+          this.selectedValue = response.supplierId;
 
-  public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
-      next: (response) => {
-        this.products = response;
-        ////.log(this.products, 'products');
-        this.options = this.products.map((item) => item.name);
-      },
-    });
-  }
+          const productArray = this.form.controls.productItems as FormArray<
+            FormGroup<ProductItem>
+          >;
+          productArray.clear();
+          const items: ProductItem[] = Array.isArray(response.productItems)
+            ? response.productItems
+            : [];
 
-  public getOrderType() {
-    this.coolOrderService.getOrderTypeData().subscribe({
-      next: (response) => {
-        ////.log(response);
-        this.orderType = response;
-      },
-    });
-  }
+          items.forEach((item: ProductItem) => {
+            productArray.push(
+              new FormGroup({
+                product: new FormControl(item.product),
+                quantity2: new FormControl(item.quantity2),
+              })
+            );
+          });
 
-  private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
-      next: (response) => {
-        this.location = response;
+          const flightArray = this.form.controls.flight as FormArray<
+            FormGroup<flight>
+          >;
+          flightArray.clear();
+          const flightItems: flight[] = Array.isArray(response.flight)
+            ? response.flight
+            : [];
+
+          flightItems.forEach((f: flight) => {
+            flightArray.push(
+              new FormGroup({
+                flightId: new FormControl(f.flightId),
+                flightDate: new FormControl(f.flightDate),
+                flightOrg: new FormControl(f.flightOrg),
+                flightDes: new FormControl(f.flightDes),
+                flightProductType: new FormControl(f.flightProductType),
+                flightOldQty: new FormControl(f.flightOldQty),
+              })
+            );
+          });
+        });
       },
     });
   }
 
   public submit(status: 'New' | 'draft') {
-
     // console.log(status)
     // console.log(this.form.invalid, "click submit")
 
     const formData = {
       ...this.form.value,
-      status
-    }
+      status,
+    };
     this.calculateLeaseEndDate();
-    console.log(formData)
-
-
+    console.log(formData);
 
     if (this.form.valid && this.RouteValid) {
-      // const formData = this.form.value;
-
       const today = new Date();
       const formattedDate = today.toISOString().substring(0, 10);
 
       const formData = {
         ...this.form.value,
         status,
-        create_at : formattedDate
-      }
+        create_at: formattedDate,
+      };
 
       this.coolOrderService.saveProduct(formData).subscribe({
         next: (res) => {
           console.log(' Data saved:', res);
           alert(`${status} Form submitted successfully`);
-          this.router.navigate(['/order-list'])
+          this.router.navigate(['/order-list']);
           this.form.reset();
           this.form.controls.productItems.clear();
           this.form.controls.productItems.push(this.createProductItemGroup());
@@ -468,38 +467,83 @@ export class CoolorderComponent implements OnInit {
     }
   }
 
-  public reset() {
-    this.form.reset();
+  public getSupplierId(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedValue = selectElement.value;
+
+    const productArray = this.form.controls.productItems as FormArray;
+    while (productArray.length !== 0) {
+      productArray.removeAt(0);
+    }
+
+    this.form.controls.productCode.reset();
+    this.form.controls.groupId.reset();
+    this.form.controls.locationId.reset();
+    this.form.controls.straps.reset();
+    this.form.controls.precondition.reset();
+    this.form.controls.strapsValue.reset();
+
+    const flightArray = this.form.controls.flight as FormArray;
+
+    flightArray.controls.forEach((control) => {
+      const group = control as FormGroup;
+      group.controls['flightOldQty'].reset();
+    });
+
+    this.group = [];
+    this.products = [];
+    this.options = [];
+    this.location = [];
+    this.temp = [];
+
+    productArray.push(this.createProductItemGroup());
+    this.getGroupBySupplierId(this.selectedValue);
+    this.getLocation();
   }
 
-  private getTemp() {
-    ////.log(this.groupId);
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+  private getLocation() {
+    this.coolOrderService.getLocation(this.selectedValue).subscribe({
       next: (response) => {
-        this.temp = response;
-        ////.log('temp', response);
+        this.location = response;
       },
     });
   }
 
-  public checkValue(event: any, i: number) {
-    const selectedValue = event.target.value;
-    //  console.log(selectedValue, i)
-    const Row = this.form.controls.productItems.at(i);
-    const PreviousValue = Row.controls.product.value;
-    //  console.log(Row, PreviousValue)
-    if (PreviousValue && this.unique.has(PreviousValue)) {
-      this.unique.delete(PreviousValue);
-      // console.log(deletevalue)
-    }
+  public getGroupBySupplierId(supplierId: any) {
+    this.coolOrderService.getGroup(supplierId).subscribe({
+      next: (response) => {
+        this.group = response;
+        //.log(response.id, this.group)
+        this.groupId = response.id;
+      },
+    });
+  }
 
-    this.unique.add(selectedValue);
-    // console.log(this.unique)
+  public getProductByGroupId(event: any) {
+    this.groupId = event.target.value as HTMLSelectElement;
+    this.getProductsById();
+    this.getTemp();
+  }
+
+  public getProductsById() {
+    this.coolOrderService.getProduct(this.groupId).subscribe({
+      next: (response) => {
+        this.products = response;
+        this.options = this.products.map((item) => item.name);
+      },
+    });
+  }
+
+  private getTemp() {
+    this.coolOrderService.getTemp(this.groupId).subscribe({
+      next: (response) => {
+        this.temp = response;
+        console.log(this.temp);
+      },
+    });
   }
 
   public disabled(productName: string, currentIndex: number): boolean {
-    // console.log(productName, "product name")
-
     for (let i = 0; i < this.form.controls.productItems.length; i++) {
       if (i !== currentIndex) {
         const Row = this.form.controls.productItems.at(i);
@@ -510,5 +554,11 @@ export class CoolorderComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  public reset() {
+    this.form.reset({
+      supplierId: this.selectedValue,
+    });
   }
 }
