@@ -60,7 +60,7 @@
           </div>
           <div class="form-control">
             <label>Booked Rental Days</label>
-            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" />
+            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" readonly/>
           </div>
           <div class="form-control">
             <label>Customer Return Port</label>
@@ -73,7 +73,7 @@
           </div>
           <div class="form-control">
             <label>Planned Lease End</label>
-            <input type="date" formControlName="leaseEnd" readonly/>
+            <input type="date" formControlName="leaseEnd"/>
           </div>
           <div class="form-control">
             <label>Select Location</label>

@@ -57,4 +57,8 @@ export class CoolorderService {
   deleteOrder(id:string | null){
    return this.http.delete(`${this.apiUrl}order/${id}`)
   }
+
+  createNewCR(CR:any){
+   return this.http.post(`${this.apiUrl}CR`,CR)
+  }
 }

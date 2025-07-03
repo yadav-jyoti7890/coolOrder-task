@@ -1,62 +1,37 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
-import { flight, form, ProductItem } from '../../form-interface';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
-import { debounceTime, forkJoin } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { flight, form, ProductItem } from '../../form-interface';
+import { debounceTime, forkJoin, from } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
-import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 import { ValidateBorderDirective } from '../../validator';
-import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
+import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 
 @Component({
-  selector: 'app-update',
+  selector: 'app-change-request',
   imports: [
     ReactiveFormsModule,
-    CommonModule, 
+    CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
-   
   ],
-  templateUrl: './update.component.html',
-  styleUrl: './update.component.css',
+  templateUrl: './change-request.component.html',
+  styleUrl: './change-request.component.css'
 })
-export class UpdateComponent {
+export class ChangeRequestComponent {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
   constructor(
     private coolOrderService: CoolorderService,
-    private fb: FormBuilder,
-    private el: ElementRef,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -71,10 +46,16 @@ export class UpdateComponent {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
-  public updateId!: string | null;
+  public orderId!: string | null;
   public initialFormValues!: any;
   public RouteValid: boolean = false;
+  public disableCR: boolean = true;
   public showCommentPopup:boolean = false;
+  public changeInfo!: FormGroup
+  public submitValue: 'New' | 'draft' | null = null
+  // public comment = new FormControl('');
+  
+
 
   ngOnInit(): void {
     forkJoin([
@@ -89,9 +70,9 @@ export class UpdateComponent {
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
     // this.fetchData()
-    this.updateId = this.route.snapshot.paramMap.get('id');
-    console.log(this.updateId);
-    console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
+    this.orderId = this.route.snapshot.paramMap.get('id');
+    //console.log(this.orderId);
+    //console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
@@ -129,6 +110,15 @@ export class UpdateComponent {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
+    this.changeInfo = new FormGroup({
+      comment:new FormControl('', Validators.required),
+      createBy: new FormControl('', Validators.required)
+    })
+
+
+
+
+
     this.initialFormValues = this.form.value;
 
     this.form.controls.leaseStart?.valueChanges.subscribe(() =>
@@ -156,7 +146,6 @@ export class UpdateComponent {
       .subscribe(() => {
         this.matchValues();
       });
-    this.matchValues();
 
     this.form.controls.productItems.valueChanges
       .pipe(debounceTime(800))
@@ -164,8 +153,13 @@ export class UpdateComponent {
         this.matchValues();
       });
 
-      this.matchValues();
+       this.form.valueChanges.pipe(debounceTime(800))
+      .subscribe(() => {
+      this.disableCR = !this.form.dirty || !this.form.valid;
+      });
+
   }
+
 
   private createProductItemGroup(): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
@@ -220,7 +214,7 @@ export class UpdateComponent {
       return { valid: false, index: invalidIndexes };
     }
 
-    // console.log(origin, destination, flights)
+    // //console.log(origin, destination, flights)
     for (let i = 1; i < flights.length; i++) {
       const prev = flights[i - 1];
       const current = flights[i];
@@ -333,8 +327,8 @@ export class UpdateComponent {
   }
 
   private fetchData() {
-    console.log(this.updateId, 'update id from update ');
-    this.coolOrderService.fetchData(this.updateId).subscribe({
+    //console.log(this.orderId, 'update id from update ');
+    this.coolOrderService.fetchData(this.orderId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
@@ -351,7 +345,7 @@ export class UpdateComponent {
           this.location = all.location;
           this.temp = all.temp;
 
-          // console.log(this.temp, "temp")
+          // //console.log(this.temp, "temp")
 
           // patch basic values
           this.form.patchValue({
@@ -393,6 +387,8 @@ export class UpdateComponent {
             );
           });
 
+          // this.initialFormValues.controls.productItems = this.form.controls.productItems.value
+
           const flightArray = this.form.controls.flight as FormArray<
             FormGroup<flight>
           >;
@@ -413,13 +409,17 @@ export class UpdateComponent {
               })
             );
           });
+
+          this.initialFormValues = this.form.value
+
         });
       },
     });
   }
 
-  public update(status: 'New' | 'draft') {
-    if (!this.form.valid || !this.RouteValid) {
+  public submit(selectValue:string| null) {
+    console.log(selectValue)
+    if (!this.form.valid || !this.RouteValid || this.disableCR) {
       alert('Please fix the errors before updating.');
 
       // this.form.markAllAsTouched();
@@ -438,6 +438,7 @@ export class UpdateComponent {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
                 if (field.invalid) {
+
                   field.markAsTouched();
                   field.updateValueAndValidity({ onlySelf: true });
                 }
@@ -446,7 +447,8 @@ export class UpdateComponent {
           });
         }
       });
-    } else {
+    } 
+    else {
       const updateData: any = {}; // STORE DIRTY DATA!
       //CONVERT OBJECT INTO ARRAY !
       Object.keys(this.form.controls).forEach((key: string) => {
@@ -484,13 +486,17 @@ export class UpdateComponent {
 
       const copy = {
         ...updateData,
-        status,
+        status: selectValue,
+        previousFormValue: this.initialFormValues,
+        orderId: this.orderId,
+        comment: this.changeInfo.value
       };
-      console.log(copy, 'copy data');
-      console.log('Dirty updated data:', copy, this.updateId);
-      this.coolOrderService.updateOrder(copy, this.updateId).subscribe({
+
+      console.log(copy)
+
+      this.coolOrderService.createNewCR(copy).subscribe({
         next: (response) => {
-          alert('update successfully');
+          alert('Create New CR');
           this.router.navigate(['/order-list']);
         },
         error: (err) => {
@@ -498,6 +504,15 @@ export class UpdateComponent {
         },
       });
     }
+  }
+
+  public cancel(){
+    this.showCommentPopup = false
+  }
+
+  public openPopUp(status: 'New' | 'draft'){
+    this.submitValue = status;
+    this.showCommentPopup = true;
   }
 
   public getSupplierId(event: Event): void {
@@ -571,7 +586,7 @@ export class UpdateComponent {
     this.coolOrderService.getTemp(this.groupId).subscribe({
       next: (response) => {
         this.temp = response;
-        console.log(this.temp)
+        //console.log(this.temp)
       },
     });
   }
@@ -589,5 +604,6 @@ export class UpdateComponent {
     return false;
   }
 
-  public reset() {}
+  public reset() { }
 }
+

@@ -45,7 +45,8 @@
                      <div class="action" style="display: flex; gap: 1vw;">
                       <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
                        <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
-                       <a style="font-weight: 600 !important; cursor: pointer;">view</a>
+                       <!-- <a style="font-weight: 600 !important; cursor: pointer;">view</a> -->
+                        <button [routerLink]="['/change-request', order.id]" class="view">CR</button>
                      </div>
                 
                 </td>

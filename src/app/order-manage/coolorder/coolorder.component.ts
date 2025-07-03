@@ -117,7 +117,7 @@ export class CoolorderComponent implements OnInit {
       this.calculateLeaseEndDate()
     );
 
-    this.form.controls.rentalDays?.valueChanges.subscribe(() =>
+    this.form.controls.leaseEnd?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
 
@@ -315,22 +315,31 @@ export class CoolorderComponent implements OnInit {
   private calculateLeaseEndDate() {
     // get start date
     const start = this.form.controls.leaseStart.value;
-    // get rentalDays in a number format
-    const rentalDays = parseInt(this.form.controls.rentalDays.value || '0', 10);
-    ////.log(rentalDays);
+    const end = this.form.controls.leaseEnd.value;
 
-    // check if value null or empty
-    if (start && !isNaN(rentalDays)) {
-      const startDate = new Date(start);
-      ////.log(startDate);
-      const endDate = new Date(startDate);
-      ////.log(endDate);
-      endDate.setDate(startDate.getDate() + rentalDays); //getdate-> gets the day of the month from start date
-
-      const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
-      this.form.controls.leaseEnd.setValue(formattedDate);
-
+    if(start && end){
+      const startdate = new Date(start)
+      console.log(startdate)
     }
+
+  
+
+    console.log(start, typeof start)
+
+    // const startDate = new Date(start)
+    // const calculateDays = start.ge
+    // this.form.controls.rentalDays.setValue(start.g)
+    // const rentalDays = parseInt(this.form.controls.rentalDays.value || '0', 10);
+  
+    // if (start && !isNaN(rentalDays)) {
+    //   const startDate = new Date(start);
+    //   const endDate = new Date(startDate);
+    //   endDate.setDate(startDate.getDate() + rentalDays);
+
+    //   const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
+    //   this.form.controls.leaseEnd.setValue(formattedDate);
+
+    // }
   }
 
   private getSupplier() {
@@ -396,7 +405,7 @@ export class CoolorderComponent implements OnInit {
   public submit(status: 'New' | 'draft') {
 
     // console.log(status)
-    // console.log(this.form.invalid, "click submit")
+    // console.log(this.forinvalid, "click submit")m.
 
     const formData = {
       ...this.form.value,
