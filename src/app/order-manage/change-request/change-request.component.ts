@@ -50,11 +50,10 @@ export class ChangeRequestComponent {
   public initialFormValues!: any;
   public RouteValid: boolean = false;
   public disableCR: boolean = true;
-  public showCommentPopup:boolean = false;
-  public changeInfo!: FormGroup
+  public showCommentPopup: boolean = false;
   public submitValue: 'New' | 'draft' | null = null
-  // public comment = new FormControl('');
-  
+  public comment = new FormControl(null, [Validators.required]);
+
 
 
   ngOnInit(): void {
@@ -110,14 +109,9 @@ export class ChangeRequestComponent {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
-    this.changeInfo = new FormGroup({
-      comment:new FormControl('', Validators.required),
-      createBy: new FormControl('', Validators.required)
-    })
-
-
-
-
+    // this.changeInfo = new FormGroup({
+    //   comment:new FormControl(null, Validators.required),
+    // })
 
     this.initialFormValues = this.form.value;
 
@@ -125,7 +119,7 @@ export class ChangeRequestComponent {
       this.calculateLeaseEndDate()
     );
 
-    this.form.controls.rentalDays?.valueChanges.subscribe(() =>
+    this.form.controls.leaseEnd?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
 
@@ -153,23 +147,23 @@ export class ChangeRequestComponent {
         this.matchValues();
       });
 
-       this.form.valueChanges.pipe(debounceTime(800))
+    this.form.valueChanges.pipe(debounceTime(800))
       .subscribe(() => {
-      this.disableCR = !this.form.dirty || !this.form.valid;
+        this.disableCR = !this.form.dirty || !this.form.valid;
       });
-
   }
 
 
-  private createProductItemGroup(): FormGroup<ProductItem> {
+  private createProductItemGroup(data: Partial<ProductItem> = {}): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
-      product: new FormControl(null, Validators.required),
-      quantity2: new FormControl(null, [
+      product: new FormControl(data.product ?? null, Validators.required),
+      quantity2: new FormControl(data.quantity2 ?? null, [
         Validators.pattern('^[0-9]+$'),
         Validators.required,
       ]),
     });
   }
+
 
   private matchValues() {
     // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
@@ -270,18 +264,19 @@ export class ChangeRequestComponent {
     }
   }
 
-  private createFlight(data: any = {}): FormGroup {
-    const flight = new FormGroup({
-      flightId: new FormControl(data.flightId || '', Validators.required),
-      flightDate: new FormControl(data.flightDate || '', Validators.required),
-      flightOrg: new FormControl(data.flightOrg || '', Validators.required),
-      flightDes: new FormControl(data.flightDes || '', Validators.required),
-      flightProductType: new FormControl('', Validators.required),
-      flightOldQty: new FormControl('', Validators.required),
-    });
 
-    return flight;
+
+  private createFlight(data: Partial<flight> = {}): FormGroup<flight> {
+    return new FormGroup<flight>({
+      flightId: new FormControl(data.flightId ?? null, Validators.required),
+      flightDate: new FormControl(data.flightDate ?? null, Validators.required),
+      flightOrg: new FormControl(data.flightOrg ?? null, Validators.required),
+      flightDes: new FormControl(data.flightDes ?? null, Validators.required),
+      flightProductType: new FormControl(data.flightProductType ?? null, Validators.required),
+      flightOldQty: new FormControl(data.flightOldQty ?? null, Validators.required),
+    });
   }
+
 
   public addFlight(action: 'addFlight' | 'removeFlight', index?: number) {
     //.log('add flight');
@@ -312,17 +307,17 @@ export class ChangeRequestComponent {
   private calculateLeaseEndDate() {
     // get start date
     const start = this.form.controls.leaseStart.value;
-    // get rentalDays in a number format
-    const rentalDays = (this.form.controls.rentalDays.value || 0, 10);
+    const end = this.form.controls.leaseEnd.value;
 
-    // check if value null or empty
-    if (start && rentalDays) {
-      const startDate = new Date(start);
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + rentalDays); //getdate-> gets the day of the month from start date
+    if (start && end) {
+      const startDate = new Date(start)
+      const endDate = new Date(end)
+      // const endDate = new Date(end)
 
-      const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
-      this.form.controls.leaseEnd.setValue(formattedDate);
+      const startDay = startDate.getDate()
+      const endDay = endDate.getDate()
+      // console.log(startDay, "start" , endDay, "enddate")
+      this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
     }
   }
 
@@ -379,15 +374,8 @@ export class ChangeRequestComponent {
             : [];
 
           items.forEach((item: ProductItem) => {
-            productArray.push(
-              new FormGroup({
-                product: new FormControl(item.product),
-                quantity2: new FormControl(item.quantity2),
-              })
-            );
+            productArray.push(this.createProductItemGroup(item)); // ✅ Correct
           });
-
-          // this.initialFormValues.controls.productItems = this.form.controls.productItems.value
 
           const flightArray = this.form.controls.flight as FormArray<
             FormGroup<flight>
@@ -397,17 +385,9 @@ export class ChangeRequestComponent {
             ? response.flight
             : [];
 
+
           flightItems.forEach((f: flight) => {
-            flightArray.push(
-              new FormGroup({
-                flightId: new FormControl(f.flightId),
-                flightDate: new FormControl(f.flightDate),
-                flightOrg: new FormControl(f.flightOrg),
-                flightDes: new FormControl(f.flightDes),
-                flightProductType: new FormControl(f.flightProductType),
-                flightOldQty: new FormControl(f.flightOldQty),
-              })
-            );
+            flightArray.push(this.createFlight(f));
           });
 
           this.initialFormValues = this.form.value
@@ -417,8 +397,17 @@ export class ChangeRequestComponent {
     });
   }
 
-  public submit(selectValue:string| null) {
-    console.log(selectValue)
+  public checkAndSubmit() {
+    if (this.comment.invalid) {
+      this.comment.markAsTouched();
+      this.comment.updateValueAndValidity();
+      return;
+    }
+    this.submit(this.selectedValue)
+  }
+
+  public submit(selectValue: string | null) {
+    // console.log(selectValue)
     if (!this.form.valid || !this.RouteValid || this.disableCR) {
       alert('Please fix the errors before updating.');
 
@@ -447,7 +436,7 @@ export class ChangeRequestComponent {
           });
         }
       });
-    } 
+    }
     else {
       const updateData: any = {}; // STORE DIRTY DATA!
       //CONVERT OBJECT INTO ARRAY !
@@ -489,10 +478,10 @@ export class ChangeRequestComponent {
         status: selectValue,
         previousFormValue: this.initialFormValues,
         orderId: this.orderId,
-        comment: this.changeInfo.value
+        comment: this.comment.value
       };
 
-      console.log(copy)
+      // console.log(copy)
 
       this.coolOrderService.createNewCR(copy).subscribe({
         next: (response) => {
@@ -506,11 +495,12 @@ export class ChangeRequestComponent {
     }
   }
 
-  public cancel(){
+  public cancel() {
     this.showCommentPopup = false
+    this.comment.reset();
   }
 
-  public openPopUp(status: 'New' | 'draft'){
+  public openPopUp(status: 'New' | 'draft') {
     this.submitValue = status;
     this.showCommentPopup = true;
   }

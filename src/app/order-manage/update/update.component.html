@@ -24,7 +24,7 @@
       </div> -->
 
 
-       <div class="action-buttons">
+      <div class="action-buttons">
         <button type="button" (click)="reset()" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reset">
           ⟳
         </button>
@@ -33,12 +33,12 @@
           <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
         </button>
 
-        <button type="button" class="orange"  (click)="update('New')" >
+        <button type="button" class="orange" (click)="update('New')">
           <i class="ri-arrow-right-line"></i>
         </button>
       </div>
 
-      
+
     </div>
 
     <div class="cards">
@@ -57,10 +57,7 @@
             <label>Customer Pickup Port</label>
             <input type="text" formControlName="pickUpPort" [appValidateBorder]="form.controls.pickUpPort" />
           </div>
-          <div class="form-control">
-            <label>Booked Rental Days</label>
-            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" />
-          </div>
+
           <div class="form-control">
             <label>Customer Return Port</label>
             <input type="text" formControlName="returnPort" [appValidateBorder]="form.controls.returnPort" />
@@ -72,6 +69,10 @@
           <div class="form-control">
             <label>Planned Lease End</label>
             <input type="date" formControlName="leaseEnd" readonly />
+          </div>
+          <div class="form-control">
+            <label>Booked Rental Days</label>
+            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" readonly />
           </div>
           <div class="form-control">
             <label>Select Location</label>
@@ -123,7 +124,7 @@
                 " style="width: 100%">
                 <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
                 <input type="text" formControlName="preconditionInputValue"
-                  [appValidateBorder]="form.controls.preconditionInputValue"/>
+                  [appValidateBorder]="form.controls.preconditionInputValue" />
               </div>
 
               <!-- Straps -->
@@ -177,7 +178,7 @@
 
               <div class="remove">
                 <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
-                 <i class="ri-subtract-line"></i>
+                  <i class="ri-subtract-line"></i>
                 </button>
               </div>
 

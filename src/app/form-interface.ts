@@ -19,7 +19,7 @@ export interface form {
   org: FormControl<string | null>;
   des: FormControl<string | null>;
   pickUpPort: FormControl<string | null>;
-  rentalDays: FormControl<string | null>;
+  rentalDays: FormControl<number | null>;
   returnPort: FormControl<string | null>;
   leaseStart: FormControl<string | null>;
   leaseEnd: FormControl<string | null>;
@@ -37,7 +37,6 @@ export interface form {
   productItems: FormArray<FormGroup<ProductItem>>;
   flight: FormArray<FormGroup<flight>>;
 }
-
 
 export interface order {
   id:number

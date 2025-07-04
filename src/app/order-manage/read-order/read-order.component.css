@@ -416,6 +416,9 @@ textarea:disabled {
   border-color: #ddd;
   cursor: not-allowed;
 }
-
+:read-only{
+  background-color: #fdfdfd;
+  color: #000;
+}
 
 

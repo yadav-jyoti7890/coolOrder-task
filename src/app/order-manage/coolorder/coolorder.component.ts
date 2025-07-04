@@ -318,28 +318,16 @@ export class CoolorderComponent implements OnInit {
     const end = this.form.controls.leaseEnd.value;
 
     if(start && end){
-      const startdate = new Date(start)
-      console.log(startdate)
+      const startDate = new Date(start)
+      const endDate = new Date(end)
+      // const endDate = new Date(end)
+
+      const startDay = startDate.getDate()
+      const endDay = endDate.getDate()
+      console.log(startDay, "start" , endDay, "enddate")
+
+      this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
     }
-
-  
-
-    console.log(start, typeof start)
-
-    // const startDate = new Date(start)
-    // const calculateDays = start.ge
-    // this.form.controls.rentalDays.setValue(start.g)
-    // const rentalDays = parseInt(this.form.controls.rentalDays.value || '0', 10);
-  
-    // if (start && !isNaN(rentalDays)) {
-    //   const startDate = new Date(start);
-    //   const endDate = new Date(startDate);
-    //   endDate.setDate(startDate.getDate() + rentalDays);
-
-    //   const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
-    //   this.form.controls.leaseEnd.setValue(formattedDate);
-
-    // }
   }
 
   private getSupplier() {

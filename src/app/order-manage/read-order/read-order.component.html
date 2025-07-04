@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="form" >
+    <form [formGroup]="form">
         <div class="top-bar">
             <div class="select-bar">
                 <select formControlName="orderType">
@@ -41,16 +41,12 @@
                         <input type="text" formControlName="pickUpPort"
                             [appValidateBorder]="form.controls.pickUpPort" />
                     </div>
-                    <div class="form-control">
-                        <label>Booked Rental Days</label>
-                        <input type="text" formControlName="rentalDays"
-                            [appValidateBorder]="form.controls.rentalDays" />
-                    </div>
-                    <div class="form-control">
+                   <div class="form-control">
                         <label>Customer Return Port</label>
                         <input type="text" formControlName="returnPort"
                             [appValidateBorder]="form.controls.returnPort" />
                     </div>
+                    
                     <div class="form-control">
                         <label>Planned Lease Start</label>
                         <input type="date" name id formControlName="leaseStart"
@@ -58,7 +54,12 @@
                     </div>
                     <div class="form-control">
                         <label>Planned Lease End</label>
-                        <input type="date" formControlName="leaseEnd" readonly />
+                        <input type="date" formControlName="leaseEnd" />
+                    </div>
+                     <div class="form-control">
+                        <label>Booked Rental Days</label>
+                        <input type="text" formControlName="rentalDays"
+                            [appValidateBorder]="form.controls.rentalDays" />
                     </div>
                     <div class="form-control">
                         <label>Select Location</label>
@@ -85,7 +86,8 @@
                             <div class="checkbox-option">
                                 <input type="checkbox" id="preconditioning"
                                     [formControl]="form.controls['precondition']" />
-                                <label for="preconditioning">Preconditioning (By Supplier)</label>
+                                <label for="preconditioning">Preconditioning (By
+                                    Supplier)</label>
                             </div>
 
                             <!-- Show dropdown only if preconditioning is true -->
@@ -97,7 +99,8 @@
 
                                 <select [formControl]="form.controls.preconditionDropDownValue"
                                     [appValidateBorder]="form.controls.preconditionDropDownValue">
-                                    <option disabled>select group first*</option>
+                                    <option disabled>select group
+                                        first*</option>
                                     <option *ngFor="let t of temp" [value]="t.id">
                                         {{ t.name }}
                                     </option>
@@ -144,7 +147,8 @@
                         <label>Group</label>
                         <select formControlName="groupId" (change)="getProductByGroupId($event)"
                             [appValidateBorder]="form.controls.groupId">
-                            <option disabled selected>select supplier first*</option>
+                            <option disabled selected>select supplier
+                                first*</option>
                             <option *ngFor="let g of group" [value]="g.id">
                                 {{ g.name }}
                             </option>
@@ -176,9 +180,9 @@
                                     <label>Product*</label>
                                     <select formControlName="product" class="input"
                                         [appValidateBorder]="item.controls.product!">
-                                        <option value disabled>Select Product</option>
-                                        <option *ngFor="let product of products" [value]="product.id"
-                                         >
+                                        <option value disabled>Select
+                                            Product</option>
+                                        <option *ngFor="let product of products" [value]="product.id">
                                             {{ product.name }}
                                         </option>
                                     </select>
@@ -240,7 +244,7 @@
                         <label for="product-type-1">Product Type *</label>
                         <select formControlName="flightProductType" class="input"
                             [appValidateBorder]="flightDetail.controls.flightProductType">
-                            <option value="" disabled>Select Product</option>
+                            <option value disabled>Select Product</option>
                             <option *ngFor="let product of products" [value]="product.id">
                                 {{ product.name }}
                             </option>

@@ -122,7 +122,7 @@ export class CopyOrderComponent implements OnInit {
       this.calculateLeaseEndDate()
     );
 
-    this.form.controls.rentalDays?.valueChanges.subscribe(() =>
+    this.form.controls.leaseEnd?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
 
@@ -294,20 +294,21 @@ export class CopyOrderComponent implements OnInit {
     this.matchValues();
   }
 
-  private calculateLeaseEndDate() {
+   private calculateLeaseEndDate() {
     // get start date
     const start = this.form.controls.leaseStart.value;
-    // get rentalDays in a number format
-    const rentalDays = (this.form.controls.rentalDays.value || 0, 10);
+    const end = this.form.controls.leaseEnd.value;
 
-    // check if value null or empty
-    if (start && rentalDays) {
-      const startDate = new Date(start);
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + rentalDays); //getdate-> gets the day of the month from start date
+    if(start && end){
+      const startDate = new Date(start)
+      const endDate = new Date(end)
+      // const endDate = new Date(end)
 
-      const formattedDate = formatDate(endDate, 'yyyy-MM-dd', 'en-US'); //
-      this.form.controls.leaseEnd.setValue(formattedDate);
+      const startDay = startDate.getDate()
+      const endDay = endDate.getDate()
+      console.log(startDay, "start" , endDay, "enddate")
+
+      this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
     }
   }
 

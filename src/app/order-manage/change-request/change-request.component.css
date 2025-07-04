@@ -439,7 +439,8 @@ app-validation select {
 }
 
 .modal-content {
-  background-color:#36454F;
+  /* background-color:#36454F; */
+  background-color: rgb(138, 136, 136);
   padding: 1vw;
   border-radius: 10px;
   width: 800px;

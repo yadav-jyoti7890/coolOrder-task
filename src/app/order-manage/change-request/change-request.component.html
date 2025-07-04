@@ -30,25 +30,26 @@
                     ⟳
                 </button>
 
-                <button type="button"  (click)="openPopUp('draft')">
+                <button type="button" (click)="openPopUp('draft')" [disabled]="disableCR">
                     <!-- (click)="openPopUp()" -->
                     <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
                 </button>
 
                 <button type="button" class="orange" [disabled]="disableCR" (click)="openPopUp('New')">
-                      <!-- (click)="openPopUp()" -->
+                    <!-- (click)="openPopUp()" -->
                     <i class="ri-arrow-right-line"></i>
                 </button>
             </div>
 
-            <div class="modal" *ngIf="showCommentPopup" [formGroup]="changeInfo">
+            <div class="modal" *ngIf="showCommentPopup">
                 <div class="modal-content">
                     <h3>Add Comment Before Submit</h3>
-                    <textarea rows="4" cols="40" placeholder="Enter comment..." formControlName="comment" ></textarea>
-                    <input type="text" placeholder="Create By...!" formControlName="createBy">
+                    <textarea rows="4" cols="40" placeholder="Enter comment..." [formControl]="comment"
+                        [appValidateBorder]="comment"></textarea>
+                    <!-- <input type="text" placeholder="Create By...!" formControlName="createBy"> -->
 
                     <div class="modal-actions">
-                        <button (click)="submit(submitValue)">OK</button>
+                        <button (click)="checkAndSubmit()">OK</button>
                         <button (click)="cancel()">Cancel</button>
                     </div>
                 </div>
@@ -73,11 +74,7 @@
                         <input type="text" formControlName="pickUpPort"
                             [appValidateBorder]="form.controls.pickUpPort" />
                     </div>
-                    <div class="form-control">
-                        <label>Booked Rental Days</label>
-                        <input type="text" formControlName="rentalDays"
-                            [appValidateBorder]="form.controls.rentalDays" />
-                    </div>
+
                     <div class="form-control">
                         <label>Customer Return Port</label>
                         <input type="text" formControlName="returnPort"
@@ -90,7 +87,12 @@
                     </div>
                     <div class="form-control">
                         <label>Planned Lease End</label>
-                        <input type="date" formControlName="leaseEnd" readonly />
+                        <input type="date" formControlName="leaseEnd" />
+                    </div>
+                    <div class="form-control">
+                        <label>Booked Rental Days</label>
+                        <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays"
+                            readonly />
                     </div>
                     <div class="form-control">
                         <label>Select Location</label>
@@ -239,15 +241,13 @@
                 </button>
             </div>
 
-            <div class="flight-rows-container" formArrayName="flight" cdkDropList style="padding: 10px;"
-                [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)"
-                cdkDropListLockAxis="y">
-
+            <div class="flight-rows-container" formArrayName="flight" cdkDropList
+                [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
                 <div class="flight-row" *ngFor="
-                let flightDetail of form.controls.flight.controls;
-                let i = index
-              " [formGroupName]="i" cdkDrag cdkDragLockAxis="y" [cdkDragBoundary]="'.flight-rows-container'">
-
+            let flightDetail of form.controls.flight.controls;
+            let i = index
+          " style="padding: 10px" [formGroupName]="i" cdkDrag cdkDragLockAxis="y"
+                    [cdkDragBoundary]="'.flight-rows-container'">
                     <div class="form-group">
                         <label for="flight-id-1">Flight Id *</label>
                         <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
@@ -262,12 +262,12 @@
                     <div class="form-group">
                         <label for="origin-1">Origin *</label>
                         <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg"
-                            #flightOrgInputs />
+                            #flightOrgInputs [appValidateBorder]="flightDetail.controls.flightOrg" />
                     </div>
                     <div class="form-group">
                         <label for="destination-1">Destination *</label>
                         <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
-                            #flightDesInputs />
+                            #flightDesInputs [appValidateBorder]="flightDetail.controls.flightDes" />
                     </div>
 
                     <div class="form-group">
@@ -285,26 +285,23 @@
                         <label for="uld-qty-1">ULD Qty *</label>
                         <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
                             [appValidateTotalQuantity]="{
-                    productArray: form.controls.productItems,
-                    flightArray: form.controls.flight,
-                    currentGroup: flightDetail
-                  }" [appValidateBorder]="flightDetail.controls.flightOldQty" />
+                productArray: form.controls.productItems,
+                flightArray: form.controls.flight,
+                currentGroup: flightDetail
+              }" [appValidateBorder]="flightDetail.controls.flightOldQty!" />
                     </div>
 
                     <div class="row-actions">
-                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)"
-                            aria-label="Remove Row">
+                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)">
                             <i class="ri-subtract-line"></i>
                         </button>
-                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)"
-                            [disabled]="flightDisable">
+                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)">
                             <i class="ri-file-copy-line"></i>
                         </button>
                         <button class="action-btn reorder-btn" id="move">
                             <i class="ri-menu-line" cdkDragHandle></i>
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>

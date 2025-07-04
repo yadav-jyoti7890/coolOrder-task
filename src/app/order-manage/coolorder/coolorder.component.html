@@ -26,7 +26,8 @@
           <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
         </button>
 
-        <button type="button" class="orange" data-bs-toggle="tooltip" data-bs-placement="bottom" (click)="submit('New')">
+        <button type="button" class="orange" data-bs-toggle="tooltip" data-bs-placement="bottom"
+          (click)="submit('New')">
           <i class="ri-arrow-right-line" title="submit"></i>
         </button>
 
@@ -59,13 +60,10 @@
             <input type="text" formControlName="pickUpPort" [appValidateBorder]="form.controls.pickUpPort" />
           </div>
           <div class="form-control">
-            <label>Booked Rental Days</label>
-            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" readonly/>
-          </div>
-          <div class="form-control">
             <label>Customer Return Port</label>
             <input type="text" formControlName="returnPort" [appValidateBorder]="form.controls.returnPort" />
           </div>
+
           <div class="form-control">
             <label>Planned Lease Start</label>
             <input type="date" name="" id="" formControlName="leaseStart"
@@ -73,7 +71,11 @@
           </div>
           <div class="form-control">
             <label>Planned Lease End</label>
-            <input type="date" formControlName="leaseEnd"/>
+            <input type="date" formControlName="leaseEnd" />
+          </div>
+          <div class="form-control">
+            <label>Booked Rental Days</label>
+            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" readonly />
           </div>
           <div class="form-control">
             <label>Select Location</label>

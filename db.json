@@ -207,67 +207,28 @@
   ],
   "order": [
     {
-      "id": "67f1",
+      "id": "0ea7",
       "orderType": "Commercial",
-      "org": "MUMBAI",
-      "des": "JABALPUR",
-      "pickUpPort": "JABALPUR",
-      "rentalDays": "10",
-      "returnPort": "MUMBAI",
+      "org": "A",
+      "des": "B",
+      "pickUpPort": "A",
+      "rentalDays": 10,
+      "returnPort": "B",
       "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-11",
+      "leaseEnd": "2025-07-10",
       "supplierId": "1",
-      "commodity": "JABALPUR",
+      "commodity": "A",
       "precondition": true,
       "straps": true,
       "preconditionDropDownValue": "1",
       "preconditionInputValue": null,
-      "strapsValue": "STRAPS",
+      "strapsValue": "STARPS",
       "groupId": "1",
-      "locationId": "2",
-      "productCode": "87654",
+      "locationId": "1",
+      "productCode": "1234",
       "productItems": [
         {
           "product": "1",
-          "quantity2": "200"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-01",
-          "flightOrg": "MUMBAI",
-          "flightDes": "JABALPUR",
-          "flightProductType": "1",
-          "flightOldQty": "200"
-        }
-      ],
-      "status": "draft",
-      "create_at": "2025-06-03"
-    },
-    {
-      "id": "ab5a",
-      "orderType": "ChargeasblePosition",
-      "org": "JABALPUR",
-      "des": "DELHI",
-      "pickUpPort": "DELHI",
-      "rentalDays": "10",
-      "returnPort": "JABALPUR",
-      "leaseStart": "2025-07-02",
-      "leaseEnd": "2025-07-12",
-      "supplierId": "3",
-      "commodity": "JABALPUR",
-      "precondition": true,
-      "straps": true,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": "TRUE",
-      "strapsValue": "TRUE",
-      "groupId": "5",
-      "locationId": "5",
-      "productCode": "5498",
-      "productItems": [
-        {
-          "product": "10",
           "quantity2": "100"
         }
       ],
@@ -275,112 +236,105 @@
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-01",
-          "flightOrg": "JABALPUR",
-          "flightDes": "DELHI",
-          "flightProductType": "10",
+          "flightOrg": "A",
+          "flightDes": "B",
+          "flightProductType": "1",
           "flightOldQty": "100"
         }
       ],
       "status": "New",
-      "create_at": "2025-07-03"
+      "create_at": "2025-07-04"
     },
     {
-      "id": "4304",
-      "orderType": "Commercial",
-      "org": "MUMBAI",
-      "des": "JABALPUR",
-      "pickUpPort": "JABALPUR",
-      "rentalDays": "10",
-      "returnPort": "MUMBAI",
-      "leaseStart": "2025-07-05",
-      "leaseEnd": "2025-07-15",
-      "supplierId": "1",
-      "commodity": "JABALPUR",
-      "precondition": true,
-      "straps": true,
-      "preconditionDropDownValue": "1",
+      "id": "00a3",
+      "orderType": "ChargeasblePosition",
+      "org": "B",
+      "des": "M",
+      "pickUpPort": "B",
+      "rentalDays": 11,
+      "returnPort": "M",
+      "leaseStart": "2025-07-02",
+      "leaseEnd": "2025-07-12",
+      "supplierId": "2",
+      "commodity": "A",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
       "preconditionInputValue": null,
-      "strapsValue": "STRAPS",
-      "groupId": "1",
-      "locationId": "2",
-      "productCode": "87654",
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "12344",
       "productItems": [
         {
-          "product": "1",
-          "quantity2": "200"
+          "product": "6",
+          "quantity2": "120"
         }
       ],
       "flight": [
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-01",
-          "flightOrg": "MUMBAI",
-          "flightDes": "JABALPUR",
-          "flightProductType": "1",
-          "flightOldQty": "200"
+          "flightOrg": "B",
+          "flightDes": "M",
+          "flightProductType": "6",
+          "flightOldQty": "120"
         }
       ],
       "status": "draft",
-      "create_at": "2025-07-03"
+      "create_at": "2025-07-04"
+    },
+    {
+      "id": "420d",
+      "orderType": "ChargeasblePosition",
+      "org": "B",
+      "des": "M",
+      "pickUpPort": "B",
+      "rentalDays": 11,
+      "returnPort": "M",
+      "leaseStart": "2025-07-02",
+      "leaseEnd": "2025-07-12",
+      "supplierId": "2",
+      "commodity": "A",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "0000",
+      "productItems": [
+        {
+          "product": "6",
+          "quantity2": "120"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "B",
+          "flightDes": "M",
+          "flightProductType": "6",
+          "flightOldQty": "120"
+        }
+      ],
+      "status": "draft",
+      "create_at": "2025-07-04"
     }
   ],
   "CR": [
     {
-      "id": "571a",
-      "rentalDays": "20",
-      "status": "draft",
-      "previousFormValue": {
-        "orderType": "ChargeasblePosition",
-        "org": "JABALPUR",
-        "des": "DELHI",
-        "pickUpPort": "DELHI",
-        "rentalDays": "10",
-        "returnPort": "JABALPUR",
-        "leaseStart": "2025-07-02",
-        "leaseEnd": "2025-07-12",
-        "supplierId": "3",
-        "commodity": "JABALPUR",
-        "precondition": true,
-        "straps": true,
-        "preconditionDropDownValue": null,
-        "preconditionInputValue": "TRUE",
-        "strapsValue": "TRUE",
-        "groupId": "5",
-        "locationId": "5",
-        "productCode": "5498",
-        "productItems": [
-          {
-            "product": "10",
-            "quantity2": "100"
-          }
-        ],
-        "flight": [
-          {
-            "flightId": "LH1001",
-            "flightDate": "2025-07-01",
-            "flightOrg": "JABALPUR",
-            "flightDes": "DELHI",
-            "flightProductType": "10",
-            "flightOldQty": "100"
-          }
-        ]
-      },
-      "orderId": "ab5a",
-      "comment": {
-        "comment": "ppppppppppppppppppppp",
-        "createBy": "2025-07-10"
-      }
-    },
-    {
-      "id": "83a6",
+      "id": "f3f5",
       "productCode": "12345",
-      "status": "New",
+      "status": "3",
       "previousFormValue": {
         "orderType": "ChargeasblePosition",
         "org": "JABALPUR",
         "des": "DELHI",
         "pickUpPort": "DELHI",
-        "rentalDays": "10",
+        "rentalDays": 11,
         "returnPort": "JABALPUR",
         "leaseStart": "2025-07-02",
         "leaseEnd": "2025-07-12",
@@ -411,22 +365,19 @@
           }
         ]
       },
-      "orderId": "ab5a",
-      "comment": {
-        "comment": "ppppppppppppppppppppp",
-        "createBy": "2025-07-16"
-      }
+      "orderId": null,
+      "comment": "this is filed is required filed"
     },
     {
-      "id": "a1f2",
-      "productCode": "12345",
-      "status": "New",
+      "id": "c14f",
+      "commodity": "DELHI",
+      "status": "3",
       "previousFormValue": {
         "orderType": "ChargeasblePosition",
         "org": "JABALPUR",
         "des": "DELHI",
         "pickUpPort": "DELHI",
-        "rentalDays": "10",
+        "rentalDays": 11,
         "returnPort": "JABALPUR",
         "leaseStart": "2025-07-02",
         "leaseEnd": "2025-07-12",
@@ -457,22 +408,19 @@
           }
         ]
       },
-      "orderId": "ab5a",
-      "comment": {
-        "comment": "ppppppppppppppppppppp",
-        "createBy": "2025-07-16"
-      }
+      "orderId": null,
+      "comment": "THSI IS REQUIRED FILED"
     },
     {
-      "id": "271c",
-      "productCode": "4566",
-      "status": "New",
+      "id": "627c",
+      "commodity": "panjab",
+      "status": "3",
       "previousFormValue": {
         "orderType": "ChargeasblePosition",
         "org": "JABALPUR",
         "des": "DELHI",
         "pickUpPort": "DELHI",
-        "rentalDays": "10",
+        "rentalDays": 11,
         "returnPort": "JABALPUR",
         "leaseStart": "2025-07-02",
         "leaseEnd": "2025-07-12",
@@ -503,11 +451,389 @@
           }
         ]
       },
-      "orderId": "ab5a",
-      "comment": {
-        "comment": "kjhsdkjhjkdhk",
-        "createBy": "pppppppppppppppppppppppppppppppppppp"
-      }
+      "orderId": null,
+      "comment": "HJGHJGHJHGJ"
+    },
+    {
+      "id": "99d3",
+      "commodity": "DELHI",
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "SSDDS"
+    },
+    {
+      "id": "93a1",
+      "flight": [
+        {
+          "flightOldQty": ""
+        }
+      ],
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "SSADSDD"
+    },
+    {
+      "id": "4376",
+      "flight": [
+        {
+          "flightId": ""
+        }
+      ],
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "HJGHJHJ"
+    },
+    {
+      "id": "e6e8",
+      "productCode": "1234",
+      "flight": [
+        {
+          "flightOldQty": ""
+        }
+      ],
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "SDSDSD"
+    },
+    {
+      "id": "10e9",
+      "flight": [
+        {
+          "flightDate": ""
+        }
+      ],
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "SDAS"
+    },
+    {
+      "id": "7016",
+      "flight": [
+        {
+          "flightId": ""
+        }
+      ],
+      "status": "1",
+      "previousFormValue": {
+        "orderType": "Commercial",
+        "org": "A",
+        "des": "B",
+        "pickUpPort": "A",
+        "rentalDays": 16,
+        "returnPort": "B",
+        "leaseStart": "2025-07-01",
+        "leaseEnd": "2025-07-16",
+        "supplierId": "1",
+        "commodity": "A",
+        "precondition": null,
+        "straps": null,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": null,
+        "strapsValue": null,
+        "groupId": "1",
+        "locationId": "1",
+        "productCode": "1234",
+        "productItems": [
+          {
+            "product": "1",
+            "quantity2": "120"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "A",
+            "flightDes": "B",
+            "flightProductType": "1",
+            "flightOldQty": "120"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "jk"
+    },
+    {
+      "id": "9226",
+      "productItems": [
+        {
+          "quantity2": "120"
+        }
+      ],
+      "flight": [
+        {
+          "flightOldQty": "120"
+        }
+      ],
+      "status": "3",
+      "previousFormValue": {
+        "orderType": "ChargeasblePosition",
+        "org": "JABALPUR",
+        "des": "DELHI",
+        "pickUpPort": "DELHI",
+        "rentalDays": 11,
+        "returnPort": "JABALPUR",
+        "leaseStart": "2025-07-02",
+        "leaseEnd": "2025-07-12",
+        "supplierId": "3",
+        "commodity": "JABALPUR",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": null,
+        "preconditionInputValue": "TRUE",
+        "strapsValue": "TRUE",
+        "groupId": "5",
+        "locationId": "5",
+        "productCode": "5498",
+        "productItems": [
+          {
+            "product": "10",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "JABALPUR",
+            "flightDes": "DELHI",
+            "flightProductType": "10",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": null,
+      "comment": "FKJLKDFJLKJDFKLJLKDF"
+    },
+    {
+      "id": "eb62",
+      "precondition": false,
+      "straps": false,
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01"
+        }
+      ],
+      "status": "1",
+      "previousFormValue": {
+        "orderType": "Commercial",
+        "org": "A",
+        "des": "B",
+        "pickUpPort": "A",
+        "rentalDays": 10,
+        "returnPort": "B",
+        "leaseStart": "2025-07-01",
+        "leaseEnd": "2025-07-10",
+        "supplierId": "1",
+        "commodity": "A",
+        "precondition": true,
+        "straps": true,
+        "preconditionDropDownValue": "1",
+        "preconditionInputValue": null,
+        "strapsValue": "STARPS",
+        "groupId": "1",
+        "locationId": "1",
+        "productCode": "1234",
+        "productItems": [
+          {
+            "product": "1",
+            "quantity2": "100"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH1001",
+            "flightDate": "2025-07-01",
+            "flightOrg": "A",
+            "flightDes": "B",
+            "flightProductType": "1",
+            "flightOldQty": "100"
+          }
+        ]
+      },
+      "orderId": "0ea7",
+      "comment": "CHANGE FLIGHT DATE"
     }
   ]
 }
