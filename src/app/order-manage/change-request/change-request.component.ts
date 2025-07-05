@@ -2,7 +2,7 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { flight, form, ProductItem } from '../../form-interface';
+import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { debounceTime, forkJoin, from } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
 import { ValidateBorderDirective } from '../../validator';
@@ -264,8 +264,6 @@ export class ChangeRequestComponent {
     }
   }
 
-
-
   private createFlight(data: Partial<flight> = {}): FormGroup<flight> {
     return new FormGroup<flight>({
       flightId: new FormControl(data.flightId ?? null, Validators.required),
@@ -276,7 +274,6 @@ export class ChangeRequestComponent {
       flightOldQty: new FormControl(data.flightOldQty ?? null, Validators.required),
     });
   }
-
 
   public addFlight(action: 'addFlight' | 'removeFlight', index?: number) {
     //.log('add flight');
@@ -403,7 +400,7 @@ export class ChangeRequestComponent {
       this.comment.updateValueAndValidity();
       return;
     }
-    this.submit(this.selectedValue)
+    this.submit(this.submitValue)
   }
 
   public submit(selectValue: string | null) {
@@ -481,7 +478,7 @@ export class ChangeRequestComponent {
         comment: this.comment.value
       };
 
-      // console.log(copy)
+      console.log(copy)
 
       this.coolOrderService.createNewCR(copy).subscribe({
         next: (response) => {

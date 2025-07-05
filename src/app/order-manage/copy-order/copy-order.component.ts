@@ -15,7 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { flight, form, ProductItem } from '../../form-interface';
+import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { debounceTime, forkJoin } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
 import { ValidateBorderDirective } from '../../validator';

@@ -1,5 +1,6 @@
-<div class="header">
+<div class="header" style="display: flex; justify-content: space-between;padding: 1vw;">
     <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900;">Order List</h2>
+    <button class="view" [routerLink]="['/coolorder']">Create Order</button>
 </div>
 <div class="order-detail-container">
     <!-- Member List Table -->
@@ -51,7 +52,8 @@
                 
                 </td>
                 }
-                  <!-- <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i> -->
+
+                <!-- <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i> -->
                 <!-- <td><button class="login-btn" [routerLink]="['/update', order.id]">Update</button>
                 <button class="login-btn" style="background-color: rgb(195, 8, 8) !important;" (click)="delete(order.id)">Delete</button>
                 </td> -->

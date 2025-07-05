@@ -1,0 +1,80 @@
+<div class="container1">
+    <form [formGroup]="form">
+
+        <div class="cards">
+            <div class="card">
+                <h3>Order details</h3>
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>AWB Org</label>
+                        <input type="text" formControlName="org" [appValidateBorder]="form.controls.org" />
+                    </div>
+                    <div class="form-control">
+                        <label>AWB Dest</label>
+                        <input type="text" formControlName="des" [appValidateBorder]="form.controls.des" />
+                    </div>
+                    <div class="form-control">
+                        <label>Customer Pickup Port</label>
+                        <input type="text" formControlName="pickUpPort"
+                            [appValidateBorder]="form.controls.pickUpPort" />
+                    </div>
+                    <div class="form-control">
+                        <label>Customer Return Port</label>
+                        <input type="text" formControlName="returnPort"
+                            [appValidateBorder]="form.controls.returnPort" />
+                    </div>
+
+                    <div class="form-control">
+                        <label>Planned Lease Start</label>
+                        <input type="date" name id formControlName="leaseStart"
+                            [appValidateBorder]="form.controls.leaseStart" />
+                    </div>
+                    <div class="form-control">
+                        <label>Planned Lease End</label>
+                        <input type="date" formControlName="leaseEnd" />
+                    </div>
+                    <div class="form-control">
+                        <label>Booked Rental Days</label>
+                        <input type="text" formControlName="rentalDays"
+                            [appValidateBorder]="form.controls.rentalDays" />
+                    </div>
+                    <div class="form-control">
+                        <label>Select Location</label>
+                        <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
+                            <option selected disabled>choose Location</option>
+                            <option *ngFor="let location of location" [value]="location.id">
+                                {{ location.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container1">
+    <h1>Order Change Requests</h1>
+
+    <table class="requests-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Comment</th>
+                <th>Created By</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Row 1 -->
+            <tr *ngFor="let changeRequest of changeRequest">
+                <td class="order-id">#{{changeRequest.orderId}} </td>
+                <td class="comment">{{changeRequest.comment}} </td>
+                <td class="created-by">John Doe<br><small>2025-07-04 14:30</small></td>
+                <td><span class="status status-pending">{{changeRequest.status}}</span></td>
+                <td><button class="compare-btn">Compare</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

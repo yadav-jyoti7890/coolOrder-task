@@ -21,7 +21,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { flight, form, ProductItem } from '../../form-interface';
+import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { ValidateBorderDirective } from '../../validator';
 
 import { AddInputService } from '../../services/add-input.service';

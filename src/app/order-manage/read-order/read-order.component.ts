@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { flight, form, ProductItem } from '../../form-interface';
+import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
 import { ValidateBorderDirective } from '../../validator';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     ValidateBorderDirective,
     RouterLink,
+    RouterOutlet
   ],
   templateUrl: './read-order.component.html',
   styleUrl: './read-order.component.css'

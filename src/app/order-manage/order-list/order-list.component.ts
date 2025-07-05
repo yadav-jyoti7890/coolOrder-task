@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
 import { response } from 'express';
 import { error } from 'console';
-import { form, order } from '../../form-interface';
+import { form, order } from '../../interfaces/form-interface';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 

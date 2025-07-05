@@ -11,7 +11,7 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { flight, form, ProductItem } from '../../form-interface';
+import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import {
   AbstractControl,
   FormArray,

@@ -41,12 +41,12 @@
                         <input type="text" formControlName="pickUpPort"
                             [appValidateBorder]="form.controls.pickUpPort" />
                     </div>
-                   <div class="form-control">
+                    <div class="form-control">
                         <label>Customer Return Port</label>
                         <input type="text" formControlName="returnPort"
                             [appValidateBorder]="form.controls.returnPort" />
                     </div>
-                    
+
                     <div class="form-control">
                         <label>Planned Lease Start</label>
                         <input type="date" name id formControlName="leaseStart"
@@ -56,7 +56,7 @@
                         <label>Planned Lease End</label>
                         <input type="date" formControlName="leaseEnd" />
                     </div>
-                     <div class="form-control">
+                    <div class="form-control">
                         <label>Booked Rental Days</label>
                         <input type="text" formControlName="rentalDays"
                             [appValidateBorder]="form.controls.rentalDays" />
@@ -275,4 +275,14 @@
             </div>
         </div>
     </form>
+
+     <div class="tabs">
+        <div class="tab" [routerLink]="['./Order-detail']">Order-detail</div>
+        <div class="tab">Other-detail</div>
+        <div class="tab">Product-detail</div>
+        <div class="tab">Flight-detail</div>
+        <div class="tab" [routerLink]="['/change-request-list', updateId]">Change-Request</div>
+    </div>
+
+    
 </div>
