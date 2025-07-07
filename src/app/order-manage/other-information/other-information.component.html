@@ -1,0 +1,67 @@
+<div class="container">
+    <form [formGroup]="form">
+        <div class="cards">
+            <div class="card">
+                <h3>Other Requirements</h3>
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>Commodity</label>
+                        <input type="text" placeholder="Enter commodity" formControlName="commodity" readonly
+                            [appValidateBorder]="form.controls.commodity" />
+
+                        <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
+                            <!-- Preconditioning -->
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="preconditioning"
+                                    [formControl]="form.controls['precondition']" />
+                                <label for="preconditioning">Preconditioning (By
+                                    Supplier)</label>
+                            </div>
+
+                            <!-- Show dropdown only if preconditioning is true -->
+
+                            <div *ngIf="
+                  form.controls['precondition'].value && selectedValue == 1
+                ">
+                                <!-- //leaseEnd -->
+
+                                <select [formControl]="form.controls.preconditionDropDownValue"
+                                    [appValidateBorder]="form.controls.preconditionDropDownValue">
+                                    <option disabled>select group
+                                        first*</option>
+                                    <option *ngFor="let t of temp" [value]="t.id">
+                                        {{ t.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Show index input if preconditioning and selectedValue == 3 -->
+
+                            <div *ngIf="
+                  form.controls['precondition'].value && selectedValue == 3
+                " style="width: 100%">
+                                <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
+                                <input type="text" formControlName="preconditionInputValue"
+                                    [appValidateBorder]="form.controls.preconditionInputValue" />
+                            </div>
+
+                            <!-- Straps -->
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
+                                    [appValidateBorder]="form.controls.straps" />
+                                <label for="straps">Straps</label>
+                            </div>
+
+                            <!-- Show input if straps is checked -->
+                            <div *ngIf="form.controls['straps'].value" style="width: 100%">
+                                <input type="text" formControlName="strapsValue"
+                                    [appValidateBorder]="form.controls.strapsValue" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+</div>

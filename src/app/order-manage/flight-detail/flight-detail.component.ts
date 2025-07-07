@@ -1,28 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { CoolorderService } from '../../services/coolorder.service';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ValidateBorderDirective } from '../../validator';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { CoolorderService } from '../../services/coolorder.service';
 import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
-import { ValidateBorderDirective } from '../../validator';
-import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-read-order',
+  selector: 'app-flight-detail',
   imports: [
     ReactiveFormsModule,
     CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
     RouterLink,
-    RouterOutlet,
-    RouterLinkActive
+    RouterOutlet
   ],
-  templateUrl: './read-order.component.html',
-  styleUrl: './read-order.component.css'
+  templateUrl: './flight-detail.component.html',
+  styleUrl: './flight-detail.component.css'
 })
-export class ReadOrderComponent {
-  constructor(
+export class FlightDetailComponent {
+constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
@@ -91,7 +90,7 @@ export class ReadOrderComponent {
         Validators.pattern('^[0-9]*$'),
       ]),
 
-      // create form array for multiple product
+      
       productItems: new FormArray<FormGroup<ProductItem>>([
         this.createProductItemGroup(),
       ]),
@@ -142,24 +141,6 @@ export class ReadOrderComponent {
 
           // patch basic values
           this.form.patchValue({
-            orderType: response.orderType,
-            org: response.org,
-            des: response.des,
-            pickUpPort: response.pickUpPort,
-            rentalDays: response.rentalDays,
-            returnPort: response.returnPort,
-            leaseStart: response.leaseStart,
-            leaseEnd: response.leaseEnd,
-            supplierId: response.supplierId,
-            commodity: response.commodity,
-            precondition: response.precondition,
-            straps: response.straps,
-            preconditionDropDownValue: response.preconditionDropDownValue,
-            preconditionInputValue: response.preconditionInputValue,
-            strapsValue: response.strapsValue,
-            groupId: response.groupId,
-            locationId: response.locationId,
-            productCode: response.productCode,
           });
 
           this.selectedValue = response.supplierId;

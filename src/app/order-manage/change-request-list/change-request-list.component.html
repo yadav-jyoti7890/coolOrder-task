@@ -73,7 +73,7 @@
                 <td class="comment">{{changeRequest.comment}} </td>
                 <td class="created-by">John Doe<br><small>2025-07-04 14:30</small></td>
                 <td><span class="status status-pending">{{changeRequest.status}}</span></td>
-                <td><button class="compare-btn">Compare</button></td>
+                <td><button class="compare-btn" [routerLink]="['/read-order', updateId, 'compare-list', changeRequest.id]">Compare</button></td>
             </tr>
         </tbody>
     </table>

@@ -277,11 +277,15 @@
     </form>
 
      <div class="tabs">
-        <div class="tab" [routerLink]="['./Order-detail']">Order-detail</div>
-        <div class="tab">Other-detail</div>
-        <div class="tab">Product-detail</div>
-        <div class="tab">Flight-detail</div>
-        <div class="tab" [routerLink]="['/change-request-list', updateId]">Change-Request</div>
+        <!-- <div class="tab" [routerLink]="['./Order-detail']">Order-detail</div> -->
+        <div class="tab" [routerLink]="['other-information']" routerLinkActive="active">Other-Requirement</div>
+        <div class="tab" [routerLink]="['product-detail',updateId]" routerLinkActive="active">Product-detail</div>
+        <div class="tab" [routerLink]="['flight-detail', updateId]" routerLinkActive="active">Flight-detail</div>
+        <div class="tab" [routerLink]="['change-request-list', updateId]" routerLinkActive="active">Change-Request</div>
+    </div>
+
+    <div>
+        <router-outlet></router-outlet>
     </div>
 
     

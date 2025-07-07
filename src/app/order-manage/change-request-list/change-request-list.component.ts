@@ -60,6 +60,7 @@ export class ChangeRequestListComponent {
         this.fetchData();
       });
   
+      
       this.getGroupBySupplierId(this.selectedValue);
       this.getLocation();
       this.fetchData()

@@ -1,28 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { CoolorderService } from '../../services/coolorder.service';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ValidateBorderDirective } from '../../validator';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { CoolorderService } from '../../services/coolorder.service';
 import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
-import { ValidateBorderDirective } from '../../validator';
-import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-read-order',
+  selector: 'app-other-information',
   imports: [
     ReactiveFormsModule,
     CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
     RouterLink,
-    RouterOutlet,
-    RouterLinkActive
+    RouterOutlet
   ],
-  templateUrl: './read-order.component.html',
-  styleUrl: './read-order.component.css'
+  templateUrl: './other-information.component.html',
+  styleUrl: './other-information.component.css'
 })
-export class ReadOrderComponent {
-  constructor(
+export class OtherInformationComponent {
+constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
@@ -56,7 +55,6 @@ export class ReadOrderComponent {
     });
 
     this.getGroupBySupplierId(this.selectedValue);
-    this.getLocation();
     // this.fetchData()
     this.updateId = this.route.snapshot.paramMap.get('id');
     console.log(this.updateId)
@@ -122,7 +120,7 @@ export class ReadOrderComponent {
   }
 
   private fetchData() {
-    console.log(this.updateId, "update id from update ")
+    // console.log(this.updateId, "update id from update ")
     this.coolOrderService.fetchData(this.updateId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
@@ -142,14 +140,6 @@ export class ReadOrderComponent {
 
           // patch basic values
           this.form.patchValue({
-            orderType: response.orderType,
-            org: response.org,
-            des: response.des,
-            pickUpPort: response.pickUpPort,
-            rentalDays: response.rentalDays,
-            returnPort: response.returnPort,
-            leaseStart: response.leaseStart,
-            leaseEnd: response.leaseEnd,
             supplierId: response.supplierId,
             commodity: response.commodity,
             precondition: response.precondition,
@@ -158,46 +148,10 @@ export class ReadOrderComponent {
             preconditionInputValue: response.preconditionInputValue,
             strapsValue: response.strapsValue,
             groupId: response.groupId,
-            locationId: response.locationId,
-            productCode: response.productCode,
           });
 
-          this.selectedValue = response.supplierId;
-
-         
           this.form.disable();
-          const productArray = this.form.controls.productItems as FormArray<FormGroup<ProductItem>>;
-          productArray.clear();
-          const items: ProductItem[] = Array.isArray(response.productItems) ? response.productItems : [];
-
-          items.forEach((item: ProductItem) => {
-            productArray.push(
-              new FormGroup({
-                product: new FormControl(item.product),
-                quantity2: new FormControl(item.quantity2),
-              })
-            );
-          });
-
-          const flightArray = this.form.controls.flight as FormArray<FormGroup<flight>>;;
-          flightArray.clear();
-          const flightItems: flight[] = Array.isArray(response.flight) ? response.flight : [];
-
-          flightItems.forEach((f: flight) => {
-            flightArray.push(
-              new FormGroup({
-                flightId: new FormControl(f.flightId),
-                flightDate: new FormControl(f.flightDate),
-                flightOrg: new FormControl(f.flightOrg),
-                flightDes: new FormControl(f.flightDes),
-                flightProductType: new FormControl(f.flightProductType),
-                flightOldQty: new FormControl(f.flightOldQty),
-              })
-            );
-          });
-
-          this.form.controls.productItems.disable()
-          this.form.controls.flight.disable()
+          this.selectedValue = response.supplierId;       
         });
       },
     });
@@ -231,26 +185,16 @@ export class ReadOrderComponent {
     this.products = [];
     this.options = [];
     this.location = [];
-    this.temp = [];
 
     productArray.push(this.createProductItemGroup());
     this.getGroupBySupplierId(this.selectedValue);
-    this.getLocation();
-  }
-
-  private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
-      next: (response) => {
-        this.location = response;
-      },
-    });
+    // this.getLocation();
   }
 
   public getGroupBySupplierId(supplierId: any) {
     this.coolOrderService.getGroup(supplierId).subscribe({
       next: (response) => {
         this.group = response;
-        //.log(response.id, this.group)
         this.groupId = response.id;
       },
     });

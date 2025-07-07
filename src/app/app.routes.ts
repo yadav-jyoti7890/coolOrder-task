@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { CoolorderComponent } from './order-manage/coolorder/coolorder.component';
 import { UpdateComponent } from './order-manage/update/update.component';
@@ -7,15 +6,36 @@ import { ReadOrderComponent } from './order-manage/read-order/read-order.compone
 import { CopyOrderComponent } from './order-manage/copy-order/copy-order.component';
 import { ChangeRequestComponent } from './order-manage/change-request/change-request.component';
 import { ChangeRequestListComponent } from './order-manage/change-request-list/change-request-list.component';
+import { CompareListComponent } from './order-manage/compare-list/compare-list.component';
+import { OtherInformationComponent } from './order-manage/other-information/other-information.component';
+import { ProductDetailComponent } from './order-manage/product-detail/product-detail.component';
+import { FlightDetailComponent } from './order-manage/flight-detail/flight-detail.component';
 
 export const routes: Routes = [
-  {path: '', component: CoolorderComponent },
-  {path: 'coolorder', component: CoolorderComponent },
-  {path: 'update/:id', component: UpdateComponent},
-  {path: 'order-list', component: OrderListComponent},
-  {path: 'order-detail', component: OrderListComponent},
-  {path: 'read-order/:id', component: ReadOrderComponent},
-  {path: 'change-request-list/:id', component: ChangeRequestListComponent},
-  {path: 'copy-order/:id', component: CopyOrderComponent},
-  {path: 'change-request/:id', component: ChangeRequestComponent}
+  { path: '', component: CoolorderComponent },
+  { path: 'coolorder', component: CoolorderComponent },
+  { path: 'update/:id', component: UpdateComponent },
+  { path: 'order-list', component: OrderListComponent },
+  { path: 'order-detail', component: OrderListComponent },
+  {
+    path: 'read-order/:id',
+    component: ReadOrderComponent,
+    children: [
+      { path: '', component: OtherInformationComponent },
+      // { path: '', redirectTo: 'OtherInformationComponent', pathMatch: 'full' },
+
+      { path: 'other-information/:id', component: OtherInformationComponent },
+      { path: 'product-detail/:id', component: ProductDetailComponent },
+      { path: 'flight-detail/:id', component: FlightDetailComponent },
+      {
+        path: 'change-request-list/:id',
+        component: ChangeRequestListComponent,
+      },
+      { path: 'compare-list/:id', component: CompareListComponent },
+
+    ],
+  },
+  { path: 'change-request-list/:id', component: ChangeRequestListComponent },
+  { path: 'copy-order/:id', component: CopyOrderComponent },
+  { path: 'change-request/:id', component: ChangeRequestComponent },
 ];
