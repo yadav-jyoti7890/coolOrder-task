@@ -361,193 +361,84 @@
       ],
       "status": "New",
       "create_at": "2025-07-05"
+    },
+    {
+      "id": "ee09",
+      "orderType": "CourtesyMove",
+      "org": "M",
+      "des": "K",
+      "pickUpPort": "K",
+      "rentalDays": 10,
+      "returnPort": "M",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "2",
+      "commodity": "M",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "4",
+      "locationId": "4",
+      "productCode": "12009",
+      "productItems": [
+        {
+          "product": "9",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "M",
+          "flightDes": "J",
+          "flightProductType": "9",
+          "flightOldQty": "50"
+        },
+        {
+          "flightId": "LH1002",
+          "flightDate": "2025-07-02",
+          "flightOrg": "J",
+          "flightDes": "K",
+          "flightProductType": "9",
+          "flightOldQty": "50"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-07"
     }
   ],
   "CR": [
     {
-      "id": "4963",
-      "productCode": "9999",
-      "status": "draft",
-      "previousFormValue": {
-        "orderType": "CourtesyMove",
-        "org": "A",
-        "des": "B",
-        "pickUpPort": "A",
-        "rentalDays": 8,
-        "returnPort": "B",
-        "leaseStart": "2025-07-02",
-        "leaseEnd": "2025-07-09",
-        "supplierId": "3",
-        "commodity": "A",
-        "precondition": true,
-        "straps": true,
-        "preconditionDropDownValue": null,
-        "preconditionInputValue": "TRUE",
-        "strapsValue": "TRUE",
-        "groupId": "5",
-        "locationId": "5",
-        "productCode": "1234",
-        "productItems": [
-          {
-            "product": "10",
-            "quantity2": "100"
-          }
-        ],
-        "flight": [
-          {
-            "flightId": "LH1001",
-            "flightDate": "2025-07-15",
-            "flightOrg": "A",
-            "flightDes": "B",
-            "flightProductType": "10",
-            "flightOldQty": "100"
-          }
-        ]
-      },
-      "orderId": "5470",
-      "comment": "CHANGE PRODUCT CODE"
-    },
-    {
-      "id": "4bf3",
-      "leaseStart": "2025-07-03",
-      "status": "New",
-      "previousFormValue": {
-        "orderType": "CourtesyMove",
-        "org": "A",
-        "des": "B",
-        "pickUpPort": "A",
-        "rentalDays": 8,
-        "returnPort": "B",
-        "leaseStart": "2025-07-02",
-        "leaseEnd": "2025-07-09",
-        "supplierId": "3",
-        "commodity": "A",
-        "precondition": true,
-        "straps": true,
-        "preconditionDropDownValue": null,
-        "preconditionInputValue": "TRUE",
-        "strapsValue": "TRUE",
-        "groupId": "5",
-        "locationId": "5",
-        "productCode": "1234",
-        "productItems": [
-          {
-            "product": "10",
-            "quantity2": "100"
-          }
-        ],
-        "flight": [
-          {
-            "flightId": "LH1001",
-            "flightDate": "2025-07-15",
-            "flightOrg": "A",
-            "flightDes": "B",
-            "flightProductType": "10",
-            "flightOldQty": "100"
-          }
-        ]
-      },
-      "orderId": "5470",
-      "comment": "CHANGE LEASE END DATE "
-    },
-    {
-      "id": "9448",
-      "flight": [
-        {
-          "flightId": "LH1002"
-        }
-      ],
-      "status": "draft",
-      "previousFormValue": {
-        "orderType": "Commercial",
+      "id": "a5e3",
+      "CR": {
         "org": "MUMBAI",
         "des": "PANJAB",
-        "pickUpPort": "PANJAB",
-        "rentalDays": 8,
-        "returnPort": "MUMBAI",
-        "leaseStart": "2025-07-02",
-        "leaseEnd": "2025-07-09",
-        "supplierId": "2",
-        "commodity": "MUMBAI",
-        "precondition": null,
-        "straps": null,
-        "preconditionDropDownValue": null,
-        "preconditionInputValue": null,
-        "strapsValue": null,
-        "groupId": "3",
-        "locationId": "3",
-        "productCode": "1234",
-        "productItems": [
-          {
-            "product": "8",
-            "quantity2": "100"
-          }
-        ],
         "flight": [
           {
-            "flightId": "LH1001",
-            "flightDate": "2025-07-01",
             "flightOrg": "MUMBAI",
-            "flightDes": "PANJAB",
-            "flightProductType": "8",
-            "flightOldQty": "100"
+            "flightDes": "GOA"
+          },
+          {
+            "flightOrg": "GOA",
+            "flightDes": "PANJAB"
           }
         ]
       },
-      "orderId": "5361",
-      "comment": "CHANGE FLIGHT ID"
+      "status": "draft",
+      "orderId": "ee09",
+      "comment": "TEST1\n"
     },
     {
-      "id": "b132",
-      "productItems": [
-        {
-          "quantity2": "200"
-        }
-      ],
-      "flight": [
-        {
-          "flightOldQty": "200"
-        }
-      ],
-      "status": "New",
-      "previousFormValue": {
-        "orderType": "Commercial",
-        "org": "MUMBAI",
-        "des": "PANJAB",
-        "pickUpPort": "PANJAB",
-        "rentalDays": 8,
-        "returnPort": "MUMBAI",
-        "leaseStart": "2025-07-02",
-        "leaseEnd": "2025-07-09",
-        "supplierId": "2",
-        "commodity": "MUMBAI",
-        "precondition": null,
-        "straps": null,
-        "preconditionDropDownValue": null,
-        "preconditionInputValue": null,
-        "strapsValue": null,
-        "groupId": "3",
-        "locationId": "3",
-        "productCode": "1234",
-        "productItems": [
-          {
-            "product": "8",
-            "quantity2": "100"
-          }
-        ],
-        "flight": [
-          {
-            "flightId": "LH1001",
-            "flightDate": "2025-07-01",
-            "flightOrg": "MUMBAI",
-            "flightDes": "PANJAB",
-            "flightProductType": "8",
-            "flightOldQty": "100"
-          }
-        ]
+      "id": "3977",
+      "CR": {
+        "productCode": "9876"
       },
-      "orderId": "5361",
-      "comment": "CHANGE QUANTITY"
+      "status": "draft",
+      "orderId": "5470",
+      "comment": "test2"
     }
   ]
 }

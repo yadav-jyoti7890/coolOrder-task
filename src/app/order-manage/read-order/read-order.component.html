@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <!-- <div class="card">
                 <h3>Other Requirements</h3>
                 <div class="form-group">
                     <div class="form-control">
@@ -82,7 +82,7 @@
                             [appValidateBorder]="form.controls.commodity" />
 
                         <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
-                            <!-- Preconditioning -->
+                            Preconditioning
                             <div class="checkbox-option">
                                 <input type="checkbox" id="preconditioning"
                                     [formControl]="form.controls['precondition']" />
@@ -90,12 +90,12 @@
                                     Supplier)</label>
                             </div>
 
-                            <!-- Show dropdown only if preconditioning is true -->
+                            Show dropdown only if preconditioning is true
 
                             <div *ngIf="
                   form.controls['precondition'].value && selectedValue == 1
                 ">
-                                <!-- //leaseEnd -->
+                                //leaseEnd
 
                                 <select [formControl]="form.controls.preconditionDropDownValue"
                                     [appValidateBorder]="form.controls.preconditionDropDownValue">
@@ -107,24 +107,24 @@
                                 </select>
                             </div>
 
-                            <!-- Show index input if preconditioning and selectedValue == 3 -->
+                            Show index input if preconditioning and selectedValue == 3
 
                             <div *ngIf="
                   form.controls['precondition'].value && selectedValue == 3
                 " style="width: 100%">
-                                <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
+                                <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation>
                                 <input type="text" formControlName="preconditionInputValue"
                                     [appValidateBorder]="form.controls.preconditionInputValue" />
                             </div>
 
-                            <!-- Straps -->
+                            Straps
                             <div class="checkbox-option">
                                 <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
                                     [appValidateBorder]="form.controls.straps" />
                                 <label for="straps">Straps</label>
                             </div>
 
-                            <!-- Show input if straps is checked -->
+                            Show input if straps is checked
                             <div *ngIf="form.controls['straps'].value" style="width: 100%">
                                 <input type="text" formControlName="strapsValue"
                                     [appValidateBorder]="form.controls.strapsValue" />
@@ -132,14 +132,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="card">
+            <!-- <div class="card">
                 <div style="display: flex; justify-content: space-between">
                     <h3>Products</h3>
-                    <!-- <button type="button" style="padding: 0vw 1vw; font-size: 1vw" (click)="updateProductItems('add')">
-                        +
-                    </button> -->
+                   
                 </div>
 
                 <div class="form-group">
@@ -167,13 +165,7 @@
                 let item of form.controls.productItems.controls;
                 let i = index
               " [formGroupName]="i" class="product-item-row">
-                            <!-- <p>{{i}}</p> -->
-                            <!-- 
-                            <div class="remove">
-                                <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                </button>
-                            </div> -->
+                           
 
                             <div class style="display: flex">
                                 <div class="form-control">
@@ -198,17 +190,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- flight detail -->
-        <div class="form-container">
+        <!-- <div class="form-container">
             <div class="header">
                 <h2>Flight details</h2>
-                <!-- <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
-                    [disabled]="flightDisable">
-                    +
-                </button> -->
+               
             </div>
 
             <div class="flight-rows-container" formArrayName="flight">
@@ -257,36 +246,26 @@
                             [appValidateBorder]="flightDetail.controls.flightOldQty" />
                     </div>
 
-                    <!-- <div class="row-actions">
-                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)"
-                            aria-label="Remove Row">
-                            <i class="ri-subtract-line"></i>
-                        </button>
-                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)"
-                            [disabled]="flightDisable">
-                            <i class="ri-file-copy-line"></i>
-                        </button>
-                        <button class="action-btn reorder-btn" id="move">
-                            <i class="ri-menu-line" cdkDragHandle></i>
-                        </button>
-                    </div> -->
+                   
 
                 </div>
             </div>
-        </div>
+        </div> -->
     </form>
-
-     <div class="tabs">
-        <!-- <div class="tab" [routerLink]="['./Order-detail']">Order-detail</div> -->
-        <div class="tab" [routerLink]="['other-information']" routerLinkActive="active">Other-Requirement</div>
-        <div class="tab" [routerLink]="['product-detail',updateId]" routerLinkActive="active">Product-detail</div>
-        <div class="tab" [routerLink]="['flight-detail', updateId]" routerLinkActive="active">Flight-detail</div>
-        <div class="tab" [routerLink]="['change-request-list', updateId]" routerLinkActive="active">Change-Request</div>
+    <div class="tabs">
+        <div class="tab" [class.active]="activeTab === 'other'" (click)="setComponent('other')">Other-Requirement</div>
+        <div class="tab" [class.active]="activeTab === 'product'" (click)="setComponent('product')">Product-detail</div>
+        <div class="tab" [class.active]="activeTab === 'flight'" (click)="setComponent('flight')">Flight-detail</div>
+        <div class="tab" [class.active]="activeTab === 'Change'" (click)="setComponent('Change')">Change-Request</div>
     </div>
+
 
     <div>
-        <router-outlet></router-outlet>
+        <ng-container *ngComponentOutlet="currentRoute"></ng-container>
+        <!-- <div *ngComponentOutlet="currentRoute"></div> -->
+
     </div>
 
-    
+
+
 </div>

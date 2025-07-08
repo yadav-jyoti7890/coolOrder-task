@@ -17,24 +17,7 @@ export const routes: Routes = [
   { path: 'update/:id', component: UpdateComponent },
   { path: 'order-list', component: OrderListComponent },
   { path: 'order-detail', component: OrderListComponent },
-  {
-    path: 'read-order/:id',
-    component: ReadOrderComponent,
-    children: [
-      { path: '', component: OtherInformationComponent },
-      // { path: '', redirectTo: 'OtherInformationComponent', pathMatch: 'full' },
-
-      { path: 'other-information/:id', component: OtherInformationComponent },
-      { path: 'product-detail/:id', component: ProductDetailComponent },
-      { path: 'flight-detail/:id', component: FlightDetailComponent },
-      {
-        path: 'change-request-list/:id',
-        component: ChangeRequestListComponent,
-      },
-      { path: 'compare-list/:id', component: CompareListComponent },
-
-    ],
-  },
+  {path: 'read-order/:id', component: ReadOrderComponent,},
   { path: 'change-request-list/:id', component: ChangeRequestListComponent },
   { path: 'copy-order/:id', component: CopyOrderComponent },
   { path: 'change-request/:id', component: ChangeRequestComponent },

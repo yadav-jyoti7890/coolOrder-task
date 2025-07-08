@@ -471,9 +471,10 @@ export class ChangeRequestComponent {
       });
 
       const copy = {
-        ...updateData,
+        CR:{
+          ...updateData,
+        },
         status: selectValue,
-        previousFormValue: this.initialFormValues,
         orderId: this.orderId,
         comment: this.comment.value
       };

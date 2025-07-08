@@ -6,6 +6,11 @@ import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
 import { ValidateBorderDirective } from '../../validator';
 import { CommonModule } from '@angular/common';
+import { OtherInformationComponent } from '../other-information/other-information.component';
+import { FlightDetailComponent} from '../flight-detail/flight-detail.component';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { ChangeRequestListComponent } from '../change-request-list/change-request-list.component';
+import { CompareListComponent } from '../compare-list/compare-list.component';
 
 @Component({
   selector: 'app-read-order',
@@ -16,12 +21,15 @@ import { CommonModule } from '@angular/common';
     ValidateBorderDirective,
     RouterLink,
     RouterOutlet,
-    RouterLinkActive
+    RouterLinkActive,
+    CompareListComponent
   ],
   templateUrl: './read-order.component.html',
   styleUrl: './read-order.component.css'
 })
 export class ReadOrderComponent {
+
+
   constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
@@ -41,9 +49,15 @@ export class ReadOrderComponent {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
-  public updateId!: string | null;
+  public orderId!: string | null;
   public initialFormValues!: any;
   public RouteValid: boolean = false
+  public currentRoute:any = OtherInformationComponent
+  public selectedCompareId: string = '';
+  public showCompare = false;
+  public activeTab:string = 'other'
+
+
 
   ngOnInit(): void {
     forkJoin([
@@ -58,9 +72,9 @@ export class ReadOrderComponent {
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
     // this.fetchData()
-    this.updateId = this.route.snapshot.paramMap.get('id');
-    console.log(this.updateId)
-    console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
+    this.orderId = this.route.snapshot.paramMap.get('id');
+    // console.log(this.orderId)
+    // console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
 
 
     this.form = new FormGroup<form>({
@@ -122,8 +136,8 @@ export class ReadOrderComponent {
   }
 
   private fetchData() {
-    console.log(this.updateId, "update id from update ")
-    this.coolOrderService.fetchData(this.updateId).subscribe({
+    console.log(this.orderId, "update id from update ")
+    this.coolOrderService.fetchData(this.orderId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
@@ -277,6 +291,23 @@ export class ReadOrderComponent {
         this.temp = response;
       },
     });
+  }
+
+  public setComponent(route:string){
+    this.activeTab = route
+    this.showCompare = true
+   if(route == 'Change'){
+     this.currentRoute = ChangeRequestListComponent
+   }
+   else if(route == 'flight'){
+    this.currentRoute = FlightDetailComponent
+   }
+   else if(route == 'product'){
+    this.currentRoute = ProductDetailComponent
+   }
+   else{
+   this.currentRoute = OtherInformationComponent
+   }
   }
 
 

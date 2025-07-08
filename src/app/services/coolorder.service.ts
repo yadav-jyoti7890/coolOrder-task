@@ -65,4 +65,11 @@ export class CoolorderService {
   changeRequestList(orderId: string | null) {
     return this.http.get(`${this.apiUrl}CR?orderId=${orderId}`);
   }
+
+  getCompareDataWithId(id:string|number): Observable<any>{
+    return this.http.get(`${this.apiUrl}CR/${id}`)
+  }
+  getOrderDataWithId(id:string):Observable<any>{
+    return this.http.get(`${this.apiUrl}order/${id}`)
+  }
 }

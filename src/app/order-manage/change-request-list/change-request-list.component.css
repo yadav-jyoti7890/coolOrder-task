@@ -6,6 +6,10 @@
   overflow: hidden;
 }
 
+.container1 h1 {
+  padding-top: 1vw;
+}
+
 /* Top Bar */
 .top-bar {
   display: flex;
@@ -430,6 +434,7 @@ textarea:disabled {
   border-color: #ddd;
   cursor: not-allowed;
 }
+
 .modal {
   position: fixed;
   top: 0;
@@ -481,7 +486,7 @@ textarea {
 }
 
 
-.container1{
+.container1 {
   width: 100% !important;
   margin: 0 auto;
 }
@@ -551,8 +556,8 @@ h1 {
 }
 
 .status-pending {
-  background-color: #fef3c7;
-  color: #d97706;
+  background-color: #fafafa;
+  color: #d37000;
 }
 
 .status-approved {
@@ -598,13 +603,167 @@ h1 {
   border: 1px solid #fde68a;
 }
 
-@media (max-width: 768px) {
-  .requests-table {
-    display: block;
-    overflow-x: auto;
+.open-dialog-btn {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 20px;
+}
+
+.open-dialog-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Modal Overlay Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Dialog Box Styles */
+.comparison-dialog {
+  width: 700px;
+  max-width: 90%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
 
-  .comment {
-    max-width: 200px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/* Dialog Header Styles */
+.dialog-header {
+  padding: 16px 24px;
+  background-color: #2c3e50;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* Dialog Body Styles */
+.dialog-body {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Comparison Row Styles */
+.comparison-row {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.field-name {
+  width: 150px;
+  padding-right: 15px;
+  font-weight: 600;
+  color: #555;
+  align-self: center;
+}
+
+.value-container {
+  flex: 1;
+  display: flex;
+}
+
+.value-box {
+  flex: 1;
+  padding: 12px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.old-value {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  margin-right: 10px;
+}
+
+.new-value {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.value-label {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background-color: white;
+  padding: 0 5px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+/* Dialog Footer Styles */
+.dialog-footer {
+  padding: 16px 24px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #eee;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  margin-left: 10px;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
 }

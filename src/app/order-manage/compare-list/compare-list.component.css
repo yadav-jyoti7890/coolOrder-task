@@ -5,3 +5,30 @@
     font-weight: 600;
     font-family: helvetica;
 }
+table{
+    width: 100% !important;
+}
+table th{
+    font-size: 1vw;
+    font-weight: 600;
+    font-family: helvetica;
+}
+table tr{
+  border-bottom: 1px solid #6d6b6bb0;
+}
+table tr td{
+    padding: 1vw 0vw;
+}
+/* .preValue{
+    background-color: rgba(216, 44, 44, 0.559);
+    color: white;
+} */
+ .preValue {
+  background-color: #c30e1d; 
+  display: inline-block;
+  padding: 10px
+}
+
+ 
+
+
