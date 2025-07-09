@@ -298,8 +298,7 @@ export class ChangeRequestListComponent {
     });
   }
 
-
-  public compareData(changeRequestId:string, orderId:string) {
+  public compareData(changeRequestId: string, orderId: string) {
     this.compareId = changeRequestId;
     if (this.compareId) {
       this.openDioLog = true;
@@ -307,13 +306,13 @@ export class ChangeRequestListComponent {
     forkJoin([
       this.coolOrderService.getCompareDataWithId(changeRequestId),
       this.coolOrderService.getOrderDataWithId(orderId)
-    ]).subscribe(([changeRequestResponse, orderResponse])=>{
+    ]).subscribe(([changeRequestResponse, orderResponse]) => {
       console.log(changeRequestResponse, orderResponse)
       this.changeData = this.getChangedValueWithOldValue(changeRequestResponse, orderResponse)
     })
   }
 
-  private getChangedValueWithOldValue(cr: any, orderData:any) {
+  private getChangedValueWithOldValue(cr: any, orderData: any) {
     const preViousValue = orderData
     const CR = cr.CR
     const result = []
@@ -340,7 +339,6 @@ export class ChangeRequestListComponent {
     // console.log(currentFlight)
 
     previousFlight.forEach((oldItem: any, index: number) => {
-    
       const newItem = currentFlight[index] || {};
       console.log(newItem)
       console.log(oldItem, "old")

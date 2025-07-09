@@ -39,7 +39,8 @@ export interface form {
 }
 
 export interface order {
-  id:number
+  id:number|string
+  hasCR:boolean
   orderType: string 
   org:string
   des: string
@@ -62,5 +63,6 @@ export interface order {
   create_at:Date,
   productItems: FormArray<FormGroup<ProductItem>>;
   flight: FormArray<FormGroup<flight>>;
+  comment:string
 }
 

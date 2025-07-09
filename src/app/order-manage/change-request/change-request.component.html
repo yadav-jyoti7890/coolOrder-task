@@ -43,7 +43,7 @@
             <div class="modal" *ngIf="showCommentPopup">
                 <div class="modal-content">
                     <h3>Add Comment Before Submit</h3>
-                    <textarea rows="4" cols="40" placeholder="Enter comment..." [formControl]="comment"
+                    <textarea rows="6" cols="40" placeholder="Enter comment..." [formControl]="comment"
                         [appValidateBorder]="comment"></textarea>
                     <!-- <input type="text" placeholder="Create By...!" formControlName="createBy"> -->
 
@@ -233,9 +233,7 @@
             <div class="header">
                 <h2>Flight details</h2>
                 <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
-                    [disabled]="flightDisable">
-                    +
-                </button>
+                    [disabled]="flightDisable">+</button>
             </div>
 
             <div class="flight-rows-container" formArrayName="flight" cdkDropList

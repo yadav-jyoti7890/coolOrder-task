@@ -54,6 +54,10 @@ export class CoolorderService {
     return this.http.get(`${this.apiUrl}order`)
   }
 
+    getAllChangeRequest(): Observable<any> {
+    return this.http.get(`${this.apiUrl}CR`)
+  }
+
   deleteOrder(id: string | null) {
     return this.http.delete(`${this.apiUrl}order/${id}`)
   }
@@ -69,6 +73,7 @@ export class CoolorderService {
   getCompareDataWithId(id:string|number): Observable<any>{
     return this.http.get(`${this.apiUrl}CR/${id}`)
   }
+
   getOrderDataWithId(id:string):Observable<any>{
     return this.http.get(`${this.apiUrl}order/${id}`)
   }

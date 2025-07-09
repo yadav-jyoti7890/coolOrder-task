@@ -10,7 +10,6 @@ import { OtherInformationComponent } from '../other-information/other-informatio
 import { FlightDetailComponent} from '../flight-detail/flight-detail.component';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
 import { ChangeRequestListComponent } from '../change-request-list/change-request-list.component';
-import { CompareListComponent } from '../compare-list/compare-list.component';
 
 @Component({
   selector: 'app-read-order',
@@ -22,7 +21,6 @@ import { CompareListComponent } from '../compare-list/compare-list.component';
     RouterLink,
     RouterOutlet,
     RouterLinkActive,
-    CompareListComponent
   ],
   templateUrl: './read-order.component.html',
   styleUrl: './read-order.component.css'

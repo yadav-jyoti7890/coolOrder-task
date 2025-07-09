@@ -52,7 +52,7 @@ export class ChangeRequestComponent {
   public disableCR: boolean = true;
   public showCommentPopup: boolean = false;
   public submitValue: 'New' | 'draft' | null = null
-  public comment = new FormControl(null, [Validators.required]);
+  public comment = new FormControl(null, [Validators.required,  Validators.maxLength(200)]);  
 
 
 
@@ -153,7 +153,6 @@ export class ChangeRequestComponent {
       });
   }
 
-
   private createProductItemGroup(data: Partial<ProductItem> = {}): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
       product: new FormControl(data.product ?? null, Validators.required),
@@ -163,7 +162,6 @@ export class ChangeRequestComponent {
       ]),
     });
   }
-
 
   private matchValues() {
     // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
@@ -470,13 +468,18 @@ export class ChangeRequestComponent {
         }
       });
 
+      const today = new Date();
+      const formattedDate = today.toISOString().substring(0, 10);
+
+
       const copy = {
         CR:{
           ...updateData,
         },
         status: selectValue,
         orderId: this.orderId,
-        comment: this.comment.value
+        comment: this.comment.value,
+        create_at: formattedDate
       };
 
       console.log(copy)
