@@ -173,7 +173,7 @@ export class CopyOrderComponent implements OnInit {
 
     this.RouteValid = isCompleteRoute.valid;
 
-    this.flightOrgInputs.forEach((orgInputRef, index) => {
+    this.flightOrgInputs?.forEach((orgInputRef, index) => {
       const desInputRef = this.flightDesInputs.get(index);
       const color = isCompleteRoute.index.includes(index) ? 'red' : 'green';
 

@@ -207,45 +207,6 @@
   ],
   "order": [
     {
-      "id": "5470",
-      "orderType": "CourtesyMove",
-      "org": "A",
-      "des": "B",
-      "pickUpPort": "A",
-      "rentalDays": 8,
-      "returnPort": "B",
-      "leaseStart": "2025-07-02",
-      "leaseEnd": "2025-07-09",
-      "supplierId": "3",
-      "commodity": "A",
-      "precondition": true,
-      "straps": true,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": "TRUE",
-      "strapsValue": "TRUE",
-      "groupId": "5",
-      "locationId": "5",
-      "productCode": "1234",
-      "productItems": [
-        {
-          "product": "10",
-          "quantity2": "100"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-15",
-          "flightOrg": "A",
-          "flightDes": "B",
-          "flightProductType": "10",
-          "flightOldQty": "100"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-04"
-    },
-    {
       "id": "16ca",
       "orderType": "Commercial",
       "org": "MUMBAI",
@@ -264,7 +225,7 @@
       "strapsValue": null,
       "groupId": "3",
       "locationId": "3",
-      "productCode": "1234",
+      "productCode": "12345",
       "productItems": [
         {
           "product": "8",
@@ -447,136 +408,135 @@
       ],
       "status": "draft",
       "create_at": "2025-07-09"
+    },
+    {
+      "id": "4e4e",
+      "orderType": "ChargeasblePosition",
+      "org": "INDORE",
+      "des": "DELHI",
+      "pickUpPort": "INDORE",
+      "rentalDays": 21,
+      "returnPort": "DELHI",
+      "leaseStart": "2025-07-10",
+      "leaseEnd": "2025-07-30",
+      "supplierId": "2",
+      "commodity": "DELHI",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "4",
+      "productCode": "99999",
+      "productItems": [
+        {
+          "product": "6",
+          "quantity2": "250"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-07",
+          "flightOrg": "INDORE",
+          "flightDes": "DELHI",
+          "flightProductType": "6",
+          "flightOldQty": "250"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-09"
+    },
+    {
+      "id": "d53a",
+      "orderType": "Commercial",
+      "org": "MUMBAI",
+      "des": "PANJAB",
+      "pickUpPort": "PANJAB",
+      "rentalDays": 8,
+      "returnPort": "MUMBAI",
+      "leaseStart": "2025-07-02",
+      "leaseEnd": "2025-07-09",
+      "supplierId": "2",
+      "commodity": "MUMBAI",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "12345",
+      "productItems": [
+        {
+          "product": "8",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "MUMBAI",
+          "flightDes": "PANJAB",
+          "flightProductType": "8",
+          "flightOldQty": "100"
+        }
+      ],
+      "status": "draft",
+      "create_at": "2025-07-10"
+    },
+    {
+      "id": "329c",
+      "orderType": "Commercial",
+      "org": "MUMBAI",
+      "des": "PANJAB",
+      "pickUpPort": "PANJAB",
+      "rentalDays": 8,
+      "returnPort": "MUMBAI",
+      "leaseStart": "2025-07-02",
+      "leaseEnd": "2025-07-09",
+      "supplierId": "2",
+      "commodity": "MUMBAI",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "12345",
+      "productItems": [
+        {
+          "product": "8",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "MUMBAI",
+          "flightDes": "PANJAB",
+          "flightProductType": "8",
+          "flightOldQty": "100"
+        }
+      ],
+      "status": "draft",
+      "create_at": "2025-07-10"
     }
   ],
   "CR": [
     {
-      "id": "413b",
+      "id": "9f36",
       "CR": {
-        "productCode": "12009"
-      },
-      "status": "draft",
-      "orderId": "5470",
-      "comment": "phase1",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "e33d",
-      "CR": {
-        "org": "MUMBAI",
-        "des": "DELHI",
-        "flight": [
-          {
-            "flightOrg": "MUMBAI",
-            "flightDes": "DELHI"
-          }
-        ]
-      },
-      "status": "draft",
-      "orderId": "5470",
-      "comment": "phase2",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "de4a",
-      "CR": {
-        "flight": [
-          {
-            "flightId": "LH1007"
-          }
-        ]
-      },
-      "status": "draft",
-      "orderId": "5470",
-      "comment": "change flight id",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "618d",
-      "CR": {
-        "org": "jabalpur",
-        "des": "goa",
-        "supplierId": "2",
-        "groupId": "3",
-        "locationId": "4",
-        "productCode": "1288",
-        "productItems": [
-          {
-            "product": "13",
-            "quantity2": "120"
-          }
-        ],
-        "flight": [
-          {
-            "flightOrg": "jabalpur",
-            "flightDes": "goa",
-            "flightProductType": "13",
-            "flightOldQty": "120"
-          }
-        ]
-      },
-      "status": "draft",
-      "orderId": "5470",
-      "comment": "change supplier",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "e2bc",
-      "CR": {
-        "productCode": "9999"
+        "productCode": "99999"
       },
       "status": "draft",
       "orderId": "5361",
-      "comment": "test1",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "fa45",
-      "CR": {
-        "des": "HARIYANA",
-        "productCode": "1233",
-        "flight": [
-          {
-            "flightDes": "HARIYANA"
-          }
-        ]
-      },
-      "status": "draft",
-      "orderId": "5361",
-      "comment": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero,",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "9ea4",
-      "CR": {
-        "productCode": "7655"
-      },
-      "status": "draft",
-      "orderId": "5361",
-      "comment": "fggfg",
-      "create_at": "2025-07-09"
-    },
-    {
-      "id": "d28b",
-      "CR": {
-        "productItems": [
-          {
-            "quantity2": "200"
-          }
-        ],
-        "flight": [
-          {
-            "flightOldQty": "100"
-          },
-          {
-            "flightOldQty": "100"
-          }
-        ]
-      },
-      "status": "draft",
-      "orderId": "ee09",
-      "comment": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock,.",
-      "create_at": "2025-07-09"
+      "comment": "change product code only",
+      "create_at": "2025-07-10"
     }
   ]
 }

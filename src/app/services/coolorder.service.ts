@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { form, ProductItem } from '../interfaces/form-interface';
@@ -66,15 +66,15 @@ export class CoolorderService {
     return this.http.post(`${this.apiUrl}CR`, CR)
   }
 
-  changeRequestList(orderId: string | null) {
-    return this.http.get(`${this.apiUrl}CR?orderId=${orderId}`);
+  changeRequestList(orderId: string | null, context?:HttpContext) {
+    return this.http.get(`${this.apiUrl}CR?orderId=${orderId}`, {context});
   }
 
   getCompareDataWithId(id:string|number): Observable<any>{
     return this.http.get(`${this.apiUrl}CR/${id}`)
   }
 
-  getOrderDataWithId(id:string):Observable<any>{
-    return this.http.get(`${this.apiUrl}order/${id}`)
+  getOrderDataWithId(id:string, context?:HttpContext):Observable<any>{
+    return this.http.get(`${this.apiUrl}order?id=${id}`, {context})
   }
 }

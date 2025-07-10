@@ -54,8 +54,6 @@ export class ChangeRequestComponent {
   public submitValue: 'New' | 'draft' | null = null
   public comment = new FormControl(null, [Validators.required,  Validators.maxLength(200)]);  
 
-
-
   ngOnInit(): void {
     forkJoin([
       this.coolOrderService.getSupplier(),
