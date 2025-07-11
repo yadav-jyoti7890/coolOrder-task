@@ -74,11 +74,10 @@ export class CoolorderComponent implements OnInit {
   ngOnInit(): void {
     this.getSupplier();
     this.getOrderType();
-
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
       org: new FormControl(null, [Validators.required]),
-      des: new FormControl(null, Validators.required),
+      des: new FormControl(null, [Validators.required]),
       pickUpPort: new FormControl(null, Validators.required),
       rentalDays: new FormControl(null, [
         Validators.required,
@@ -401,8 +400,6 @@ export class CoolorderComponent implements OnInit {
     }
     this.calculateLeaseEndDate();
     console.log(formData)
-
-
 
     if (this.form.valid && this.RouteValid) {
       // const formData = this.form.value;

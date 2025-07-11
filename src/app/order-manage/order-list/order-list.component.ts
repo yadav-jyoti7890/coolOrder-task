@@ -4,8 +4,8 @@ import { response } from 'express';
 import { error } from 'console';
 import { form, order } from '../../interfaces/form-interface';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import {  RouterLink } from '@angular/router';
+import { forkJoin, Subscription } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 import { HttpContext } from '@angular/common/http';
 import { BYPASS_LOADER } from '../interceptor/loader-context';
@@ -17,11 +17,12 @@ import { BYPASS_LOADER } from '../interceptor/loader-context';
   styleUrl: './order-list.component.css'
 })
 export class OrderListComponent implements OnInit {
+  
   public orderData: order[] = [];
   public openDioLog: boolean = false;
   public changeData: any[] = []
-
   public loaderVisibleInDialog = false;
+  public showLoaderData!: Subscription
 
 
   constructor(private CoolOrderService: CoolorderService, public loaderService: LoaderService) {
@@ -34,7 +35,7 @@ export class OrderListComponent implements OnInit {
   private getAllOrder() {
     forkJoin([
       this.CoolOrderService.getAllOrderData(),
-      this.CoolOrderService.getAllChangeRequest() // <-- Add a method to get all CRs
+      this.CoolOrderService.getAllChangeRequest()
     ]).subscribe(([orders, crs]) => {
       this.orderData = orders.map((order: order) => {
         const orderCRs = crs.filter((cr: any) => cr.orderId === order.id.toString());
@@ -62,112 +63,118 @@ export class OrderListComponent implements OnInit {
 
   public showDialog(orderId: any) {
     this.openDioLog = true;
-    this.loaderVisibleInDialog = true;
     this.loaderService.lock()
-    const byPassContext = new HttpContext().set(BYPASS_LOADER, true)
+    this.loaderVisibleInDialog = true;
+
+    const byPassContext = new HttpContext().set(BYPASS_LOADER, true)  
+    // console.log(byPassContext, BYPASS_LOADER, "bypasscontext", "BYPASS_LOADER")
     setTimeout(() => {
-      forkJoin([
+      console.log("complete 2 minutes")
+      this.showLoaderData = forkJoin([
         this.CoolOrderService.changeRequestList(orderId, byPassContext),
         this.CoolOrderService.getOrderDataWithId(orderId, byPassContext)
       ]).subscribe({
-        next: ([changeRequestData, orderData]) => {
+        next: ([changeRequestData, orderData]) => {  
           console.log(changeRequestData, orderData, "api response")
           this.changeData = this.getChangedValueWithOldValue(changeRequestData, orderData);
-          // console.log(this.changeData, "compare value")
+          console.log(this.changeData)
         },
         error: (err) => {
-          // console.error('Error while loading data:', err);
+          this.loaderService.unlock();
+          this.loaderVisibleInDialog = false;
+          console.log("something went wrong")
+  
         },
         complete: () => {
           this.loaderService.unlock();
           this.loaderVisibleInDialog = false;
-          // console.log("after complete this", this.loaderService, this.loaderVisibleInDialog)
         }
       });
     }, 3000);
   }
 
+  private getChangedValueWithOldValue(cr: any, orderData: any): any[] {
+    const result: any[] = [];
 
-  private getChangedValueWithOldValue(cr: any, orderData: any) {
- 
-    const preViousValue = orderData
-    const CR = cr
-    const result: any[] = []
+    cr.forEach((crItem: any, index: number) => {
+      const comment = crItem.comment;
+      const create_at = crItem.create_at;
+      const newItem = crItem.CR;
 
-    console.log(preViousValue)
+      console.log(newItem, index)
+      const oldItem = orderData[0]
 
-    CR.forEach((cr: any, index: number) => {
-      const comment = cr.comment;
-      const create_at = cr.create_at;
-      const newItem = cr.CR
-      const changes = []
-      // console.log(comment, create_at)
+      console.log(oldItem)
 
-      for (const key in preViousValue) {
-        if (key === 'productItems' || key === 'flight') continue
+      if (!oldItem || !newItem) return;
 
-        console.log("🔑 Key Name:", key);
-        console.log("📦 Key Value:", preViousValue[key]);
+      const changes: any[] = [];
 
-        const oldValue = preViousValue[key]
+      for (const key in newItem) {
+        if (key === 'flight' || key === 'productItems') continue;
 
+        const oldVal = oldItem[key];
+        const newVal = newItem[key];
 
-        if (newItem.hasOwnProperty(key) && newItem !== undefined && newItem !== oldValue) {
-          changes.push({ field: key, oldValue: oldValue, newValue: newItem[key] })
+        if (newItem.hasOwnProperty(key) && oldVal !== newVal) {
+          changes.push({ field: key, oldValue: oldVal, newValue: newVal });
         }
       }
-      const previousFlight = preViousValue.flight || [];
-      // console.log(previousFlight, "flight")
-      const currentFlight = newItem.flight || [];
-      previousFlight?.forEach((oldItem: any, index: number) => {
-        const newItem = currentFlight[index] || {};
-        for (const key in oldItem) {
-          const oldVal = oldItem[key];
-          const newVal = newItem[key];
-          if (
-            oldItem.hasOwnProperty(key) &&
-            newVal !== undefined && oldVal !== undefined &&
-            oldVal !== newVal
-          ) { changes.push({ field: key, oldValue: oldVal, newValue: newVal }) }
-        }
-      });
 
-      const product = preViousValue.productItems || [];
-      // console.log(product)
-      const currentProduct = newItem.productItems || [];
-      product?.forEach((oldItem: any, index: number) => {
-        const newItem = currentProduct[index] || {};
-        for (const key in oldItem) {
-          const oldVal = oldItem[key];
-          const newVal = newItem[key];
-          if (
-            newItem.hasOwnProperty(key) &&
-            newVal !== undefined &&
-            oldVal !== newVal
-          ) {
-            changes.push({ field: key, oldValue: oldVal, newValue: newVal })
+      
+      const oldFlights = oldItem.flight || [];
+      const newFlights = newItem.flight || [];
+
+      oldFlights.forEach((oldFlight: any, i: number) => {
+        const newFlight = newFlights[i] || {};
+        for (const key in oldFlight) {
+          const oldVal = oldFlight[key];
+          const newVal = newFlight[key];
+          if (oldVal !== undefined && newVal !== undefined && oldVal !== newVal) {
+            changes.push({
+              field: key,
+              oldValue: oldVal,
+              newValue: newVal
+            });
           }
         }
       });
 
+      
+      const oldProducts = oldItem.productItems || [];
+      const newProducts = newItem.productItems || [];
+
+      oldProducts.forEach((oldProduct: any, i: number) => {
+        const newProduct = newProducts[i] || {};
+        for (const key in oldProduct) {
+          const oldVal = oldProduct[key];
+          const newVal = newProduct[key];
+          if (oldVal !== undefined && newVal !== undefined && oldVal !== newVal) {
+            changes.push({
+              field: key,
+              oldValue: oldVal,
+              newValue: newVal
+            });
+          }
+        }
+      });
+
+
       if (changes.length > 0) {
         result.push({
-          changes,
           comment,
-          create_at
-        })
+          create_at,
+          changes
+        });
       }
+    });
 
-      // console.log(result, "result")
-    })
-
-    return result
-
+    return result;
   }
 
   public closeBtn() {
-    this.openDioLog = false;
-    const byPassContext = new HttpContext().set(BYPASS_LOADER, false)
+    this.openDioLog = false
+    this.loaderVisibleInDialog = false;
+    this.loaderService.unlock();
   }
-
 }

@@ -1,10 +1,8 @@
 <div class="container1">
     <h1>Order Change Requests</h1>
 
-
-
     @if(changeRequest?.length > 0){
-        <table class="requests-table">
+        <table class="requests-table card">
             <thead>
                 <tr>
                     <th>Order ID</th>
@@ -14,11 +12,10 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="width: 100%;">
                 <!-- Row 1 -->
-
                 <tr *ngFor="let changeRequest of changeRequest">
-                    <td class="order-id">#{{changeRequest.orderId}} </td>
+                    <td class="order-id">#{{changeRequest.id}} </td>
                     <td class="comment">{{changeRequest.comment}} </td>
                     <td class="created-by">John Doe<br><small>2025-07-04 14:30</small></td>
                     <td><span class="status status-pending">{{changeRequest.status}}</span></td>

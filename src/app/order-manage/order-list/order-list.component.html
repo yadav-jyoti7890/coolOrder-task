@@ -17,7 +17,7 @@
                 <th>pickUpPort</th>
                 <th>Lease Start</th>
                 <th>Lease End</th>
-                <th>Group</th>
+                <th>Rental-Days</th>
                 <th>Product Code</th>
                 <th>Create_At</th>
                 <th>status</th>
@@ -30,11 +30,11 @@
                 <td>{{ order.org }}</td>
                 <td>{{ order.des }}</td>
                 <td>{{ order.pickUpPort }}</td>
-                <td>{{ order.leaseStart }}</td>
-                <td>{{ order.leaseEnd }}</td>
-                <td>{{ order.groupId }}</td>
+                <td>{{ order.leaseStart | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ order.leaseEnd | date: 'dd/MM/yyyy' }}</td>
+                <td>{{ order.rentalDays }}</td>
                 <td>{{ order.productCode }}</td>
-                <td>{{ order.create_at }}</td>
+                <td>{{ order.create_at | date: 'dd/MM/yyyy' }}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 0.5vw">
                         <span>{{ order.status | uppercase}}</span>
@@ -74,23 +74,14 @@
   <div class="comparison-dialog">
     <div class="dialog-header">
       <span>Text Comparison</span>
-      <button class="close-btn" id="closeBtn" (click)="closeBtn()">&times;</button>
+      <button class="close-btn" (click)="closeBtn()">&times;</button>
     </div>
-
-    <!-- ✅ Only Dialog Loader -->
-    <div *ngIf="loaderVisibleInDialog" class="dialog-loader">
-      <div class="spinner"></div>
-    </div>
-
-    <!-- ✅ Data appears only after loader gone -->
+    
     <ng-container *ngIf="!loaderVisibleInDialog">
       <div class="dialog-body card" *ngFor="let crGroup of changeData" style="margin: 1vw">
         <div class="flex">
-          <div class="text-wrapper">
-            {{ crGroup.comment | slice: 0:30 }}<span *ngIf="crGroup.comment.length > 30">...</span>
-            <div class="hover-box" *ngIf="crGroup.comment.length > 30">{{ crGroup.comment }}</div>
-          </div>
-          <span>{{ crGroup.create_at }}</span>
+         
+          <span>{{ crGroup.create_at | date: 'dd/MM/yyyy' }}</span>
         </div>
 
         <div *ngFor="let CR of crGroup.changes" class="comparison-row">
@@ -106,7 +97,19 @@
             </div>
           </div>
         </div>
+
+        <div class="comment">
+           <textarea  class="comment-box" readonly disabled>{{crGroup.comment}} </textarea>
+        </div>
       </div>
     </ng-container>
+
+     <div *ngIf="loaderVisibleInDialog" class="dialog-loader">
+      <div class="spinner"></div>
+    </div>
   </div>
 </div>
+
+
+   
+   

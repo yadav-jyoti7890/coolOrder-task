@@ -70,9 +70,9 @@ export class ChangeRequestListComponent {
 
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
-    this.fetchData()
     this.updateId = this.route.snapshot.paramMap.get('id')
     this.changeRequestList();
+    this.fetchData()
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
@@ -109,7 +109,6 @@ export class ChangeRequestListComponent {
 
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
-
   }
 
   public changeRequestList() {
@@ -299,13 +298,14 @@ export class ChangeRequestListComponent {
   }
 
   public compareData(changeRequestId: string, orderId: string) {
+    console.log(changeRequestId, orderId)
     this.compareId = changeRequestId;
     if (this.compareId) {
       this.openDioLog = true;
     }
     forkJoin([
-      this.coolOrderService.getCompareDataWithId(changeRequestId),
-      this.coolOrderService.getOrderDataWithId(orderId)
+      this.coolOrderService.changeRequestData(changeRequestId),
+      this.coolOrderService.getOrderData(orderId)
     ]).subscribe(([changeRequestResponse, orderResponse]) => {
       console.log(changeRequestResponse, orderResponse)
       this.changeData = this.getChangedValueWithOldValue(changeRequestResponse, orderResponse)
@@ -313,11 +313,13 @@ export class ChangeRequestListComponent {
   }
 
   private getChangedValueWithOldValue(cr: any, orderData: any) {
-    const preViousValue = orderData
-    const CR = cr.CR
+    const preViousValue = orderData[0]
+    const CR = cr[0].CR
     const result = []
 
+
     for (const key in preViousValue) {
+
       if (key === 'productItems' || key === 'flight') continue;
 
       const preValue = preViousValue[key]

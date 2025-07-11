@@ -125,6 +125,7 @@ i {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  /* background-color: red; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,15 +135,16 @@ i {
 
 /* Dialog Box Styles */
 .comparison-dialog {
-  width: 80%;
-  max-width: 90%;
-  background-color: rgb(252, 252, 252);
+  width: 80vw;
+  /* max-width: 90%; */
+  background-color:#fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   overflow-y: scroll !important;
   animation: fadeIn 0.3s;
   height: 800px;
   scrollbar-width: thin;
+ 
 }
 
 @keyframes fadeIn {
@@ -159,6 +161,8 @@ i {
 
 /* Dialog Header Styles */
 .dialog-header {
+  width: 80vw;
+  position: fixed;
   padding: 16px 24px;
   background-color: #4361EE;
   color: white;
@@ -167,6 +171,7 @@ i {
   display: flex;
   justify-content: space-between;
   align-items: center;
+   z-index: 99;
 }
 
 .close-btn {
@@ -181,6 +186,7 @@ i {
 
 /* Dialog Body Styles */
 .dialog-body {
+  margin-top: 4vw !important;
   padding: 20px;
   /* max-height: 70vh; */
   overflow-y: scroll !important;
@@ -306,17 +312,16 @@ i {
 .text-wrapper:hover .hover-box {
   display: block;
 }
-.global-loader {
-  position: fixed;
-  top: 0;
-  left: 0;
+
+
+.dialog-loader{
+  /* background-color: red; */
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.6);
-  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
+   transform: translate(50% 50%);
 }
 
 .spinner {
@@ -326,15 +331,41 @@ i {
   width: 40px;
   height: 40px;
   animation: spin 0.9s linear infinite;
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto auto;
+  transform: translate(-50% -50%); */
 }
+
+.comment{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+}
+
+.comment-box{
+  width: 40%;
+  padding: 10px;
+  border: none;
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: 100px;
+}
+
+.comment-box textarea:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
-
 
 /* Responsive */
 @media (max-width: 768px) {

@@ -1,6 +1,6 @@
-.container {
-  max-width: 1800px;
-  min-height: 100vh;
+.container1{
+  width: 100%;
+  height: auto;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 8px;
@@ -247,7 +247,7 @@ app-validation select {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 2vw 2vw;
-  /* max-width: 1400px; */
+  margin-top: 1vw;
 }
 
 .header {

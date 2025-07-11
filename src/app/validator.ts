@@ -46,12 +46,12 @@ export class ValidateBorderDirective implements OnInit {
     }
 
 
-    if (this.control.valid && (this.control.dirty)) {
+    if (this.control.valid && (this.control.dirty && this.control.touched)) {
       inputEl.style.borderBottom = '3px solid green';
     } 
     else if (
       this.control.invalid &&
-      (this.control.dirty)
+      (this.control.dirty && this.control.touched)
     ) {
       inputEl.style.borderBottom = '2px solid red';
       this.errorElement = this.renderer.createElement('div');
@@ -74,6 +74,7 @@ export class ValidateBorderDirective implements OnInit {
 
     if (this.control.errors['required']) return 'This field is required';
     if (this.control.errors['pattern']) return 'Only numbers allowed';
+
     if (this.control.errors['minlength'])  return `Minimum ${this.control.errors['minlength'].requiredLength} characters required`;
     if (this.control.errors['maxlength'])  return `maxlength ${this.control.errors['maxlength'].requiredLength} characters required`;
     return 'Invalid input';

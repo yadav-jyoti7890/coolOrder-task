@@ -77,4 +77,13 @@ export class CoolorderService {
   getOrderDataWithId(id:string, context?:HttpContext):Observable<any>{
     return this.http.get(`${this.apiUrl}order?id=${id}`, {context})
   }
+
+   getOrderData(id:string):Observable<any>{
+    // console.log(id)
+    return this.http.get(`${this.apiUrl}order?id=${id}`)
+  }
+
+    changeRequestData(id: string | null):Observable<any>{
+    return this.http.get(`${this.apiUrl}CR?id=${id}`);
+  }
 }

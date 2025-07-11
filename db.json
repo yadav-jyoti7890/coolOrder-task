@@ -506,7 +506,7 @@
       "strapsValue": null,
       "groupId": "3",
       "locationId": "3",
-      "productCode": "12345",
+      "productCode": "56789",
       "productItems": [
         {
           "product": "8",
@@ -529,24 +529,49 @@
   ],
   "CR": [
     {
-      "id": "9f36",
+      "id": "701a",
       "CR": {
-        "productCode": "99999"
+        "productCode": "5764",
+        "productItems": [
+          {
+            "product": "6",
+            "quantity2": "200"
+          }
+        ],
+        "flight": [
+          {
+            "flightId": "LH10010",
+            "flightDate": "2025-07-02",
+            "flightProductType": "6",
+            "flightOldQty": "200"
+          }
+        ]
       },
       "status": "draft",
       "orderId": "5361",
-      "comment": "change product code only",
-      "create_at": "2025-07-10"
+      "comment": "change flight related data and product related data✅",
+      "create_at": "2025-07-11"
     },
     {
-      "id": "0909",
+      "id": "abfa",
       "CR": {
-        "commodity": "PANJAB"
+        "groupId": "4",
+        "productCode": "16533",
+        "productItems": [
+          {
+            "product": "9"
+          }
+        ],
+        "flight": [
+          {
+            "flightProductType": "9"
+          }
+        ]
       },
       "status": "draft",
       "orderId": "5361",
-      "comment": "add commidity",
-      "create_at": "2025-07-10"
+      "comment": "change product detail and flight details",
+      "create_at": "2025-07-11"
     }
   ]
 }

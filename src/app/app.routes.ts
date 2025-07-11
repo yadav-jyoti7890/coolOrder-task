@@ -6,9 +6,7 @@ import { ReadOrderComponent } from './order-manage/read-order/read-order.compone
 import { CopyOrderComponent } from './order-manage/copy-order/copy-order.component';
 import { ChangeRequestComponent } from './order-manage/change-request/change-request.component';
 import { ChangeRequestListComponent } from './order-manage/change-request-list/change-request-list.component';
-import { OtherInformationComponent } from './order-manage/other-information/other-information.component';
-import { ProductDetailComponent } from './order-manage/product-detail/product-detail.component';
-import { FlightDetailComponent } from './order-manage/flight-detail/flight-detail.component';
+
 
 export const routes: Routes = [
   { path: '', component: CoolorderComponent },

@@ -1,29 +1,6 @@
-<div class="container">
+<div class="container1">
     <form [formGroup]="form">
-        <div class="top-bar">
-            <div class="select-bar">
-                <select formControlName="orderType">
-                    <option selected disabled>Commercial</option>
-                    <option *ngFor="let ot of orderType" [value]="ot.name">
-                        {{ ot.name }}
-                    </option>
-                </select>
-
-                <select formControlName="supplierId" (change)="getSupplierId($event)">
-                    <option selected disabled>choose supplier</option>
-                    <option *ngFor="let s of supplier" [value]="s.id">
-                        {{ s.name }}
-                    </option>
-                </select>
-            </div>
-
-            <div class="action-buttons">
-                <!-- <button type="button" class="orange" (click)="update()" [disabled]="!form.valid || !RouteValid">
-                    Update
-                </button> -->
-            </div>
-        </div>
-
+  
         <div class="cards">
             <div class="card">
                 <h3>Order details</h3>
