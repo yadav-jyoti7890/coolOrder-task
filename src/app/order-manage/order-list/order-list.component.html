@@ -1,73 +1,83 @@
-
-
-<div class="header" style="display: flex; justify-content: space-between; padding: 1vw">
-    <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
-        Order List
-    </h2>
-    <button class="view" [routerLink]="['/coolorder']">Create Order</button>
+<div class="header" style="display: flex; justify-content: space-between; padding: 2vw 2vw 0px 2vw; ">
+  <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
+    Order List
+  </h2>
+  <button class="view" [routerLink]="['/coolorder']">Create Order</button>
 </div>
 <div class="order-detail-container">
-    <!-- Member List Table -->
-    <table class="member-table">
-        <thead>
-            <tr>
-                <th>SN</th>
-                <th>Origin</th>
-                <th>Destination</th>
-                <th>pickUpPort</th>
-                <th>Lease Start</th>
-                <th>Lease End</th>
-                <th>Rental-Days</th>
-                <th>Product Code</th>
-                <th>Create_At</th>
-                <th>status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let order of orderData; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ order.org }}</td>
-                <td>{{ order.des }}</td>
-                <td>{{ order.pickUpPort }}</td>
-                <td>{{ order.leaseStart | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ order.leaseEnd | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ order.rentalDays }}</td>
-                <td>{{ order.productCode }}</td>
-                <td>{{ order.create_at | date: 'dd/MM/yyyy' }}</td>
-                <td>
-                    <div style="display: flex; align-items: center; gap: 0.5vw">
-                        <span>{{ order.status | uppercase}}</span>
-                        <div *ngIf="order.status === 'New' && order.hasCR">
-                            <span class="status-badge pending" (click)="showDialog(order.id)">Pending</span>
-                        </div>
-                    </div>
-                </td>
+  <!-- Member List Table -->
+  <table class="member-table">
+    <thead>
+      <tr>
+        <th>SN</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>pickUpPort</th>
+        <th>Lease Start</th>
+        <th>Lease End</th>
+        <th>Rental-Days</th>
+        <th>Product Code</th>
+        <th>Create_At</th>
+        <th>status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orderData; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ order.org }}</td>
+        <td>{{ order.des }}</td>
+        <td>{{ order.pickUpPort }}</td>
+        <td>{{ order.leaseStart | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ order.leaseEnd | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ order.rentalDays }}</td>
+        <td>{{ order.productCode }}</td>
+        <td>{{ order.create_at | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 0.5vw">
+            <span [ngClass]="{
+               'status-draft': order.status === 'draft',
+               'status-new': order.status === 'New',
+               'status-approved': order.status === 'Approved'
+                }">{{ order.status | uppercase}}
+            </span>
+            <div *ngIf="order.status === 'New' && order.hasCR">
+              <span class="status-badge pending" (click)="showDialog(order.id)">Pending</span>
+            </div>
+          </div>
+        </td>
 
-                @if(order.status === 'draft') {
-                <td>
-                    <div class="action" style="display: flex; gap: 1vw">
-                        <i class="ri-edit-fill" [routerLink]="['/update', order.id]"></i>
-                        <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
-                        <i class="ri-file-copy-fill" [routerLink]="['/copy-order', order.id]"></i>
-                    </div>
-                </td>
-                } @else {
-                <td>
-                    <div class="action" style="display: flex; gap: 1vw">
-                        <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
-                        <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
-                        <button [routerLink]="['/change-request', order.id]" class="view">
-                            CR
-                        </button>
-                    </div>
-                </td>
-                }
-            </tr>
-        </tbody>
-    </table>
+        @if(order.status === 'draft') {
+        <td>
+          <div class="action" style="display: flex; gap: 1vw">
+            <i class="ri-edit-fill" [routerLink]="['/update', order.id]"></i>
+            <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+            <i class="ri-file-copy-fill" [routerLink]="['/copy-order', order.id]"></i>
+          </div>
+        </td>
+        } @else if(order.status === 'New'){
+        <td>
+          <div class="action" style="display: flex; gap: 1vw">
+            <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
+            <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+            <button [routerLink]="['/change-request', order.id]" class="view">
+              CR
+            </button>
+          </div>
+        </td>
+        }
+        @else{
+        <td>
+          <div class="action" style="display: flex; gap: 1vw">
+            <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
+            <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
+          </div>
+        </td>
+        }
+      </tr>
+    </tbody>
+  </table>
 </div>
-
 
 <!-- display model -->
 <div class="modal-overlay" *ngIf="openDioLog" style="padding: 1vw">
@@ -76,12 +86,24 @@
       <span>Text Comparison</span>
       <button class="close-btn" (click)="closeBtn()">&times;</button>
     </div>
-    
-    <ng-container *ngIf="!loaderVisibleInDialog">
+
+    <ng-container>
       <div class="dialog-body card" *ngFor="let crGroup of changeData" style="margin: 1vw">
         <div class="flex">
-         
           <span>{{ crGroup.create_at | date: 'dd/MM/yyyy' }}</span>
+
+          <ng-container>
+            <button class="approve-btn" *ngIf="!successLoader && !approved"
+              (click)="approve(crGroup.id, crGroup.orderId)">
+              Approve Request
+            </button>
+
+            <div *ngIf="successLoader " class="spinner small"></div>
+
+            <div class="approved" *ngIf="approved">
+              <i class="ri-check-line approved-icon"></i>
+            </div>
+          </ng-container>
         </div>
 
         <div *ngFor="let CR of crGroup.changes" class="comparison-row">
@@ -99,17 +121,13 @@
         </div>
 
         <div class="comment">
-           <textarea  class="comment-box" readonly disabled>{{crGroup.comment}} </textarea>
+          <textarea class="comment-box" readonly disabled>{{crGroup.comment}} </textarea>
         </div>
       </div>
     </ng-container>
 
-     <div *ngIf="loaderVisibleInDialog" class="dialog-loader">
+    <div *ngIf="loaderVisibleInDialog" class="dialog-loader">
       <div class="spinner"></div>
     </div>
   </div>
 </div>
-
-
-   
-   

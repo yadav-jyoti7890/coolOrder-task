@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CoolorderService } from '../../services/coolorder.service';
 import { response } from 'express';
-import { error } from 'console';
 import { form, order } from '../../interfaces/form-interface';
 import { CommonModule } from '@angular/common';
-import {  RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 import { HttpContext } from '@angular/common/http';
 import { BYPASS_LOADER } from '../interceptor/loader-context';
+
 
 @Component({
   selector: 'app-order-list',
@@ -17,15 +17,18 @@ import { BYPASS_LOADER } from '../interceptor/loader-context';
   styleUrl: './order-list.component.css'
 })
 export class OrderListComponent implements OnInit {
-  
+
   public orderData: order[] = [];
   public openDioLog: boolean = false;
   public changeData: any[] = []
   public loaderVisibleInDialog = false;
-  public showLoaderData!: Subscription
+  public showLoaderData!: Subscription;
+  public changeRequest: any
+  public successLoader: boolean = false;
+  public approved:boolean = false;
 
 
-  constructor(private CoolOrderService: CoolorderService, public loaderService: LoaderService) {
+  constructor(private CoolOrderService: CoolorderService, public loaderService: LoaderService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -66,31 +69,31 @@ export class OrderListComponent implements OnInit {
     this.loaderService.lock()
     this.loaderVisibleInDialog = true;
 
-    const byPassContext = new HttpContext().set(BYPASS_LOADER, true)  
-    // console.log(byPassContext, BYPASS_LOADER, "bypasscontext", "BYPASS_LOADER")
+    const byPassContext = new HttpContext().set(BYPASS_LOADER, true)
     setTimeout(() => {
-      console.log("complete 2 minutes")
       this.showLoaderData = forkJoin([
         this.CoolOrderService.changeRequestList(orderId, byPassContext),
         this.CoolOrderService.getOrderDataWithId(orderId, byPassContext)
       ]).subscribe({
-        next: ([changeRequestData, orderData]) => {  
-          console.log(changeRequestData, orderData, "api response")
+        next: ([changeRequestData, orderData]) => {
+
+          //console.log(changeRequestData, orderData, "api response")
           this.changeData = this.getChangedValueWithOldValue(changeRequestData, orderData);
           console.log(this.changeData)
         },
         error: (err) => {
           this.loaderService.unlock();
           this.loaderVisibleInDialog = false;
-          console.log("something went wrong")
-  
+          //console.log("something went wrong")
+
         },
         complete: () => {
           this.loaderService.unlock();
           this.loaderVisibleInDialog = false;
         }
       });
-    }, 3000);
+
+    }, 2000);
   }
 
   private getChangedValueWithOldValue(cr: any, orderData: any): any[] {
@@ -99,12 +102,14 @@ export class OrderListComponent implements OnInit {
     cr.forEach((crItem: any, index: number) => {
       const comment = crItem.comment;
       const create_at = crItem.create_at;
+      const orderId = crItem.orderId;
+      const id = crItem.id;
       const newItem = crItem.CR;
 
-      console.log(newItem, index)
+      //console.log(newItem, index)
       const oldItem = orderData[0]
 
-      console.log(oldItem)
+      //console.log(oldItem)
 
       if (!oldItem || !newItem) return;
 
@@ -121,7 +126,7 @@ export class OrderListComponent implements OnInit {
         }
       }
 
-      
+
       const oldFlights = oldItem.flight || [];
       const newFlights = newItem.flight || [];
 
@@ -140,7 +145,7 @@ export class OrderListComponent implements OnInit {
         }
       });
 
-      
+
       const oldProducts = oldItem.productItems || [];
       const newProducts = newItem.productItems || [];
 
@@ -164,6 +169,8 @@ export class OrderListComponent implements OnInit {
         result.push({
           comment,
           create_at,
+          orderId,
+          id,
           changes
         });
       }
@@ -177,4 +184,34 @@ export class OrderListComponent implements OnInit {
     this.loaderVisibleInDialog = false;
     this.loaderService.unlock();
   }
+
+  public approve(changeRequestId: string, orderId: string) {
+    this.successLoader = true;
+    if(changeRequestId && orderId){
+         setTimeout(() => {
+      this.CoolOrderService.changeRequestData(changeRequestId).subscribe({
+        next: (response) => {
+          const updateOrder = {
+            ...response[0].CR,
+            status: 'Approved'
+          }
+          this.CoolOrderService.updateOrder(updateOrder, orderId).subscribe({
+            next: (response) => {
+              console.log(response, "update success")
+              this.successLoader = false;
+              this.approved = true;
+              this.getAllOrder()
+              setTimeout(() => {
+                 this.openDioLog = false
+              }, 900);
+            }
+          })
+        },
+       
+      })
+    }, 800);
+    }
+    
+  }
+
 }

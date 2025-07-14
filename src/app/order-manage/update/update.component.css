@@ -5,6 +5,8 @@
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
+  padding: 1vw;
+
 }
 
 /* Top Bar */
@@ -13,9 +15,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #36454f;
+  background-color: #4361ee;
   color: white;
   border-bottom: 1px solid #ddd;
+   border-radius: 6px;
+  margin: 0 1vw;
 }
 
 .select-bar {

@@ -1,10 +1,11 @@
 .container {
-  max-width: 1800px;
+  max-width: 2000px;
   min-height: 100vh;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 8px;
   overflow: hidden;
+  padding: 1vw;
 }
 
 /* Top Bar */
@@ -12,10 +13,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: #36454f;
+  padding: 15px 27px;
+  background-color: #4361EE;
   color: white;
   border-bottom: 1px solid #ddd;
+  border-radius: 6px;
+  margin: 0 1vw;
 }
 
 .select-bar {
@@ -242,12 +245,13 @@ app-validation select {
 
 /* Form container */
 .form-container {
- max-width: 1800px;
+  max-width: 2000px;
   background-color: #ffffff !important;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 2vw 3vw;
   /* max-width: 1400px; */
+  margin: 0 1vw;
 }
 
 .header {

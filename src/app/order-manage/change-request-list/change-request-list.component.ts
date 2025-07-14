@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output, output } from '@angular/core';
-
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { flight, form, order, ProductItem } from '../../interfaces/form-interface';
@@ -309,6 +308,7 @@ export class ChangeRequestListComponent {
     ]).subscribe(([changeRequestResponse, orderResponse]) => {
       console.log(changeRequestResponse, orderResponse)
       this.changeData = this.getChangedValueWithOldValue(changeRequestResponse, orderResponse)
+      console.log(this.changeData)
     })
   }
 
@@ -326,6 +326,7 @@ export class ChangeRequestListComponent {
 
       if (CR.hasOwnProperty(key)) {
         const newValue = CR[key]
+        console.log(preValue, newValue)
         if (preValue != newValue) {
           result.push({
             field: key,
