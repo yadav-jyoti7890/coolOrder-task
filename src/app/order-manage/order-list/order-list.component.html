@@ -2,7 +2,11 @@
   <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
     Order List
   </h2>
-  <button class="view" [routerLink]="['/coolorder']">Create Order</button>
+  <div>
+    <button class="view" [routerLink]="['/coolorder']">Create Order</button>
+    <button class="excel-btn" (click)="exportToExcel()">📥 Download Excel</button>
+  </div>
+
 </div>
 <div class="order-detail-container">
   <!-- Member List Table -->
@@ -11,13 +15,51 @@
       <tr>
         <th>SN</th>
         <th>Origin</th>
-        <th>Destination</th>
-        <th>pickUpPort</th>
-        <th>Lease Start</th>
-        <th>Lease End</th>
-        <th>Rental-Days</th>
-        <th>Product Code</th>
-        <th>Create_At</th>
+
+        <th>Destination
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill" (click)="short('des', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" (click)="short('des', 'desc')"></i>
+          </div>
+        </th>
+
+        <th>pickupport
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill"  (click)="short('pickUpPort', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill"  (click)="short('pickUpPort', 'desc')"></i>
+          </div>
+        </th>
+
+        <th>Lease Start
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill"  (click)="short('leaseStart', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill"  (click)="short('leaseStart', 'desc')"></i>
+          </div>
+        </th>
+        <th>Lease End
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill" (click)="short('leaseEnd', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" (click)="short('leaseEnd', 'desc')"></i>
+          </div>
+        </th>
+        <th>Rental-Days
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill" (click)="short('rentalDays', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" (click)="short('rentalDays', 'desc')"></i>
+          </div>
+        </th>
+        <th>Product Code
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill" (click)="short('productCode', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" (click)="short('productCode', 'desc')"></i>
+          </div>
+        </th>
+        <th>Create_At
+          <div class="arrow">
+            <i class="ri-arrow-up-s-fill" (click)="short('create_at', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" (click)="short('create_at', 'desc')"></i>
+          </div>
+        </th>
         <th>status</th>
         <th>Action</th>
       </tr>
@@ -93,17 +135,18 @@
           <span>{{ crGroup.create_at | date: 'dd/MM/yyyy' }}</span>
 
           <ng-container>
-            <button class="approve-btn" *ngIf="!successLoader && !approved"
+            <button class="approve-btn" *ngIf="!successLoader[crGroup.id] && !approved[crGroup.id]"
               (click)="approve(crGroup.id, crGroup.orderId)">
               Approve Request
             </button>
 
-            <div *ngIf="successLoader " class="spinner small"></div>
+            <div *ngIf="successLoader[crGroup.id]" class="spinner small"></div>
 
-            <div class="approved" *ngIf="approved">
+            <div class="approved" *ngIf="approved[crGroup.id]">
               <i class="ri-check-line approved-icon"></i>
             </div>
           </ng-container>
+
         </div>
 
         <div *ngFor="let CR of crGroup.changes" class="comparison-row">

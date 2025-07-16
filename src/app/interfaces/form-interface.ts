@@ -25,7 +25,6 @@ export interface form {
   leaseEnd: FormControl<string | null>;
   groupId: FormControl<string | null>;
   productCode: FormControl<string | null>;
-  // productId: FormControl<string | null>;
   commodity: FormControl<string | null>;
   precondition: FormControl<boolean | null>;
   straps: FormControl<boolean | null>;

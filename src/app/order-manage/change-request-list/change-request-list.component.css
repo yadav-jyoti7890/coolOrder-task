@@ -501,7 +501,7 @@ h1 {
 .requests-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: rgb(208, 36, 36);
+  /* background-color: rgb(208, 36, 36); */
   border-radius: 8px;
   /* overflow: hidden; */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);

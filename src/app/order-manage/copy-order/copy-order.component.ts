@@ -44,7 +44,7 @@ export class CopyOrderComponent implements OnInit {
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -294,19 +294,19 @@ export class CopyOrderComponent implements OnInit {
     this.matchValues();
   }
 
-   private calculateLeaseEndDate() {
+  private calculateLeaseEndDate() {
     // get start date
     const start = this.form.controls.leaseStart.value;
     const end = this.form.controls.leaseEnd.value;
 
-    if(start && end){
+    if (start && end) {
       const startDate = new Date(start)
       const endDate = new Date(end)
       // const endDate = new Date(end)
 
       const startDay = startDate.getDate()
       const endDay = endDate.getDate()
-      console.log(startDay, "start" , endDay, "enddate")
+      console.log(startDay, "start", endDay, "enddate")
 
       this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
     }
@@ -406,6 +406,7 @@ export class CopyOrderComponent implements OnInit {
       ...this.form.value,
       status,
     };
+
     this.calculateLeaseEndDate();
     console.log(formData);
 
@@ -419,147 +420,148 @@ export class CopyOrderComponent implements OnInit {
         create_at: formattedDate,
       };
 
-      this.coolOrderService.saveProduct(formData).subscribe({
-        next: (res) => {
-          console.log(' Data saved:', res);
-          alert(`${status} Form submitted successfully`);
-          this.router.navigate(['/order-list']);
-          this.form.reset();
-          this.form.controls.productItems.clear();
-          this.form.controls.productItems.push(this.createProductItemGroup());
-          this.form.controls.flight.clear();
-          this.form.controls.flight.push(this.createFlight());
-        },
-
-        error: (err) => {
-          console.error('❌ Error saving:', err);
-          alert('Error saving data.');
-        },
-      });
-    } else {
-      // this.form.markAllAsTouched();
-      alert('Please fix the errors before updating.');
-
-      Object.keys(this.form.controls).forEach((key: string) => {
-        const control = this.form.get(key);
-
-        if (control instanceof FormControl) {
-          // console.log(`Field '${key}' touched:`, control.touched);
-          if (control.invalid) {
-            control.markAsTouched();
-            control.updateValueAndValidity({ onlySelf: true });
+      this.coolOrderService.saveOrder(formData).subscribe({
+        next: (response) => {
+          const res: any = response
+          const orderLog = {
+            ...res,
+            orderId: res.id
           }
-        } else if (control instanceof FormArray) {
-          control.controls.forEach((row: AbstractControl, index: number) => {
-            if (row instanceof FormGroup) {
-              Object.keys(row.controls).forEach((fieldName) => {
-                const field = row.get(fieldName) as FormControl;
-                if (field && field.invalid) {
-                  field.markAsTouched();
-                  field.updateValueAndValidity({
-                    onlySelf: true,
-                  });
-                }
+          this.coolOrderService.saveOrder_log(orderLog).subscribe({
+            next: (response) => {
+              this.router.navigate(['/order-list']);
+              this.form.reset();
+              this.form.controls.productItems.clear();
+              this.form.controls.productItems.push(this.createProductItemGroup());
+              this.form.controls.flight.clear();
+            }
+          })
+        }
+      })
+  } else {
+  // this.form.markAllAsTouched();
+  alert('Please fix the errors before updating.');
+
+  Object.keys(this.form.controls).forEach((key: string) => {
+    const control = this.form.get(key);
+
+    if (control instanceof FormControl) {
+      // console.log(`Field '${key}' touched:`, control.touched);
+      if (control.invalid) {
+        control.markAsTouched();
+        control.updateValueAndValidity({ onlySelf: true });
+      }
+    } else if (control instanceof FormArray) {
+      control.controls.forEach((row: AbstractControl, index: number) => {
+        if (row instanceof FormGroup) {
+          Object.keys(row.controls).forEach((fieldName) => {
+            const field = row.get(fieldName) as FormControl;
+            if (field && field.invalid) {
+              field.markAsTouched();
+              field.updateValueAndValidity({
+                onlySelf: true,
               });
             }
           });
         }
       });
     }
+  });
+}
   }
 
   public getSupplierId(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    this.selectedValue = selectElement.value;
+  const selectElement = event.target as HTMLSelectElement;
+  this.selectedValue = selectElement.value;
 
-    const productArray = this.form.controls.productItems as FormArray;
-    while (productArray.length !== 0) {
-      productArray.removeAt(0);
-    }
+  const productArray = this.form.controls.productItems as FormArray;
+  while(productArray.length !== 0) {
+  productArray.removeAt(0);
+}
 
-    this.form.controls.productCode.reset();
-    this.form.controls.groupId.reset();
-    this.form.controls.locationId.reset();
-    this.form.controls.straps.reset();
-    this.form.controls.precondition.reset();
-    this.form.controls.strapsValue.reset();
+this.form.controls.productCode.reset();
+this.form.controls.groupId.reset();
+this.form.controls.locationId.reset();
+this.form.controls.straps.reset();
+this.form.controls.precondition.reset();
+this.form.controls.strapsValue.reset();
 
-    const flightArray = this.form.controls.flight as FormArray;
+const flightArray = this.form.controls.flight as FormArray;
 
-    flightArray.controls.forEach((control) => {
-      const group = control as FormGroup;
-      group.controls['flightOldQty'].reset();
-    });
+flightArray.controls.forEach((control) => {
+  const group = control as FormGroup;
+  group.controls['flightOldQty'].reset();
+});
 
-    this.group = [];
-    this.products = [];
-    this.options = [];
-    this.location = [];
-    this.temp = [];
+this.group = [];
+this.products = [];
+this.options = [];
+this.location = [];
+this.temp = [];
 
-    productArray.push(this.createProductItemGroup());
-    this.getGroupBySupplierId(this.selectedValue);
-    this.getLocation();
+productArray.push(this.createProductItemGroup());
+this.getGroupBySupplierId(this.selectedValue);
+this.getLocation();
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
-      next: (response) => {
-        this.location = response;
-      },
-    });
-  }
+  this.coolOrderService.getLocation(this.selectedValue).subscribe({
+    next: (response) => {
+      this.location = response;
+    },
+  });
+}
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
-      next: (response) => {
-        this.group = response;
-        //.log(response.id, this.group)
-        this.groupId = response.id;
-      },
-    });
-  }
+  this.coolOrderService.getGroup(supplierId).subscribe({
+    next: (response) => {
+      this.group = response;
+      //.log(response.id, this.group)
+      this.groupId = response.id;
+    },
+  });
+}
 
   public getProductByGroupId(event: any) {
-    this.groupId = event.target.value as HTMLSelectElement;
-    this.getProductsById();
-    this.getTemp();
-  }
+  this.groupId = event.target.value as HTMLSelectElement;
+  this.getProductsById();
+  this.getTemp();
+}
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
-      next: (response) => {
-        this.products = response;
-        this.options = this.products.map((item) => item.name);
-      },
-    });
-  }
+  this.coolOrderService.getProduct(this.groupId).subscribe({
+    next: (response) => {
+      this.products = response;
+      this.options = this.products.map((item) => item.name);
+    },
+  });
+}
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).subscribe({
-      next: (response) => {
-        this.temp = response;
-        console.log(this.temp);
-      },
-    });
-  }
+  this.coolOrderService.getTemp(this.groupId).subscribe({
+    next: (response) => {
+      this.temp = response;
+      console.log(this.temp);
+    },
+  });
+}
 
   public disabled(productName: string, currentIndex: number): boolean {
-    for (let i = 0; i < this.form.controls.productItems.length; i++) {
-      if (i !== currentIndex) {
-        const Row = this.form.controls.productItems.at(i);
-        const selectedValue = Row.controls.product.value;
-        if (selectedValue === productName) {
-          return true;
-        }
+  for (let i = 0; i < this.form.controls.productItems.length; i++) {
+    if (i !== currentIndex) {
+      const Row = this.form.controls.productItems.at(i);
+      const selectedValue = Row.controls.product.value;
+      if (selectedValue === productName) {
+        return true;
       }
     }
-    return false;
   }
+  return false;
+}
 
   public reset() {
-    this.form.reset({
-      supplierId: this.selectedValue,
-    });
-  }
+  this.form.reset({
+    supplierId: this.selectedValue,
+  });
+}
 }

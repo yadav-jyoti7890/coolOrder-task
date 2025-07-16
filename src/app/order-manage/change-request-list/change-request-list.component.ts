@@ -66,7 +66,6 @@ export class ChangeRequestListComponent {
       this.fetchData();
     });
 
-
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
     this.updateId = this.route.snapshot.paramMap.get('id')
@@ -304,9 +303,9 @@ export class ChangeRequestListComponent {
     }
     forkJoin([
       this.coolOrderService.changeRequestData(changeRequestId),
-      this.coolOrderService.getOrderData(orderId)
+      this.coolOrderService.getOrderLogData(orderId)
     ]).subscribe(([changeRequestResponse, orderResponse]) => {
-      console.log(changeRequestResponse, orderResponse)
+      console.log(changeRequestResponse, orderResponse, "change request list")
       this.changeData = this.getChangedValueWithOldValue(changeRequestResponse, orderResponse)
       console.log(this.changeData)
     })

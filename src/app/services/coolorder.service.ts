@@ -8,17 +8,22 @@ import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
   providedIn: 'root',
 })
 export class CoolorderService {
-  private apiUrl = 'http://localhost:3000/';
+
+
+  private apiUrl = 'http://localhost:3000/'; // This is base url for all request 
   constructor(private http: HttpClient) { }
 
+  // first get all supplier
   getSupplier(): Observable<any> {
     return this.http.get(`${this.apiUrl}supplier`);
   }
 
+  // get all group data by supplier id
   getGroup(supplierId: any): Observable<any> {
     return this.http.get(`${this.apiUrl}group?supplierId=${supplierId}`);
   }
 
+  // get product by group id
   getProduct(GroupId: any): Observable<any> {
     return this.http.get(`${this.apiUrl}products?groupId=${GroupId}`);
   }
@@ -35,9 +40,14 @@ export class CoolorderService {
     return this.http.get(`${this.apiUrl}temp?groupId=${groupId}`);
   }
 
-  saveProduct(data: any) {
+  saveOrder(data: any) {
     console.log(data)
     return this.http.post(`${this.apiUrl}order`, data)
+  }
+
+  saveOrder_log(data: any) {
+    console.log(data)
+    return this.http.post(`${this.apiUrl}order_Log`, data)
   }
 
   fetchData(updateId: string | null): Observable<any> {
@@ -54,8 +64,13 @@ export class CoolorderService {
     return this.http.get(`${this.apiUrl}order`)
   }
 
-    getAllChangeRequest(): Observable<any> {
+  getAllChangeRequest(): Observable<any> {
     return this.http.get(`${this.apiUrl}CR`)
+  }
+
+  getOrderLogData(orderId: string): Observable<any> {
+    console.log(orderId)
+    return this.http.get(`${this.apiUrl}order_Log?orderId=${orderId}`)
   }
 
   deleteOrder(id: string | null) {
@@ -66,24 +81,31 @@ export class CoolorderService {
     return this.http.post(`${this.apiUrl}CR`, CR)
   }
 
-  changeRequestList(orderId: string | null, context?:HttpContext) {
-    return this.http.get(`${this.apiUrl}CR?orderId=${orderId}`, {context});
+  changeRequestList(orderId: string | null, context?: HttpContext) {
+    return this.http.get(`${this.apiUrl}CR?orderId=${orderId}`, { context });
   }
 
-  getCompareDataWithId(id:string|number): Observable<any>{
+  getCompareDataWithId(id: string | number): Observable<any> {
     return this.http.get(`${this.apiUrl}CR/${id}`)
   }
 
-  getOrderDataWithId(id:string, context?:HttpContext):Observable<any>{
-    return this.http.get(`${this.apiUrl}order?id=${id}`, {context})
+  getOrderDataWithId(id: string, context?: HttpContext): Observable<any> {
+    return this.http.get(`${this.apiUrl}order?id=${id}`, { context })
   }
 
-   getOrderData(id:string):Observable<any>{
+  getOrderData(id: string): Observable<any> {
     // console.log(id)
     return this.http.get(`${this.apiUrl}order?id=${id}`)
   }
 
-    changeRequestData(id: string | null):Observable<any>{
+  changeRequestData(id: string | null): Observable<any> {
     return this.http.get(`${this.apiUrl}CR?id=${id}`);
+  }
+
+  // sorting api
+
+  getSortItem(column: string, sortType: string): Observable<any> {
+    console.log(column, sortType)
+    return this.http.get(`${this.apiUrl}order?_sort=${column}&_order=${sortType}`);
   }
 }

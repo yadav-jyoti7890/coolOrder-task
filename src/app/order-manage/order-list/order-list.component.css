@@ -105,6 +105,16 @@ i {
   cursor: pointer;
 }
 
+.excel-btn {
+  background-color: green;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
 .status-badge {
   padding: 0.2vw 0.5vw;
   border-radius: 7px;
@@ -404,6 +414,7 @@ i {
 .approved-icon {
   font-size: 1vw;
 }
+
 .status-draft {
   background-color: #ffeeba;
   color: #856404;
@@ -428,6 +439,13 @@ i {
   font-weight: bold;
 }
 
+.arrow {
+  display: inline-flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  line-height: 0.6;
+}
 
 @keyframes spin {
   to {

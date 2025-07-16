@@ -207,17 +207,56 @@
   ],
   "order": [
     {
-      "id": "c112",
-      "orderType": "CourtesyMove",
-      "org": "panjab",
+      "id": "05a2",
+      "orderType": "Commercial",
+      "org": "mumbai",
       "des": "delhi",
-      "pickUpPort": "delhi",
+      "pickUpPort": "mumbai",
       "rentalDays": 10,
-      "returnPort": "panjab",
+      "returnPort": "delhi",
       "leaseStart": "2025-07-01",
       "leaseEnd": "2025-07-10",
+      "supplierId": "1",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "1",
+      "locationId": "1",
+      "productCode": "1744",
+      "productItems": [
+        {
+          "product": "1",
+          "quantity2": "200"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "delhi",
+          "flightProductType": "1",
+          "flightOldQty": "200"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15"
+    },
+    {
+      "id": "dc10",
+      "orderType": "CourtesyMove",
+      "org": "delhi",
+      "des": "panjab",
+      "pickUpPort": "delhi",
+      "rentalDays": 6,
+      "returnPort": "panjab",
+      "leaseStart": "2025-08-05",
+      "leaseEnd": "2025-07-10",
       "supplierId": "2",
-      "commodity": "panjab",
+      "commodity": "delhi",
       "precondition": null,
       "straps": null,
       "preconditionDropDownValue": null,
@@ -225,10 +264,127 @@
       "strapsValue": null,
       "groupId": "3",
       "locationId": "3",
-      "productCode": "1966",
+      "productCode": "2366",
       "productItems": [
         {
           "product": "6",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1002",
+          "flightDate": "2025-07-01",
+          "flightOrg": "delhi",
+          "flightDes": "panjab",
+          "flightProductType": "6",
+          "flightOldQty": "100"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15"
+    },
+    {
+      "id": "2b31",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "ahemdabad",
+      "pickUpPort": "mumbai",
+      "rentalDays": 10,
+      "returnPort": "ahemdabad",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "1",
+      "commodity": "ahemdabad",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "2",
+      "locationId": "1",
+      "productCode": "14448",
+      "productItems": [
+        {
+          "product": "2",
+          "quantity2": "67"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "ahemdabad",
+          "flightProductType": "2",
+          "flightOldQty": "67"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15"
+    },
+    {
+      "id": "c397",
+      "orderType": "Commercial",
+      "org": "jabalpur",
+      "des": "goa",
+      "pickUpPort": "jabalpur",
+      "rentalDays": 10,
+      "returnPort": "goa",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "2",
+      "commodity": "goa",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "4566",
+      "productItems": [
+        {
+          "product": "6",
+          "quantity2": "250"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "jabalpur",
+          "flightDes": "goa",
+          "flightProductType": "6",
+          "flightOldQty": "250"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15"
+    },
+    {
+      "id": "ad40",
+      "orderType": "ChargeasblePosition",
+      "org": "mumbai",
+      "des": "hariyana",
+      "pickUpPort": "mumbai",
+      "rentalDays": 10,
+      "returnPort": "hariyana",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "3",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "5",
+      "locationId": "5",
+      "productCode": "8754",
+      "productItems": [
+        {
+          "product": "10",
           "quantity2": "300"
         }
       ],
@@ -236,163 +392,218 @@
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-01",
-          "flightOrg": "panjab",
-          "flightDes": "delhi",
-          "flightProductType": "6",
+          "flightOrg": "mumbai",
+          "flightDes": "hariyana",
+          "flightProductType": "10",
           "flightOldQty": "300"
         }
       ],
-      "status": "draft",
-      "create_at": "2025-07-14"
-    },
-    {
-      "id": "b3fa",
-      "orderType": "CourtesyMove",
-      "org": "panjab",
-      "des": "delhi",
-      "pickUpPort": "delhi",
-      "rentalDays": 10,
-      "returnPort": "panjab",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-10",
-      "supplierId": "2",
-      "commodity": "panjab",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "3",
-      "locationId": "3",
-      "productCode": "12345",
-      "productItems": [
-        {
-          "product": "6",
-          "quantity2": "300"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-01",
-          "flightOrg": "panjab",
-          "flightDes": "delhi",
-          "flightProductType": "6",
-          "flightOldQty": "300"
-        }
-      ],
-      "status": "Approved",
-      "create_at": "2025-07-14"
-    },
-    {
-      "id": "63e6",
-      "orderType": "CourtesyMove",
-      "org": "panjab",
-      "des": "delhi",
-      "pickUpPort": "delhi",
-      "rentalDays": 10,
-      "returnPort": "panjab",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-10",
-      "supplierId": "2",
-      "commodity": "panjab",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "3",
-      "locationId": "3",
-      "productCode": "6777",
-      "productItems": [
-        {
-          "product": "6",
-          "quantity2": "300"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH10010",
-          "flightDate": "2025-07-01",
-          "flightOrg": "panjab",
-          "flightDes": "delhi",
-          "flightProductType": "6",
-          "flightOldQty": "300"
-        }
-      ],
-      "status": "Approved",
-      "create_at": "2025-07-14"
-    },
-    {
-      "id": "7fe5",
-      "orderType": "CourtesyMove",
-      "org": "panjab",
-      "des": "delhi",
-      "pickUpPort": "delhi",
-      "rentalDays": 10,
-      "returnPort": "panjab",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-10",
-      "supplierId": "2",
-      "commodity": "panjab",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "3",
-      "locationId": "3",
-      "productCode": "78978",
-      "productItems": [
-        {
-          "product": "6",
-          "quantity2": "300"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-01",
-          "flightOrg": "panjab",
-          "flightDes": "delhi",
-          "flightProductType": "6",
-          "flightOldQty": "300"
-        }
-      ],
-      "status": "Approved",
-      "create_at": "2025-07-14"
+      "status": "New",
+      "create_at": "2025-07-15"
     }
   ],
-  "CR": [
+  "order_Log": [
     {
-      "id": "09bd",
-      "CR": {
-        "productCode": "12345"
-      },
-      "status": "draft",
-      "orderId": "b3fa",
-      "comment": "test1",
-      "create_at": "2025-07-14"
-    },
-    {
-      "id": "322d",
-      "CR": {
-        "productCode": "6777"
-      },
+      "id": "05a2",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "delhi",
+      "pickUpPort": "mumbai",
+      "rentalDays": 10,
+      "returnPort": "delhi",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "1",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "1",
+      "locationId": "1",
+      "productCode": "1744",
+      "productItems": [
+        {
+          "product": "1",
+          "quantity2": "200"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "delhi",
+          "flightProductType": "1",
+          "flightOldQty": "200"
+        }
+      ],
       "status": "New",
-      "orderId": "63e6",
-      "comment": "test1",
-      "create_at": "2025-07-14"
+      "create_at": "2025-07-15",
+      "orderId": "05a2"
     },
     {
-      "id": "5d37",
-      "CR": {
-        "productCode": "78978"
-      },
-      "status": "draft",
-      "orderId": "7fe5",
-      "comment": "test2",
-      "create_at": "2025-07-14"
+      "id": "dc10",
+      "orderType": "CourtesyMove",
+      "org": "delhi",
+      "des": "panjab",
+      "pickUpPort": "delhi",
+      "rentalDays": 6,
+      "returnPort": "panjab",
+      "leaseStart": "2025-08-05",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "2",
+      "commodity": "delhi",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "2366",
+      "productItems": [
+        {
+          "product": "6",
+          "quantity2": "100"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1002",
+          "flightDate": "2025-07-01",
+          "flightOrg": "delhi",
+          "flightDes": "panjab",
+          "flightProductType": "6",
+          "flightOldQty": "100"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15",
+      "orderId": "dc10"
+    },
+    {
+      "id": "2b31",
+      "orderType": "Commercial",
+      "org": "mumbai",
+      "des": "ahemdabad",
+      "pickUpPort": "mumbai",
+      "rentalDays": 10,
+      "returnPort": "ahemdabad",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "1",
+      "commodity": "ahemdabad",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "2",
+      "locationId": "1",
+      "productCode": "14448",
+      "productItems": [
+        {
+          "product": "2",
+          "quantity2": "67"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "ahemdabad",
+          "flightProductType": "2",
+          "flightOldQty": "67"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15",
+      "orderId": "2b31"
+    },
+    {
+      "id": "c397",
+      "orderType": "Commercial",
+      "org": "jabalpur",
+      "des": "goa",
+      "pickUpPort": "jabalpur",
+      "rentalDays": 10,
+      "returnPort": "goa",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "2",
+      "commodity": "goa",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "3",
+      "locationId": "3",
+      "productCode": "4566",
+      "productItems": [
+        {
+          "product": "6",
+          "quantity2": "250"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "jabalpur",
+          "flightDes": "goa",
+          "flightProductType": "6",
+          "flightOldQty": "250"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15",
+      "orderId": "c397"
+    },
+    {
+      "id": "ad40",
+      "orderType": "ChargeasblePosition",
+      "org": "mumbai",
+      "des": "hariyana",
+      "pickUpPort": "mumbai",
+      "rentalDays": 10,
+      "returnPort": "hariyana",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-10",
+      "supplierId": "3",
+      "commodity": "mumbai",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "5",
+      "locationId": "5",
+      "productCode": "8754",
+      "productItems": [
+        {
+          "product": "10",
+          "quantity2": "300"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-01",
+          "flightOrg": "mumbai",
+          "flightDes": "hariyana",
+          "flightProductType": "10",
+          "flightOldQty": "300"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-15",
+      "orderId": "ad40"
     }
-  ]
+  ],
+  "CR": []
+  
 }

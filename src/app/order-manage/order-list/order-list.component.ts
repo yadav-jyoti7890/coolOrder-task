@@ -8,6 +8,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 import { HttpContext } from '@angular/common/http';
 import { BYPASS_LOADER } from '../interceptor/loader-context';
+import { ExcelService } from '../../services/excel.service';
 
 
 @Component({
@@ -24,33 +25,37 @@ export class OrderListComponent implements OnInit {
   public loaderVisibleInDialog = false;
   public showLoaderData!: Subscription;
   public changeRequest: any
-  public successLoader: boolean = false;
-  public approved:boolean = false;
+  public successLoader: any = {}
+  public approved: any = {}
+ 
 
 
-  constructor(private CoolOrderService: CoolorderService, public loaderService: LoaderService, private router: Router) {
-  }
+  constructor(private CoolOrderService: CoolorderService, 
+    public loaderService: LoaderService, 
+    private router: Router,
+    private ExcelService:ExcelService
+  ) {}
 
   ngOnInit(): void {
-    this.getAllOrder();
+    this.getAllOrder();   
   }
 
-  private getAllOrder() {
-    forkJoin([
-      this.CoolOrderService.getAllOrderData(),
-      this.CoolOrderService.getAllChangeRequest()
-    ]).subscribe(([orders, crs]) => {
-      this.orderData = orders.map((order: order) => {
-        const orderCRs = crs.filter((cr: any) => cr.orderId === order.id.toString());
-        return {
-          ...order,
-          hasCR: orderCRs.length > 0
-        };
+    private getAllOrder() {
+      forkJoin([
+        this.CoolOrderService.getAllOrderData(),
+        this.CoolOrderService.getAllChangeRequest()
+      ]).subscribe(([orders, crs]) => {
+        this.orderData = orders.map((order: order) => {
+          const orderCRs = crs.filter((cr: any) => cr.orderId === order.id.toString());
+          return {
+            ...order,
+            hasCR: orderCRs.length > 0
+          };
+        });
+
+
       });
-
-
-    });
-  }
+    }
 
   public delete(id: any) {
     this.CoolOrderService.deleteOrder(id).subscribe({
@@ -186,32 +191,59 @@ export class OrderListComponent implements OnInit {
   }
 
   public approve(changeRequestId: string, orderId: string) {
-    this.successLoader = true;
-    if(changeRequestId && orderId){
-         setTimeout(() => {
-      this.CoolOrderService.changeRequestData(changeRequestId).subscribe({
-        next: (response) => {
-          const updateOrder = {
-            ...response[0].CR,
-            status: 'Approved'
-          }
-          this.CoolOrderService.updateOrder(updateOrder, orderId).subscribe({
-            next: (response) => {
-              console.log(response, "update success")
-              this.successLoader = false;
-              this.approved = true;
-              this.getAllOrder()
-              setTimeout(() => {
-                 this.openDioLog = false
-              }, 900);
+    console.log(changeRequestId, orderId)
+
+    if (changeRequestId && orderId) {
+      this.successLoader[changeRequestId] = true;
+
+      setTimeout(() => {
+        this.CoolOrderService.changeRequestData(changeRequestId).subscribe({
+          next: (response) => {
+            const updateOrder = {
+              ...response[0].CR,
+              status: 'Approved'
             }
-          })
-        },
-       
-      })
-    }, 800);
+            this.CoolOrderService.updateOrder(updateOrder, orderId).subscribe({
+              next: (response) => {
+                console.log(response, "update success")
+                this.successLoader[changeRequestId] = false;
+                this.approved[changeRequestId] = true;
+                this.getAllOrder()
+                setTimeout(() => {
+                  this.openDioLog = false
+                }, 900);
+              }
+            })
+          },
+
+        })
+      }, 800);
     }
-    
+
+  }
+
+  public short(column:string,  sortType: 'asc' | 'desc'){
+  //  console.log(column, sortType, typeof column, typeof sortType)
+   this.CoolOrderService.getSortItem(column, sortType).subscribe({
+    next: (response)=>{
+      console.log("sort item", response)
+      this.orderData = response
+    }
+   })
+  }
+
+  public exportToExcel(){
+   const exportData = this.orderData.map(order => ({
+    OrderID: order.id,
+    Type: order.orderType,
+    From: order.org,
+    To: order.des,
+    RentalDays: order.rentalDays,
+    Status: order.status,
+    leaseStart:order.leaseStart,
+    leaseEnd:order.leaseEnd
+  }));
+  this.ExcelService.exportAsExcelFile(exportData, 'FilteredOrderData')
   }
 
 }

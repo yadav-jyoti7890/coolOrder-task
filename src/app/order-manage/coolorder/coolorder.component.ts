@@ -11,7 +11,6 @@ import { CommonModule, formatDate } from '@angular/common';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
 import {
   AbstractControl,
   FormArray,
@@ -23,11 +22,9 @@ import {
 } from '@angular/forms';
 import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { ValidateBorderDirective } from '../../validator';
-
 import { AddInputService } from '../../services/add-input.service';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
-import { debounceTime } from 'rxjs';
-import { Console } from 'node:console';
+import { debounceTime, forkJoin } from 'rxjs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
@@ -316,14 +313,14 @@ export class CoolorderComponent implements OnInit {
     const start = this.form.controls.leaseStart.value;
     const end = this.form.controls.leaseEnd.value;
 
-    if(start && end){
+    if (start && end) {
       const startDate = new Date(start)
       const endDate = new Date(end)
       // const endDate = new Date(end)
 
       const startDay = startDate.getDate()
       const endDay = endDate.getDate()
-      console.log(startDay, "start" , endDay, "enddate")
+      console.log(startDay, "start", endDay, "enddate")
 
       this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
     }
@@ -392,7 +389,7 @@ export class CoolorderComponent implements OnInit {
   public submit(status: 'New' | 'draft') {
 
     // console.log(status)
-    // console.log(this.forinvalid, "click submit")m.
+    console.log(this.form.value, "click submit")
 
     const formData = {
       ...this.form.value,
@@ -410,27 +407,28 @@ export class CoolorderComponent implements OnInit {
       const formData = {
         ...this.form.value,
         status,
-        create_at : formattedDate
+        create_at: formattedDate
       }
-
-      this.coolOrderService.saveProduct(formData).subscribe({
-        next: (res) => {
-          console.log(' Data saved:', res);
-          alert(`${status} Form submitted successfully`);
-          this.router.navigate(['/order-list'])
-          this.form.reset();
-          this.form.controls.productItems.clear();
-          this.form.controls.productItems.push(this.createProductItemGroup());
-          this.form.controls.flight.clear();
-          this.form.controls.flight.push(this.createFlight());
-        },
-
-        error: (err) => {
-          console.error('❌ Error saving:', err);
-          alert('Error saving data.');
-        },
-      });
-    } else {
+      this.coolOrderService.saveOrder(formData).subscribe({
+        next: (response) => {
+          const res: any = response
+          const orderLog = {
+            ...res,
+            orderId: res.id
+          }
+          this.coolOrderService.saveOrder_log(orderLog).subscribe({
+            next: (response) => {
+              this.router.navigate(['/order-list']);
+              this.form.reset();
+              this.form.controls.productItems.clear();
+              this.form.controls.productItems.push(this.createProductItemGroup());
+              this.form.controls.flight.clear();
+            }
+          })
+        }
+      })
+    }
+    else {
       // this.form.markAllAsTouched();
       alert('Please fix the errors before updating.');
 

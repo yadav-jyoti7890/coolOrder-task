@@ -52,7 +52,7 @@ export class ChangeRequestComponent {
   public disableCR: boolean = true;
   public showCommentPopup: boolean = false;
   public submitValue: 'New' | 'draft' | null = null
-  public comment = new FormControl(null, [Validators.required,  Validators.maxLength(200)]);  
+  public comment = new FormControl(null, [Validators.required, Validators.maxLength(200)]);
 
   ngOnInit(): void {
     forkJoin([
@@ -99,7 +99,7 @@ export class ChangeRequestComponent {
         Validators.pattern('^[0-9]*$'),
       ]),
 
-      // create form array for multiple product
+
       productItems: new FormArray<FormGroup<ProductItem>>([
         this.createProductItemGroup(),
       ]),
@@ -107,9 +107,6 @@ export class ChangeRequestComponent {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
-    // this.changeInfo = new FormGroup({
-    //   comment:new FormControl(null, Validators.required),
-    // })
 
     this.initialFormValues = this.form.value;
 
@@ -309,8 +306,9 @@ export class ChangeRequestComponent {
 
       const startDay = startDate.getDate()
       const endDay = endDate.getDate()
-      // console.log(startDay, "start" , endDay, "enddate")
+      
       this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
+      this.form.controls.rentalDays.markAsDirty();
     }
   }
 
@@ -401,6 +399,7 @@ export class ChangeRequestComponent {
 
   public submit(selectValue: string | null) {
     // console.log(selectValue)
+    console.log(this.form.value)
     if (!this.form.valid || !this.RouteValid || this.disableCR) {
       alert('Please fix the errors before updating.');
 
@@ -469,10 +468,10 @@ export class ChangeRequestComponent {
       const today = new Date();
       const formattedDate = today.toISOString().substring(0, 10);
 
-
       const copy = {
-        CR:{
+        CR: {
           ...updateData,
+          
         },
         status: selectValue,
         orderId: this.orderId,
@@ -480,7 +479,7 @@ export class ChangeRequestComponent {
         create_at: formattedDate
       };
 
-      console.log(copy)
+      // console.log(copy)
 
       this.coolOrderService.createNewCR(copy).subscribe({
         next: (response) => {
