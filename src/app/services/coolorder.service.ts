@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { form, ProductItem } from '../interfaces/form-interface';
+import { form, order, ProductItem } from '../interfaces/form-interface';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable({
@@ -42,7 +42,7 @@ export class CoolorderService {
 
   saveOrder(data: any) {
     console.log(data)
-    return this.http.post(`${this.apiUrl}order`, data)
+    return this.http.post(`${this.apiUrl}orders`, data)
   }
 
   saveOrder_log(data: any) {
@@ -51,17 +51,17 @@ export class CoolorderService {
   }
 
   fetchData(updateId: string | null): Observable<any> {
-    return this.http.get(`${this.apiUrl}order/${updateId}`);
+    return this.http.get(`${this.apiUrl}orders/${updateId}`);
   }
 
   // update only specific filled using patch method
 
   updateOrder(data: any, updateId: string | null) {
-    return this.http.patch(`${this.apiUrl}order/${updateId}`, data);
+    return this.http.patch(`${this.apiUrl}orders/${updateId}`, data);
   }
 
   getAllOrderData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}order`)
+    return this.http.get(`${this.apiUrl}orders`)
   }
 
   getAllChangeRequest(): Observable<any> {
@@ -74,7 +74,7 @@ export class CoolorderService {
   }
 
   deleteOrder(id: string | null) {
-    return this.http.delete(`${this.apiUrl}order/${id}`)
+    return this.http.delete(`${this.apiUrl}orders/${id}`)
   }
 
   createNewCR(CR: any) {
@@ -90,12 +90,12 @@ export class CoolorderService {
   }
 
   getOrderDataWithId(id: string, context?: HttpContext): Observable<any> {
-    return this.http.get(`${this.apiUrl}order?id=${id}`, { context })
+    return this.http.get(`${this.apiUrl}orders?id=${id}`, { context })
   }
 
   getOrderData(id: string): Observable<any> {
     // console.log(id)
-    return this.http.get(`${this.apiUrl}order?id=${id}`)
+    return this.http.get(`${this.apiUrl}orders?id=${id}`)
   }
 
   changeRequestData(id: string | null): Observable<any> {
@@ -104,8 +104,9 @@ export class CoolorderService {
 
   // sorting api
 
-  getSortItem(column: string, sortType: string): Observable<any> {
-    console.log(column, sortType)
-    return this.http.get(`${this.apiUrl}order?_sort=${column}&_order=${sortType}`);
+  getSortItem(column: string, sortType: 'asc' | 'desc'): Observable<any> {
+    // console.log(column, sortType)
+    // console.log(`${this.apiUrl}orders?_sort=${column}&_order=${sortType}`)
+    return this.http.get<order[]>(`${this.apiUrl}orders?_sort=${column}&_order=${sortType}`);
   }
 }

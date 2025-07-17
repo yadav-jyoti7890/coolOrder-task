@@ -7,9 +7,8 @@ import * as FileSaver from 'file-saver';
 })
 export class ExcelService {
 
- exportAsExcelFile(jsonData: any[], fileName: string): void {
+  public exportAsExcelFile(jsonData: any[], fileName: string): void {
   console.log(jsonData, fileName)
-
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
     console.log(worksheet) // convert data into a sheet format
     const workbook: XLSX.WorkBook = {
@@ -32,4 +31,6 @@ export class ExcelService {
     });
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + '.xlsx');
   }
+
+
 }

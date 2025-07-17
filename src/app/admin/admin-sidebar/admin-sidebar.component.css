@@ -17,8 +17,12 @@
 
 }
 
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
 .logo {
-    padding: 0 20px 20px;
+    padding: 20px 20px 20px;
     border-bottom: 1px solid #eee;
     font-size: 1.3rem;
     font-weight: 600;
@@ -47,9 +51,9 @@
 
 /* Main Content */
 .main-content {
-   margin-left: 15%;
-  flex: 1;
-   
+    margin-left: 15%;
+    flex: 1;
+
 }
 
 

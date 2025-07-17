@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+mat-dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e53935;
+  margin-bottom: 10px;
+}
+
+mat-dialog-content {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+mat-dialog-actions button {
+  margin-left: 12px;
+}

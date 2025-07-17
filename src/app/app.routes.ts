@@ -8,6 +8,7 @@ import { ChangeRequestComponent } from './order-manage/change-request/change-req
 import { ChangeRequestListComponent } from './order-manage/change-request-list/change-request-list.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
+import { ExcelComponent } from './order-manage/excel/excel.component';
 
 export const routes: Routes = [
 {
@@ -24,6 +25,8 @@ export const routes: Routes = [
     { path: 'change-request-list/:id', component: ChangeRequestListComponent },
     { path: 'copy-order/:id', component: CopyOrderComponent },
     { path: 'change-request/:id', component: ChangeRequestComponent },
+    { path: 'excel', component: ExcelComponent },
+
   ]
 }
 
