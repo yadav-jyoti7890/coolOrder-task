@@ -37,7 +37,7 @@ export class OrderListComponent implements OnInit {
     public loaderService: LoaderService,
     private router: Router,
     private ExcelService: ExcelService,
-    private csvServices:CsvService,
+    private csvServices: CsvService,
     private dioLog: MatDialog
   ) { }
 
@@ -255,48 +255,39 @@ export class OrderListComponent implements OnInit {
       leaseEnd: order.leaseEnd,
       productCode: order.productCode,
       create_at: order.create_at,
-      status: 'draft',
+      status: order.status,
     }));
-    this.ExcelService.exportAsExcelFile(exportData, 'FilteredOrderData')
+    if (exportData.length > 0) {
+      this.ExcelService.exportAsExcelFile(exportData, 'FilteredOrderData')
+    }
+    else {
+      alert("Empty table not printable")
+    }
   }
 
   public csv() {
     console.log("download csv");
     const exportCvData = this.orderData.map(order => ({
-      Type: order.orderType,
-      From: order.org,
-      To: order.des,
-      RentalDays: order.rentalDays,
-      Status: order.status,
+      org: order.org,
+      des: order.des,
+      pickUpPort: order.pickUpPort,
+      rentalDays: order.rentalDays,
       leaseStart: order.leaseStart,
-      leaseEnd: order.leaseEnd
+      leaseEnd: order.leaseEnd,
+      productCode: order.productCode,
+      create_at: order.create_at,
+      status: order.status,
     }));
 
     this.csvServices.convertToCSV(exportCvData)
-    this.csvServices.exportCSV(exportCvData, 'orderList')
+    if (exportCvData.length > 0) {
+      this.csvServices.exportCSV(exportCvData, 'orderList')
+    }
+    else {
+      alert("Empty table not printable")
+    }
+
   }
-
- 
-
-  // public onFileChange(event: any) {
-  //   console.log("onFile change")
-  //   // console.log(event.target.files[0])
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-
-  //   reader.onload = (e: any) => {
-  //     const binaryData = e.target.result;
-
-  //     const workbook = XLSX.read(binaryData, { type: 'binary' });
-  //     const sheetName = workbook.SheetNames[0];
-  //     const worksheet = workbook.Sheets[sheetName];
-
-  //     this.orderData = XLSX.utils.sheet_to_json(worksheet);
-  //     console.log('Excel JSON Data:', this.orderData);
-  //   };
-
-  //   reader.readAsBinaryString(file);
-  // }
 
 }
 
