@@ -1,22 +1,17 @@
-
-
-
-    <div class="sidebar">
-        <div class="logo">Admin Panel</div>
-        <div class="nav-menu">
-            <div class="nav-item active" [routerLink]="['./admin-dashboard']">Dashboard</div>
-            <div class="nav-item" [routerLink]="['./coolorder']">Create Order</div>
-            <div class="nav-item"  [routerLink]="['./order-list']">Order List</div>
-            <div class="nav-item" [routerLink]="['./excel']">Import Excel</div>
-            
-            <div class="nav-item">
-                <i class="fas fa-cog"></i> Settings
-            </div>
+<div class="sidebar">
+    <div class="logo">Admin Panel</div>
+    <div class="nav-menu">
+        <div class="nav-item active" [routerLink]="['./admin-dashboard']">Dashboard</div>
+        <div class="nav-item" [routerLink]="['./coolorder']">Create Order</div>
+        <div class="nav-item" [routerLink]="['./order-list']">Order List</div>
+        <div class="nav-item" [routerLink]="['./excel']">Import Excel</div>
+        <div class="nav-item">
+            <i class="fas fa-cog"></i> Settings
         </div>
     </div>
+</div>
 
-   <!-- all component display here admin related -->
-    <div class="main-content">
-        <router-outlet></router-outlet>
-    </div>  
-
+<!-- all component display here admin related -->
+<div class="main-content">
+    <router-outlet></router-outlet>
+</div>

@@ -207,240 +207,6 @@
   ],
   "orders": [
     {
-      "orderType": "CourtesyMove",
-      "org": "MUMBAI",
-      "des": "DELHI",
-      "pickUpPort": "MUMBAI",
-      "rentalDays": 10,
-      "returnPort": "DELHI",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-10",
-      "supplierId": "1",
-      "commodity": "DELHI",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "1",
-      "locationId": "1",
-      "productCode": "8965",
-      "productItems": [
-        {
-          "product": "1",
-          "quantity2": "200"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-01",
-          "flightOrg": "MUMBAI",
-          "flightDes": "DELHI",
-          "flightProductType": "1",
-          "flightOldQty": "200"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 1
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "draft",
-      "create_at": "2025-07-17",
-      "id": 2
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 3
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "3434",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 4
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 5
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 6
-    },
-    {
       "orderType": "ChargeasblePosition",
       "org": "DELHI",
       "des": "INDORE",
@@ -478,53 +244,11 @@
       "status": "draft",
       "create_at": "2025-07-17",
       "id": 7
-    }
-  ],
-  "order_Log": [
-    {
-      "orderType": "CourtesyMove",
-      "org": "MUMBAI",
-      "des": "DELHI",
-      "pickUpPort": "MUMBAI",
-      "rentalDays": 10,
-      "returnPort": "DELHI",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-10",
-      "supplierId": "1",
-      "commodity": "DELHI",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "1",
-      "locationId": "1",
-      "productCode": "8965",
-      "productItems": [
-        {
-          "product": "1",
-          "quantity2": "200"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-01",
-          "flightOrg": "MUMBAI",
-          "flightDes": "DELHI",
-          "flightProductType": "1",
-          "flightOldQty": "200"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 1,
-      "orderId": 1
     },
     {
       "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
+      "org": "mumbai",
+      "des": "bhopal",
       "pickUpPort": "DELHI",
       "rentalDays": 25,
       "returnPort": "INDORE",
@@ -550,21 +274,20 @@
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
           "flightProductType": "11",
           "flightOldQty": "120"
         }
       ],
       "status": "draft",
-      "create_at": "2025-07-17",
-      "id": 2,
-      "orderId": 2
+      "create_at": "2025-07-18",
+      "id": 8
     },
     {
       "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
+      "org": "mumbai",
+      "des": "bhopal",
       "pickUpPort": "DELHI",
       "rentalDays": 25,
       "returnPort": "INDORE",
@@ -579,7 +302,7 @@
       "strapsValue": null,
       "groupId": "6",
       "locationId": "5",
-      "productCode": "34023",
+      "productCode": "9999",
       "productItems": [
         {
           "product": "11",
@@ -590,21 +313,20 @@
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
           "flightProductType": "11",
           "flightOldQty": "120"
         }
       ],
       "status": "New",
-      "create_at": "2025-07-17",
-      "id": 3,
-      "orderId": 3
+      "create_at": "2025-07-18",
+      "id": 9
     },
     {
       "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
+      "org": "mumbai",
+      "des": "bhopal",
       "pickUpPort": "DELHI",
       "rentalDays": 25,
       "returnPort": "INDORE",
@@ -619,7 +341,7 @@
       "strapsValue": null,
       "groupId": "6",
       "locationId": "5",
-      "productCode": "3434",
+      "productCode": "11111",
       "productItems": [
         {
           "product": "11",
@@ -630,97 +352,18 @@
         {
           "flightId": "LH1001",
           "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
           "flightProductType": "11",
           "flightOldQty": "120"
         }
       ],
       "status": "New",
-      "create_at": "2025-07-17",
-      "id": 4,
-      "orderId": 4
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 5,
-      "orderId": 5
-    },
-    {
-      "orderType": "ChargeasblePosition",
-      "org": "DELHI",
-      "des": "INDORE",
-      "pickUpPort": "DELHI",
-      "rentalDays": 25,
-      "returnPort": "INDORE",
-      "leaseStart": "2025-07-01",
-      "leaseEnd": "2025-07-25",
-      "supplierId": "3",
-      "commodity": "INDORE",
-      "precondition": null,
-      "straps": null,
-      "preconditionDropDownValue": null,
-      "preconditionInputValue": null,
-      "strapsValue": null,
-      "groupId": "6",
-      "locationId": "5",
-      "productCode": "34023",
-      "productItems": [
-        {
-          "product": "11",
-          "quantity2": "120"
-        }
-      ],
-      "flight": [
-        {
-          "flightId": "LH1001",
-          "flightDate": "2025-07-02",
-          "flightOrg": "DELHI",
-          "flightDes": "INDORE",
-          "flightProductType": "11",
-          "flightOldQty": "120"
-        }
-      ],
-      "status": "New",
-      "create_at": "2025-07-17",
-      "id": 6,
-      "orderId": 6
-    },
+      "create_at": "2025-07-18",
+      "id": 10
+    }
+  ],
+  "order_Log": [
     {
       "orderType": "ChargeasblePosition",
       "org": "DELHI",
@@ -760,19 +403,127 @@
       "create_at": "2025-07-17",
       "id": 7,
       "orderId": 7
+    },
+    {
+      "orderType": "ChargeasblePosition",
+      "org": "mumbai",
+      "des": "bhopal",
+      "pickUpPort": "DELHI",
+      "rentalDays": 25,
+      "returnPort": "INDORE",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-25",
+      "supplierId": "3",
+      "commodity": "INDORE",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "6",
+      "locationId": "5",
+      "productCode": "34023",
+      "productItems": [
+        {
+          "product": "11",
+          "quantity2": "120"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-02",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
+          "flightProductType": "11",
+          "flightOldQty": "120"
+        }
+      ],
+      "status": "draft",
+      "create_at": "2025-07-18",
+      "id": 8,
+      "orderId": 8
+    },
+    {
+      "orderType": "ChargeasblePosition",
+      "org": "mumbai",
+      "des": "bhopal",
+      "pickUpPort": "DELHI",
+      "rentalDays": 25,
+      "returnPort": "INDORE",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-25",
+      "supplierId": "3",
+      "commodity": "INDORE",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "6",
+      "locationId": "5",
+      "productCode": "9999",
+      "productItems": [
+        {
+          "product": "11",
+          "quantity2": "120"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-02",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
+          "flightProductType": "11",
+          "flightOldQty": "120"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-18",
+      "id": 9,
+      "orderId": 9
+    },
+    {
+      "orderType": "ChargeasblePosition",
+      "org": "mumbai",
+      "des": "bhopal",
+      "pickUpPort": "DELHI",
+      "rentalDays": 25,
+      "returnPort": "INDORE",
+      "leaseStart": "2025-07-01",
+      "leaseEnd": "2025-07-25",
+      "supplierId": "3",
+      "commodity": "INDORE",
+      "precondition": null,
+      "straps": null,
+      "preconditionDropDownValue": null,
+      "preconditionInputValue": null,
+      "strapsValue": null,
+      "groupId": "6",
+      "locationId": "5",
+      "productCode": "11111",
+      "productItems": [
+        {
+          "product": "11",
+          "quantity2": "120"
+        }
+      ],
+      "flight": [
+        {
+          "flightId": "LH1001",
+          "flightDate": "2025-07-02",
+          "flightOrg": "mumbai",
+          "flightDes": "bhopal",
+          "flightProductType": "11",
+          "flightOldQty": "120"
+        }
+      ],
+      "status": "New",
+      "create_at": "2025-07-18",
+      "id": 10,
+      "orderId": 10
     }
   ],
-  "CR": [
-    {
-      "CR": {
-        "rentalDays": 10,
-        "productCode": "12345"
-      },
-      "status": "draft",
-      "orderId": "1",
-      "comment": "test2",
-      "create_at": "2025-07-17",
-      "id": 1
-    }
-  ]
+  "CR": []
 }

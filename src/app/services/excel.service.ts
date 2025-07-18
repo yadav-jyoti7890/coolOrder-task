@@ -32,16 +32,16 @@ export class ExcelService {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + '.xlsx');
   }
 
-  public readExcelFile(event: any) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const binaryData = e.target.result;
-      const workbook = XLSX.read(binaryData, { type: 'binary' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const newExcelData = XLSX.utils.sheet_to_json(worksheet);
-    }
-  }
+  // public readExcelFile(event: any) {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = (e: any) => {
+  //     const binaryData = e.target.result;
+  //     const workbook = XLSX.read(binaryData, { type: 'binary' });
+  //     const sheetName = workbook.SheetNames[0];
+  //     const worksheet = workbook.Sheets[sheetName];
+  //     const newExcelData = XLSX.utils.sheet_to_json(worksheet);
+  //   }
+  // }
 
 }
