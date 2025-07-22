@@ -21,7 +21,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { flight, form, ProductItem } from '../../../interfaces/form-interface';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { debounceTime, forkJoin, takeUntil } from 'rxjs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';

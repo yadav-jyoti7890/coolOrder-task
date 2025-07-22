@@ -4,7 +4,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { flight, form, order, ProductItem } from '../../../interfaces/form-interface';
 import { debounceTime, forkJoin, take, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { CoolorderService } from '../../../services/coolorder.service';

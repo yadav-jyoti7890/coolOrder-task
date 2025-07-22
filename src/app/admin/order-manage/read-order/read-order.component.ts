@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } fr
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { flight, form, ProductItem } from '../../../interfaces/form-interface';
 import { forkJoin, take, takeUntil } from 'rxjs';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { CommonModule } from '@angular/common';
 import { OtherInformationComponent } from '../other-information/other-information.component';
 import { FlightDetailComponent} from '../flight-detail/flight-detail.component';

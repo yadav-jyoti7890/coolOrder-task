@@ -5,7 +5,7 @@ import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule
 import { flight, form, ProductItem } from '../../../interfaces/form-interface';
 import { debounceTime, forkJoin, from, takeUntil } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { TranslateModule } from '@ngx-translate/core';

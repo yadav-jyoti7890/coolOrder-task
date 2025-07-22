@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import {
   ActivatedRoute,
   Router,

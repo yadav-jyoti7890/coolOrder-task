@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CoolorderService } from '../../../services/coolorder.service';
 import { flight, form, ProductItem } from '../../../interfaces/form-interface';

@@ -26,7 +26,7 @@ import { CoolorderService } from '../../../services/coolorder.service';
 import { debounceTime, forkJoin, take, takeUntil } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
 import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
-import { ValidateBorderDirective } from '../../../validator';
+import { ValidateBorderDirective } from '../../../centralize-validation/validator';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
