@@ -12,13 +12,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   imports: [RouterOutlet, RouterLink, TranslateModule, CommonModule]         
 })
 export class AdminSidebarComponent {
-   constructor(private translate: TranslateService) {
-   
-  }
+   constructor(private translate: TranslateService) {}
 
   language(lang: string) {
     console.log(lang)
     this.translate.use(lang)
     localStorage.setItem('lang', lang);
   }
+  
 }

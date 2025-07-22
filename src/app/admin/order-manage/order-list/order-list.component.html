@@ -31,50 +31,66 @@
         <th>{{ 'ORDER_LIST.SN' | translate }}</th>
         <th>{{ 'ORDER_LIST.ORIGIN' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'asc'" (click)="short('org', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'desc'" (click)="short('org', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'asc'"
+              (click)="short('org', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'desc'"
+              (click)="short('org', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.DESTINATION' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'asc'" (click)="short('des', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'desc'" (click)="short('des', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'asc'"
+              (click)="short('des', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'desc'"
+              (click)="short('des', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.PICKUP_PORT' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'asc'" (click)="short('pickUpPort', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'desc'" (click)="short('pickUpPort', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'asc'"
+              (click)="short('pickUpPort', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'desc'"
+              (click)="short('pickUpPort', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.LEASE_START' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'asc'" (click)="short('leaseStart', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'desc'" (click)="short('leaseStart', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'asc'"
+              (click)="short('leaseStart', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'desc'"
+              (click)="short('leaseStart', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.LEASE_END' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'asc'" (click)="short('leaseEnd', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'desc'" (click)="short('leaseEnd', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'asc'"
+              (click)="short('leaseEnd', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'desc'"
+              (click)="short('leaseEnd', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.RENTAL_DAYS' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'asc'" (click)="short('rentalDays', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'desc'" (click)="short('rentalDays', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'asc'"
+              (click)="short('rentalDays', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'desc'"
+              (click)="short('rentalDays', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.PRODUCT_CODE' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'asc'" (click)="short('productCode', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'desc'" (click)="short('productCode', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'asc'"
+              (click)="short('productCode', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'desc'"
+              (click)="short('productCode', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.CREATED_AT' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'asc'" (click)="short('create_at', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'desc'" (click)="short('create_at', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'asc'"
+              (click)="short('create_at', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'desc'"
+              (click)="short('create_at', 'desc')"></i>
           </div>
         </th>
         <th>{{ 'ORDER_LIST.STATUS' | translate }}</th>

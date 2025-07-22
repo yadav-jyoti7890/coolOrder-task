@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { CoolorderComponent } from './order-manage/coolorder/coolorder.component';
-import { UpdateComponent } from './order-manage/update/update.component';
-import { OrderListComponent } from './order-manage/order-list/order-list.component';
-import { ReadOrderComponent } from './order-manage/read-order/read-order.component';
-import { CopyOrderComponent } from './order-manage/copy-order/copy-order.component';
-import { ChangeRequestComponent } from './order-manage/change-request/change-request.component';
-import { ChangeRequestListComponent } from './order-manage/change-request-list/change-request-list.component';
+import { CoolorderComponent } from './admin/order-manage/coolorder/coolorder.component';
+import { UpdateComponent } from './admin/order-manage/update/update.component';
+import { OrderListComponent } from './admin/order-manage/order-list/order-list.component';
+import { ReadOrderComponent } from './admin/order-manage/read-order/read-order.component';
+import { CopyOrderComponent } from './admin/order-manage/copy-order/copy-order.component';
+import { ChangeRequestComponent } from './admin/order-manage/change-request/change-request.component';
+import { ChangeRequestListComponent } from './admin/order-manage/change-request-list/change-request-list.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
-import { ExcelComponent } from './order-manage/excel/excel.component';
+import { ExcelComponent } from './admin/order-manage/excel/excel.component';
 
 export const routes: Routes = [
 {

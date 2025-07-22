@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { CoolorderService } from '../../services/coolorder.service';
-import { form, order } from '../../interfaces/form-interface';
+import { CoolorderService } from '../../../services/coolorder.service';
+import { order } from '../../../interfaces/form-interface';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
-import { LoaderService } from '../../services/loader.service';
+import { forkJoin, Subscription, takeUntil } from 'rxjs';
+import { LoaderService } from '../../../services/loader.service';
 import { HttpContext } from '@angular/common/http';
-import { BYPASS_LOADER } from '../interceptor/loader-context';
-import { ExcelService } from '../../services/excel.service';
+import { BYPASS_LOADER } from '../../../interceptor/loader-context';
+import { ExcelService } from '../../../services/excel.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ConfirmBoxComponent } from '../../confirmation-dialog-box/confirm-box/confirm-box.component';
-import * as XLSX from 'xlsx';
-import { CsvService } from '../../services/csv.service';
+import { ConfirmBoxComponent } from '../../../confirmation-dialog-box/confirm-box/confirm-box.component';
+import { CsvService } from '../../../services/csv.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
   selector: 'app-order-list',
@@ -21,8 +21,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './order-list.component.css'
 })
 
-export class OrderListComponent implements OnInit {
-
+export class OrderListComponent extends SubscriptionCleaner implements OnInit {
   public orderData: order[] = [];
   public openDioLog: boolean = false;
   public changeData: any[] = []
@@ -40,7 +39,7 @@ export class OrderListComponent implements OnInit {
     private ExcelService: ExcelService,
     private csvServices: CsvService,
     private dioLog: MatDialog
-  ) { }
+  ) { super(); }
 
   ngOnInit(): void {
     this.getAllOrder();
@@ -50,7 +49,7 @@ export class OrderListComponent implements OnInit {
     forkJoin([
       this.CoolOrderService.getAllOrderData(),
       this.CoolOrderService.getAllChangeRequest()
-    ]).subscribe(([orders, crs]) => {
+    ]).pipe(takeUntil(this.subscriptions$)).subscribe(([orders, crs]) => {
       this.orderData = orders.map((order: order) => {
         const orderCRs = crs.filter((cr: any) => cr.orderId === order.id.toString());
         return {
@@ -58,8 +57,6 @@ export class OrderListComponent implements OnInit {
           hasCR: orderCRs.length > 0
         };
       });
-
-
     });
   }
 
@@ -68,7 +65,7 @@ export class OrderListComponent implements OnInit {
     dialogBox.afterClosed().subscribe(result => {
       if (result) {
 
-        this.CoolOrderService.deleteOrder(id).subscribe({
+        this.CoolOrderService.deleteOrder(id).pipe(takeUntil(this.subscriptions$)).subscribe({
           next: (response) => {
             // alert("delete successfully")
             this.getAllOrder();
@@ -88,30 +85,28 @@ export class OrderListComponent implements OnInit {
     this.loaderVisibleInDialog = true;
 
     const byPassContext = new HttpContext().set(BYPASS_LOADER, true)
-    setTimeout(() => {
-      this.showLoaderData = forkJoin([
-        this.CoolOrderService.changeRequestList(orderId, byPassContext),
-        this.CoolOrderService.getOrderDataWithId(orderId, byPassContext)
-      ]).subscribe({
-        next: ([changeRequestData, orderData]) => {
+    this.showLoaderData = forkJoin([
+      this.CoolOrderService.changeRequestList(orderId, byPassContext),
+      this.CoolOrderService.getOrderDataWithId(orderId, byPassContext)
+    ]).pipe(takeUntil(this.subscriptions$)).subscribe({
+      next: ([changeRequestData, orderData]) => {
 
-          //console.log(changeRequestData, orderData, "api response")
-          this.changeData = this.getChangedValueWithOldValue(changeRequestData, orderData);
-          console.log(this.changeData)
-        },
-        error: (err) => {
-          this.loaderService.unlock();
-          this.loaderVisibleInDialog = false;
-          //console.log("something went wrong")
+        //console.log(changeRequestData, orderData, "api response")
+        this.changeData = this.getChangedValueWithOldValue(changeRequestData, orderData);
+        console.log(this.changeData)
+      },
+      error: (err) => {
+        this.loaderService.unlock();
+        this.loaderVisibleInDialog = false;
+        //console.log("something went wrong")
 
-        },
-        complete: () => {
-          this.loaderService.unlock();
-          this.loaderVisibleInDialog = false;
-        }
-      });
+      },
+      complete: () => {
+        this.loaderService.unlock();
+        this.loaderVisibleInDialog = false;
+      }
+    });
 
-    }, 2000);
   }
 
   private getChangedValueWithOldValue(cr: any, orderData: any): any[] {
@@ -144,7 +139,6 @@ export class OrderListComponent implements OnInit {
         }
       }
 
-
       const oldFlights = oldItem.flight || [];
       const newFlights = newItem.flight || [];
 
@@ -162,7 +156,6 @@ export class OrderListComponent implements OnInit {
           }
         }
       });
-
 
       const oldProducts = oldItem.productItems || [];
       const newProducts = newItem.productItems || [];
@@ -210,7 +203,7 @@ export class OrderListComponent implements OnInit {
       this.successLoader[changeRequestId] = true;
 
       setTimeout(() => {
-        this.CoolOrderService.changeRequestData(changeRequestId).subscribe({
+        this.CoolOrderService.changeRequestData(changeRequestId).pipe(takeUntil(this.subscriptions$)).subscribe({
           next: (response) => {
             const updateOrder = {
               ...response[0].CR,
@@ -238,7 +231,7 @@ export class OrderListComponent implements OnInit {
   public short(column: string, sortType: 'asc' | 'desc') {
     this.sortedFiled = column;
     this.sortType = sortType
-    this.CoolOrderService.getSortItem(column, sortType).subscribe({
+    this.CoolOrderService.getSortItem(column, sortType).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         console.log("sort item", response)
         this.orderData = response

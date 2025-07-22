@@ -81,7 +81,8 @@
         <div class="form-group">
           <div class="form-control">
             <label>{{ 'FORM.COMMODITY' | translate }}</label>
-            <input type="text" placeholder="{{ 'FORM.ENTER_COMMODITY' | translate }}" formControlName="commodity" [appValidateBorder]="form.controls.commodity" />
+            <input type="text" placeholder="{{ 'FORM.ENTER_COMMODITY' | translate }}" formControlName="commodity"
+              [appValidateBorder]="form.controls.commodity" />
 
             <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
               <div class="checkbox-option">
@@ -90,7 +91,8 @@
               </div>
 
               <div *ngIf="form.controls['precondition'].value && selectedValue == 1">
-                <select [formControl]="form.controls.preconditionDropDownValue" [appValidateBorder]="form.controls.preconditionDropDownValue">
+                <select [formControl]="form.controls.preconditionDropDownValue"
+                  [appValidateBorder]="form.controls.preconditionDropDownValue">
                   <option disabled>{{ 'FORM.SELECT_GROUP_FIRST' | translate }}</option>
                   <option *ngFor="let t of temp" [value]="t.id">
                     {{ t.name }}
@@ -99,11 +101,13 @@
               </div>
 
               <div *ngIf="form.controls['precondition'].value && selectedValue == 3" style="width: 100%">
-                <input type="text" formControlName="preconditionInputValue" [appValidateBorder]="form.controls.preconditionInputValue" />
+                <input type="text" formControlName="preconditionInputValue"
+                  [appValidateBorder]="form.controls.preconditionInputValue" />
               </div>
 
               <div class="checkbox-option">
-                <input type="checkbox" id="straps" [formControl]="form.controls['straps']" [appValidateBorder]="form.controls.straps" />
+                <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
+                  [appValidateBorder]="form.controls.straps" />
                 <label for="straps">{{ 'FORM.STRAPS' | translate }}</label>
               </div>
 
@@ -126,7 +130,8 @@
         <div class="form-group">
           <div class="form-control">
             <label>{{ 'FORM.GROUP' | translate }}</label>
-            <select formControlName="groupId" (change)="getProductByGroupId($event)" [appValidateBorder]="form.controls.groupId">
+            <select formControlName="groupId" (change)="getProductByGroupId($event)"
+              [appValidateBorder]="form.controls.groupId">
               <option disabled selected>{{ 'FORM.SELECT_SUPPLIER_FIRST' | translate }}</option>
               <option *ngFor="let g of group" [value]="g.id">
                 {{ g.name }}
@@ -140,7 +145,8 @@
         </div>
 
         <div formArrayName="productItems">
-          <div *ngFor="let item of form.controls.productItems.controls; let i = index" [formGroupName]="i" class="product-item-row">
+          <div *ngFor="let item of form.controls.productItems.controls; let i = index" [formGroupName]="i"
+            class="product-item-row">
             <div class="remove">
               <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
                 <i class="ri-subtract-line"></i>
@@ -172,16 +178,20 @@
         <button class="add-row-btn" (click)="addFlight('addFlight')" [disabled]="flightDisable">+</button>
       </div>
 
-      <div class="flight-rows-container" formArrayName="flight" cdkDropList [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)" cdkDropListLockAxis="y">
-        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index" [formGroupName]="i" cdkDrag cdkDragLockAxis="y" [cdkDragBoundary]="'.flight-rows-container'">
+      <div class="flight-rows-container" formArrayName="flight" cdkDropList
+        [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)" cdkDropListLockAxis="y">
+        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index"
+          [formGroupName]="i" cdkDrag cdkDragLockAxis="y" [cdkDragBoundary]="'.flight-rows-container'">
           <div class="form-group">
             <label>{{ 'FORM.FLIGHT_ID' | translate }} *</label>
-            <input type="text" placeholder="{{ 'FORM.FLIGHT_ID_PH' | translate }}" formControlName="flightId" [appValidateBorder]="flightDetail.controls.flightId" />
+            <input type="text" placeholder="{{ 'FORM.FLIGHT_ID_PH' | translate }}" formControlName="flightId"
+              [appValidateBorder]="flightDetail.controls.flightId" />
           </div>
 
           <div class="form-group date-picker">
             <label>{{ 'FORM.FLIGHT_DATE' | translate }} *</label>
-            <input type="date" placeholder="DD Mon YYYY" formControlName="flightDate" [appValidateBorder]="flightDetail.controls.flightDate" />
+            <input type="date" placeholder="DD Mon YYYY" formControlName="flightDate"
+              [appValidateBorder]="flightDetail.controls.flightDate" />
             <i class="fas fa-calendar-alt"></i>
           </div>
 
@@ -197,7 +207,8 @@
 
           <div class="form-group">
             <label>{{ 'FORM.PRODUCT_TYPE' | translate }} *</label>
-            <select formControlName="flightProductType" class="input" [appValidateBorder]="flightDetail.controls.flightProductType">
+            <select formControlName="flightProductType" class="input"
+              [appValidateBorder]="flightDetail.controls.flightProductType">
               <option value="" disabled>{{ 'FORM.SELECT_PRODUCT' | translate }}</option>
               <option *ngFor="let product of products" [value]="product.id">
                 {{ product.name }}
@@ -207,7 +218,9 @@
 
           <div class="form-group">
             <label>{{ 'FORM.ULD_QTY' | translate }} *</label>
-            <input type="text" placeholder="{{ 'FORM.QUANTITY_PH' | translate }}" formControlName="flightOldQty" [appValidateTotalQuantity]="{ productArray: form.controls.productItems, flightArray: form.controls.flight, currentGroup: flightDetail }" [appValidateBorder]="flightDetail.controls.flightOldQty" />
+            <input type="text" placeholder="{{ 'FORM.QUANTITY_PH' | translate }}" formControlName="flightOldQty"
+              [appValidateTotalQuantity]="{ productArray: form.controls.productItems, flightArray: form.controls.flight, currentGroup: flightDetail }"
+              [appValidateBorder]="flightDetail.controls.flightOldQty" />
           </div>
 
           <div class="row-actions">

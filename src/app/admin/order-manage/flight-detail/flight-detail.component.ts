@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidateBorderDirective } from '../../validator';
+import { ValidateBorderDirective } from '../../../validator';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { CoolorderService } from '../../services/coolorder.service';
-import { flight, form, ProductItem } from '../../interfaces/form-interface';
-import { forkJoin } from 'rxjs';
+import { CoolorderService } from '../../../services/coolorder.service';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { forkJoin, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import e from 'express';
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
-  selector: 'app-other-information',
+  selector: 'app-flight-detail',
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -19,15 +21,15 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterOutlet,
     TranslateModule
   ],
-  templateUrl: './other-information.component.html',
-  styleUrl: './other-information.component.css'
+  templateUrl: './flight-detail.component.html',
+  styleUrl: './flight-detail.component.css'
 })
-export class OtherInformationComponent {
-constructor(
+export class FlightDetailComponent extends SubscriptionCleaner {
+  constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) { super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -50,13 +52,14 @@ constructor(
     forkJoin([
       this.coolOrderService.getSupplier(),
       this.coolOrderService.getOrderTypeData(),
-    ]).subscribe(([supplierRes, orderTypeRes]) => {
+    ]).pipe(takeUntil(this.subscriptions$)).subscribe(([supplierRes, orderTypeRes]) => {
       this.supplier = supplierRes;
       this.orderType = orderTypeRes;
       this.fetchData();
     });
 
     this.getGroupBySupplierId(this.selectedValue);
+    this.getLocation();
     // this.fetchData()
     this.updateId = this.route.snapshot.paramMap.get('id');
     console.log(this.updateId)
@@ -91,7 +94,7 @@ constructor(
         Validators.pattern('^[0-9]*$'),
       ]),
 
-      // create form array for multiple product
+
       productItems: new FormArray<FormGroup<ProductItem>>([
         this.createProductItemGroup(),
       ]),
@@ -122,8 +125,8 @@ constructor(
   }
 
   private fetchData() {
-    // console.log(this.updateId, "update id from update ")
-    this.coolOrderService.fetchData(this.updateId).subscribe({
+    console.log(this.updateId, "update id from update ")
+    this.coolOrderService.fetchData(this.updateId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
@@ -133,7 +136,7 @@ constructor(
           product: this.coolOrderService.getProduct(groupId),
           location: this.coolOrderService.getLocation(supplierId),
           temp: this.coolOrderService.getTemp(groupId),
-        }).subscribe((all) => {
+        }).pipe(takeUntil(this.subscriptions$)).subscribe((all) => {
           this.group = all.group;
           this.products = all.product;
           this.options = this.products.map((item) => item.name);
@@ -142,18 +145,42 @@ constructor(
 
           // patch basic values
           this.form.patchValue({
-            supplierId: response.supplierId,
-            commodity: response.commodity,
-            precondition: response.precondition,
-            straps: response.straps,
-            preconditionDropDownValue: response.preconditionDropDownValue,
-            preconditionInputValue: response.preconditionInputValue,
-            strapsValue: response.strapsValue,
-            groupId: response.groupId,
           });
 
+          this.selectedValue = response.supplierId;
           this.form.disable();
-          this.selectedValue = response.supplierId;       
+          const productArray = this.form.controls.productItems as FormArray<FormGroup<ProductItem>>;
+          productArray.clear();
+          const items: ProductItem[] = Array.isArray(response.productItems) ? response.productItems : [];
+
+          items.forEach((item: ProductItem) => {
+            productArray.push(
+              new FormGroup({
+                product: new FormControl(item.product),
+                quantity2: new FormControl(item.quantity2),
+              })
+            );
+          });
+
+          const flightArray = this.form.controls.flight as FormArray<FormGroup<flight>>;;
+          flightArray.clear();
+          const flightItems: flight[] = Array.isArray(response.flight) ? response.flight : [];
+
+          flightItems.forEach((f: flight) => {
+            flightArray.push(
+              new FormGroup({
+                flightId: new FormControl(f.flightId),
+                flightDate: new FormControl(f.flightDate),
+                flightOrg: new FormControl(f.flightOrg),
+                flightDes: new FormControl(f.flightDes),
+                flightProductType: new FormControl(f.flightProductType),
+                flightOldQty: new FormControl(f.flightOldQty),
+              })
+            );
+          });
+
+          this.form.controls.productItems.disable()
+          this.form.controls.flight.disable()
         });
       },
     });
@@ -175,9 +202,7 @@ constructor(
     this.form.controls.precondition.reset();
     this.form.controls.strapsValue.reset();
 
-
     const flightArray = this.form.controls.flight as FormArray;
-
     flightArray.controls.forEach((control) => {
       const group = control as FormGroup;
       group.controls['flightOldQty'].reset();
@@ -187,16 +212,26 @@ constructor(
     this.products = [];
     this.options = [];
     this.location = [];
+    this.temp = [];
 
     productArray.push(this.createProductItemGroup());
     this.getGroupBySupplierId(this.selectedValue);
-    // this.getLocation();
+    this.getLocation();
+  }
+
+  private getLocation() {
+    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+      next: (response) => {
+        this.location = response;
+      },
+    });
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
+        //.log(response.id, this.group)
         this.groupId = response.id;
       },
     });
@@ -209,7 +244,7 @@ constructor(
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         this.options = this.products.map((item) => item.name);
@@ -218,7 +253,7 @@ constructor(
   }
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.temp = response;
       },

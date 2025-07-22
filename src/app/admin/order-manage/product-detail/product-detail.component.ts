@@ -7,17 +7,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ValidateBorderDirective } from '../../validator';
+import { ValidateBorderDirective } from '../../../validator';
 import {
   ActivatedRoute,
   Router,
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { CoolorderService } from '../../services/coolorder.service';
-import { flight, form, ProductItem } from '../../interfaces/form-interface';
-import { forkJoin } from 'rxjs';
+import { CoolorderService } from '../../../services/coolorder.service';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { forkJoin, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
   selector: 'app-product-detail',
@@ -33,12 +34,12 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',
 })
-export class ProductDetailComponent {
+export class ProductDetailComponent extends SubscriptionCleaner {
   constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -134,7 +135,7 @@ export class ProductDetailComponent {
 
   private fetchData() {
     console.log(this.updateId, 'update id from update ');
-    this.coolOrderService.fetchData(this.updateId).subscribe({
+    this.coolOrderService.fetchData(this.updateId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
@@ -144,7 +145,7 @@ export class ProductDetailComponent {
           product: this.coolOrderService.getProduct(groupId),
           location: this.coolOrderService.getLocation(supplierId),
           temp: this.coolOrderService.getTemp(groupId),
-        }).subscribe((all) => {
+        }).pipe(takeUntil(this.subscriptions$)).subscribe((all) => {
           this.group = all.group;
           this.products = all.product;
           this.options = this.products.map((item) => item.name);
@@ -216,7 +217,7 @@ export class ProductDetailComponent {
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
         this.groupId = response.id;
@@ -230,7 +231,7 @@ export class ProductDetailComponent {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         this.options = this.products.map((item) => item.name);

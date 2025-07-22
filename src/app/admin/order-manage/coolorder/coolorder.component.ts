@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { CoolorderService } from '../../services/coolorder.service';
+import { CoolorderService } from '../../../services/coolorder.service';
 import { CommonModule, formatDate } from '@angular/common';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -20,12 +20,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { flight, form, ProductItem } from '../../interfaces/form-interface';
-import { ValidateBorderDirective } from '../../validator';
-import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
-import { debounceTime, forkJoin } from 'rxjs';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { ValidateBorderDirective } from '../../../validator';
+import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
+import { debounceTime, forkJoin, takeUntil } from 'rxjs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
   selector: 'app-coolorder',
@@ -43,7 +44,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './coolorder.component.html',
   styleUrl: './coolorder.component.css',
 })
-export class CoolorderComponent implements OnInit {
+export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
@@ -52,7 +53,7 @@ export class CoolorderComponent implements OnInit {
     private fb: FormBuilder,
     private el: ElementRef,
     private router: Router
-  ) { }
+  ) {super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -165,6 +166,19 @@ export class CoolorderComponent implements OnInit {
     });
   }
 
+  private createFlight(data: any = {}): FormGroup {
+    const flight = new FormGroup({
+      flightId: new FormControl(data.flightId || '', Validators.required),
+      flightDate: new FormControl(data.flightDate || '', Validators.required),
+      flightOrg: new FormControl(data.flightOrg || '', Validators.required),
+      flightDes: new FormControl(data.flightDes || '', Validators.required),
+      flightProductType: new FormControl('', Validators.required),
+      flightOldQty: new FormControl('', Validators.required),
+    });
+
+    return flight;
+  }
+
   private matchValues() {
     // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
 
@@ -267,19 +281,6 @@ export class CoolorderComponent implements OnInit {
     }
   }
 
-  private createFlight(data: any = {}): FormGroup {
-    const flight = new FormGroup({
-      flightId: new FormControl(data.flightId || '', Validators.required),
-      flightDate: new FormControl(data.flightDate || '', Validators.required),
-      flightOrg: new FormControl(data.flightOrg || '', Validators.required),
-      flightDes: new FormControl(data.flightDes || '', Validators.required),
-      flightProductType: new FormControl('', Validators.required),
-      flightOldQty: new FormControl('', Validators.required),
-    });
-
-    return flight;
-  }
-
   public addFlight(action: 'addFlight' | 'removeFlight', index?: number) {
     //.log('add flight');
     const arr = this.form.controls.flight as FormArray;
@@ -328,7 +329,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   private getSupplier() {
-    this.coolOrderService.getSupplier().subscribe({
+    this.coolOrderService.getSupplier().pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.supplier = response;
       },
@@ -347,7 +348,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
       },
@@ -361,7 +362,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         ////.log(this.products, 'products');
@@ -371,7 +372,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   public getOrderType() {
-    this.coolOrderService.getOrderTypeData().subscribe({
+    this.coolOrderService.getOrderTypeData().pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         ////.log(response);
         this.orderType = response;
@@ -380,7 +381,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+    this.coolOrderService.getLocation(this.selectedValue).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.location = response;
       },
@@ -417,7 +418,7 @@ export class CoolorderComponent implements OnInit {
             ...res,
             orderId: res.id
           }
-          this.coolOrderService.saveOrder_log(orderLog).subscribe({
+          this.coolOrderService.saveOrder_log(orderLog).pipe(takeUntil(this.subscriptions$)).subscribe({
             next: (response) => {
               this.router.navigate(['/order-list']);
               this.form.reset();
@@ -467,7 +468,7 @@ export class CoolorderComponent implements OnInit {
 
   private getTemp() {
     ////.log(this.groupId);
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.temp = response;
         ////.log('temp', response);
@@ -477,13 +478,11 @@ export class CoolorderComponent implements OnInit {
 
   public checkValue(event: any, i: number) {
     const selectedValue = event.target.value;
-    //  console.log(selectedValue, i)
+
     const Row = this.form.controls.productItems.at(i);
-    const PreviousValue = Row.controls.product.value;
-    //  console.log(Row, PreviousValue)
+    const PreviousValue = Row.controls.product.value
     if (PreviousValue && this.unique.has(PreviousValue)) {
       this.unique.delete(PreviousValue);
-      // console.log(deletevalue)
     }
 
     this.unique.add(selectedValue);
@@ -491,8 +490,7 @@ export class CoolorderComponent implements OnInit {
   }
 
   public disabled(productName: string, currentIndex: number): boolean {
-    // console.log(productName, "product name")
-
+    // Check if the productName already exists in other rows
     for (let i = 0; i < this.form.controls.productItems.length; i++) {
       if (i !== currentIndex) {
         const Row = this.form.controls.productItems.at(i);

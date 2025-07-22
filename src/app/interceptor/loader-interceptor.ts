@@ -1,7 +1,7 @@
 // loader-interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { LoaderService } from '../../services/loader.service';
+import { LoaderService } from '../services/loader.service';
 import { EMPTY } from 'rxjs';
 import { BYPASS_LOADER } from './loader-context'; 
 

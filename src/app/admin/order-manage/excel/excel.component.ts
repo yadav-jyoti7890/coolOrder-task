@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { order } from '../../interfaces/form-interface';
+import { order } from '../../../interfaces/form-interface';
 import { CoolorderComponent } from '../coolorder/coolorder.component';
-import { CoolorderService } from '../../services/coolorder.service';
+import { CoolorderService } from '../../../services/coolorder.service';
 import { RouterLink } from '@angular/router';
-import { ConfirmBoxComponent } from '../../confirmation-dialog-box/confirm-box/confirm-box.component';
+import { ConfirmBoxComponent } from '../../../confirmation-dialog-box/confirm-box/confirm-box.component';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ExcelService } from '../../services/excel.service';
-import { CsvService } from '../../services/csv.service';
+import { ExcelService } from '../../../services/excel.service';
+import { CsvService } from '../../../services/csv.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 
@@ -57,11 +57,6 @@ export class ExcelComponent {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         jsonData = XLSX.utils.sheet_to_json(worksheet);
-        // jsonData.forEach((order: any) => {
-        //   order.leaseStart = this.excelDateToJSDate(order.leaseStart);
-        //   order.leaseEnd = this.excelDateToJSDate(order.leaseEnd);
-        //   order.create_at = this.excelDateToJSDate(order.create_at);
-        // });
       }
       else {
         alert('Unsupported file format.');
@@ -69,22 +64,10 @@ export class ExcelComponent {
       }
       const formArray = this.orderForm.controls['orders'] as FormArray<FormGroup>;
       const existingEntries = formArray.controls.map(ctrl => ctrl.value);
-      let i = 0;
-
+  
       jsonData.forEach((newData) => {
-
         const isDuplicate = existingEntries.some((exits) => {
-          console.log(exits, newData)
-          console.log(typeof exits.leaseStart , typeof newData.leaseStart, exits.leaseStart === newData.leaseStart, 
-            i++,  exits.leaseStart , newData.leaseStart)
-          console.log(typeof exits.leaseEnd , typeof newData.leaseEnd, exits.leaseStart === newData.leaseStart,
-            i++,  exits.leaseStart , newData.leaseStart)
-          console.log(typeof exits.create_at , typeof newData.create_at, exits.leaseStart === newData.leaseStart,
-            i++, exits.leaseStart,newData.leaseStart)
-            console.log(typeof exits.productCode , typeof newData.productCode, exits.productCode === newData.productCode,
-              exits.productCode, newData.productCode
-            )
-
+          // Check if the new data matches any existing entry
           return (
             exits.org === newData.org,
             exits.des === newData.des,
@@ -101,16 +84,9 @@ export class ExcelComponent {
           formArray.push(this.newOrder(newData));
         }
       });
-
     }
     reader.readAsArrayBuffer(file)
   }
-
-  public formatDate(date: any): string {
-  const d = new Date(date);
-  return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0]; // 'YYYY-MM-DD'
-}
-
 
   public excelDateToJSDate(value: any): string {
     if (typeof value === 'number') {

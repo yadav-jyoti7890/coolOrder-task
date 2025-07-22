@@ -1,41 +1,41 @@
-import { Component, EventEmitter, Output, output } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { CoolorderService } from '../../../services/coolorder.service';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { flight, form, order, ProductItem } from '../../interfaces/form-interface';
-import { debounceTime, forkJoin } from 'rxjs';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { forkJoin, take, takeUntil } from 'rxjs';
+import { ValidateBorderDirective } from '../../../validator';
 import { CommonModule } from '@angular/common';
-import { ValidateBorderDirective } from '../../validator';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
-import { CoolorderService } from '../../services/coolorder.service';
+import { OtherInformationComponent } from '../other-information/other-information.component';
+import { FlightDetailComponent} from '../flight-detail/flight-detail.component';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { ChangeRequestListComponent } from '../change-request-list/change-request-list.component';
 import { TranslateModule } from '@ngx-translate/core';
-
-
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
-  selector: 'app-change-request-list',
+  selector: 'app-read-order',
   imports: [
     ReactiveFormsModule,
     CommonModule,
     ReactiveFormsModule,
     ValidateBorderDirective,
-    DragDropModule,
-    ValidateTotalQuantityDirective,
     RouterLink,
+    RouterOutlet,
+    RouterLinkActive,
     TranslateModule
   ],
-  templateUrl: './change-request-list.component.html',
-  styleUrl: './change-request-list.component.css'
+  templateUrl: './read-order.component.html',
+  styleUrl: './read-order.component.css'
 })
-export class ChangeRequestListComponent {
+export class ReadOrderComponent extends SubscriptionCleaner{
 
-  // @Output() compareId = new EventEmitter();
 
   constructor(
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) { super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -43,7 +43,6 @@ export class ChangeRequestListComponent {
   public orderType: any[] = [];
   public location: any[] = [];
   public temp: any[] = [];
-  public changeData: any[] = []
   public selectedValue: any;
   public groupId: any;
   public formData: any;
@@ -51,18 +50,21 @@ export class ChangeRequestListComponent {
   public options: any[] = [];
   public flightDisable: boolean = false;
   public unique = new Set<string>();
-  public updateId!: string | null
+  public orderId!: string | null;
   public initialFormValues!: any;
-  public RouteValid: boolean = false;
-  public changeRequest: any;
-  public compareId!: string;
-  public openDioLog: boolean = false
+  public RouteValid: boolean = false
+  public currentRoute:any = OtherInformationComponent
+  public selectedCompareId: string = '';
+  public showCompare = false;
+  public activeTab:string = 'other'
+
+
 
   ngOnInit(): void {
     forkJoin([
       this.coolOrderService.getSupplier(),
       this.coolOrderService.getOrderTypeData(),
-    ]).subscribe(([supplierRes, orderTypeRes]) => {
+    ]).pipe(takeUntil(this.subscriptions$)).subscribe(([supplierRes, orderTypeRes]) => {
       this.supplier = supplierRes;
       this.orderType = orderTypeRes;
       this.fetchData();
@@ -70,9 +72,11 @@ export class ChangeRequestListComponent {
 
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
-    this.updateId = this.route.snapshot.paramMap.get('id')
-    this.changeRequestList();
-    this.fetchData()
+    // this.fetchData()
+    this.orderId = this.route.snapshot.paramMap.get('id');
+    // console.log(this.orderId)
+    // console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
+
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
@@ -109,14 +113,7 @@ export class ChangeRequestListComponent {
 
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
-  }
 
-  public changeRequestList() {
-    this.coolOrderService.changeRequestList(this.updateId).subscribe({
-      next: (response) => {
-        this.changeRequest = response
-      }
-    })
   }
 
   private createProductItemGroup(): FormGroup<ProductItem> {
@@ -140,8 +137,8 @@ export class ChangeRequestListComponent {
   }
 
   private fetchData() {
-    //////console.log(this.updateId, "update id from update ")
-    this.coolOrderService.fetchData(this.updateId).subscribe({
+    console.log(this.orderId, "update id from update ")
+    this.coolOrderService.fetchData(this.orderId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
         const groupId = response.groupId;
@@ -151,7 +148,7 @@ export class ChangeRequestListComponent {
           product: this.coolOrderService.getProduct(groupId),
           location: this.coolOrderService.getLocation(supplierId),
           temp: this.coolOrderService.getTemp(groupId),
-        }).subscribe((all) => {
+        }).pipe(takeUntil(this.subscriptions$)).subscribe((all) => {
           this.group = all.group;
           this.products = all.product;
           this.options = this.products.map((item) => item.name);
@@ -182,7 +179,7 @@ export class ChangeRequestListComponent {
 
           this.selectedValue = response.supplierId;
 
-
+         
           this.form.disable();
           const productArray = this.form.controls.productItems as FormArray<FormGroup<ProductItem>>;
           productArray.clear();
@@ -257,7 +254,7 @@ export class ChangeRequestListComponent {
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+    this.coolOrderService.getLocation(this.selectedValue).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.location = response;
       },
@@ -265,7 +262,7 @@ export class ChangeRequestListComponent {
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
         //.log(response.id, this.group)
@@ -281,7 +278,7 @@ export class ChangeRequestListComponent {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         this.options = this.products.map((item) => item.name);
@@ -290,114 +287,28 @@ export class ChangeRequestListComponent {
   }
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.temp = response;
       },
     });
   }
 
-  public compareData(changeRequestId: string, orderId: string) {
-    console.log(changeRequestId, orderId)
-    this.compareId = changeRequestId;
-    if (this.compareId) {
-      this.openDioLog = true;
-    }
-    forkJoin([
-      this.coolOrderService.changeRequestData(changeRequestId),
-      this.coolOrderService.getOrderLogData(orderId)
-    ]).subscribe(([changeRequestResponse, orderResponse]) => {
-      console.log(changeRequestResponse, orderResponse, "change request list")
-      this.changeData = this.getChangedValueWithOldValue(changeRequestResponse, orderResponse)
-      console.log(this.changeData)
-    })
-  }
-
-  private getChangedValueWithOldValue(cr: any, orderData: any) {
-    const preViousValue = orderData[0]
-    const CR = cr[0].CR
-    const result = []
-
-
-    for (const key in preViousValue) {
-
-      if (key === 'productItems' || key === 'flight') continue;
-
-      const preValue = preViousValue[key]
-
-      if (CR.hasOwnProperty(key)) {
-        const newValue = CR[key]
-        console.log(preValue, newValue)
-        if (preValue != newValue) {
-          result.push({
-            field: key,
-            preValue: preValue,
-            newValue: newValue
-          })
-        }
-      }
-    }
-
-    const previousFlight = preViousValue.flight || [];
-    const currentFlight = CR.flight || [];
-    // console.log(currentFlight)
-
-    previousFlight.forEach((oldItem: any, index: number) => {
-      const newItem = currentFlight[index] || {};
-      console.log(newItem)
-      console.log(oldItem, "old")
-
-      for (const key in oldItem) {
-        const oldVal = oldItem[key];
-        const newVal = newItem[key];
-
-
-        if (
-          newItem.hasOwnProperty(key) &&
-          newVal !== undefined &&
-          oldVal !== newVal
-        ) {
-          result.push({
-            field: key,
-            preValue: oldVal,
-            newValue: newVal
-          });
-        }
-      }
-    });
-
-    const product = preViousValue.productItems || [];
-    const currentProduct = CR.productItems || [];
-
-    product.forEach((oldItem: any, index: number) => {
-
-      const newItem = currentProduct[index] || {};
-      for (const key in oldItem) {
-        const oldVal = oldItem[key];
-        const newVal = newItem[key];
-
-        if (
-          newItem.hasOwnProperty(key) &&
-          newVal !== undefined &&
-          oldVal !== newVal
-        ) {
-          result.push({
-            field: key,
-            preValue: oldVal,
-            newValue: newVal
-          });
-        }
-      }
-    });
-
-
-
-    return result
-  }
-
-  public closeBtn() {
-    //////console.log("click")
-    this.openDioLog = false;
+  public setComponent(route:string){
+    this.activeTab = route
+    this.showCompare = true
+   if(route == 'Change'){
+     this.currentRoute = ChangeRequestListComponent
+   }
+   else if(route == 'flight'){
+    this.currentRoute = FlightDetailComponent
+   }
+   else if(route == 'product'){
+    this.currentRoute = ProductDetailComponent
+   }
+   else{
+   this.currentRoute = OtherInformationComponent
+   }
   }
 
 }

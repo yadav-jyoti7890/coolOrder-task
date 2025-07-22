@@ -30,7 +30,8 @@
       <div class="modal" *ngIf="showCommentPopup">
         <div class="modal-content">
           <h3>{{ 'ORDER_FORM.ADD_COMMENT' | translate }}</h3>
-          <textarea rows="6" cols="40" [placeholder]="'ORDER_FORM.ENTER_COMMENT' | translate" [formControl]="comment" [appValidateBorder]="comment"></textarea>
+          <textarea rows="6" cols="40" [placeholder]="'ORDER_FORM.ENTER_COMMENT' | translate" [formControl]="comment"
+            [appValidateBorder]="comment"></textarea>
           <div class="modal-actions">
             <button (click)="checkAndSubmit()">{{ 'ORDER_FORM.OK' | translate }}</button>
             <button (click)="cancel()">{{ 'ORDER_FORM.CANCEL' | translate }}</button>
@@ -88,7 +89,8 @@
         <div class="form-group">
           <div class="form-control">
             <label>{{ 'ORDER_FORM.COMMODITY' | translate }}</label>
-            <input type="text" placeholder="{{ 'ORDER_FORM.COMMODITY' | translate }}" formControlName="commodity" [appValidateBorder]="form.controls.commodity" />
+            <input type="text" placeholder="{{ 'ORDER_FORM.COMMODITY' | translate }}" formControlName="commodity"
+              [appValidateBorder]="form.controls.commodity" />
 
             <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
               <div class="checkbox-option">
@@ -97,18 +99,21 @@
               </div>
 
               <div *ngIf="form.controls['precondition'].value && selectedValue == 1">
-                <select [formControl]="form.controls.preconditionDropDownValue" [appValidateBorder]="form.controls.preconditionDropDownValue">
+                <select [formControl]="form.controls.preconditionDropDownValue"
+                  [appValidateBorder]="form.controls.preconditionDropDownValue">
                   <option disabled>{{ 'ORDER_FORM.GROUP' | translate }}</option>
                   <option *ngFor="let t of temp" [value]="t.id">{{ t.name }}</option>
                 </select>
               </div>
 
               <div *ngIf="form.controls['precondition'].value && selectedValue == 3" style="width: 100%">
-                <input type="text" formControlName="preconditionInputValue" [appValidateBorder]="form.controls.preconditionInputValue" />
+                <input type="text" formControlName="preconditionInputValue"
+                  [appValidateBorder]="form.controls.preconditionInputValue" />
               </div>
 
               <div class="checkbox-option">
-                <input type="checkbox" id="straps" [formControl]="form.controls['straps']" [appValidateBorder]="form.controls.straps" />
+                <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
+                  [appValidateBorder]="form.controls.straps" />
                 <label for="straps">{{ 'ORDER_FORM.STRAPS' | translate }}</label>
               </div>
 
@@ -129,7 +134,8 @@
         <div class="form-group">
           <div class="form-control">
             <label>{{ 'ORDER_FORM.GROUP' | translate }}</label>
-            <select formControlName="groupId" (change)="getProductByGroupId($event)" [appValidateBorder]="form.controls.groupId">
+            <select formControlName="groupId" (change)="getProductByGroupId($event)"
+              [appValidateBorder]="form.controls.groupId">
               <option disabled selected>{{ 'ORDER_FORM.SUPPLIER' | translate }}</option>
               <option *ngFor="let g of group" [value]="g.id">{{ g.name }}</option>
             </select>
@@ -141,7 +147,8 @@
         </div>
 
         <div formArrayName="productItems">
-          <div *ngFor="let item of form.controls.productItems.controls; let i = index" [formGroupName]="i" class="product-item-row">
+          <div *ngFor="let item of form.controls.productItems.controls; let i = index" [formGroupName]="i"
+            class="product-item-row">
             <div class="remove">
               <button *ngIf="i != 0" (click)="updateProductItems('remove', i)"><i class="ri-subtract-line"></i></button>
             </div>
@@ -172,8 +179,10 @@
         <button class="add-row-btn" (click)="addFlight('addFlight')" [disabled]="flightDisable">+</button>
       </div>
 
-      <div class="flight-rows-container" formArrayName="flight" cdkDropList [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
-        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index" [formGroupName]="i" cdkDrag>
+      <div class="flight-rows-container" formArrayName="flight" cdkDropList
+        [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
+        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index"
+          [formGroupName]="i" cdkDrag>
           <div class="form-group">
             <label>{{ 'ORDER_FORM.FLIGHT_ID' | translate }}</label>
             <input type="text" formControlName="flightId" [appValidateBorder]="flightDetail.controls.flightId" />
@@ -196,7 +205,8 @@
 
           <div class="form-group">
             <label>{{ 'ORDER_FORM.PRODUCT_TYPE' | translate }}</label>
-            <select formControlName="flightProductType" class="input" [appValidateBorder]="flightDetail.controls.flightProductType">
+            <select formControlName="flightProductType" class="input"
+              [appValidateBorder]="flightDetail.controls.flightProductType">
               <option value="" disabled>{{ 'ORDER_FORM.PRODUCT' | translate }}</option>
               <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
             </select>
@@ -204,7 +214,8 @@
 
           <div class="form-group">
             <label>{{ 'ORDER_FORM.ULD_QTY' | translate }}</label>
-            <input type="text" formControlName="flightOldQty" [appValidateBorder]="flightDetail.controls.flightOldQty" />
+            <input type="text" formControlName="flightOldQty"
+              [appValidateBorder]="flightDetail.controls.flightOldQty" />
           </div>
 
           <div class="row-actions">

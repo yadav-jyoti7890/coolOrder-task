@@ -1,14 +1,15 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { CoolorderService } from '../../services/coolorder.service';
+import { CoolorderService } from '../../../services/coolorder.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { flight, form, ProductItem } from '../../interfaces/form-interface';
-import { debounceTime, forkJoin, from } from 'rxjs';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { debounceTime, forkJoin, from, takeUntil } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
-import { ValidateBorderDirective } from '../../validator';
+import { ValidateBorderDirective } from '../../../validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
+import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
   selector: 'app-change-request',
@@ -25,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './change-request.component.html',
   styleUrl: './change-request.component.css'
 })
-export class ChangeRequestComponent {
+export class ChangeRequestComponent extends SubscriptionCleaner {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
@@ -33,7 +34,7 @@ export class ChangeRequestComponent {
     private coolOrderService: CoolorderService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) { super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -308,14 +309,13 @@ export class ChangeRequestComponent {
 
       const startDay = startDate.getDate()
       const endDay = endDate.getDate()
-      
+
       this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
       this.form.controls.rentalDays.markAsDirty();
     }
   }
 
   private fetchData() {
-    //console.log(this.orderId, 'update id from update ');
     this.coolOrderService.fetchData(this.orderId).subscribe({
       next: (response) => {
         const supplierId = response.supplierId;
@@ -333,9 +333,6 @@ export class ChangeRequestComponent {
           this.location = all.location;
           this.temp = all.temp;
 
-          // //console.log(this.temp, "temp")
-
-          // patch basic values
           this.form.patchValue({
             orderType: response.orderType,
             org: response.org,
@@ -378,13 +375,11 @@ export class ChangeRequestComponent {
             ? response.flight
             : [];
 
-
           flightItems.forEach((f: flight) => {
             flightArray.push(this.createFlight(f));
           });
 
           this.initialFormValues = this.form.value
-
         });
       },
     });
@@ -404,9 +399,6 @@ export class ChangeRequestComponent {
     console.log(this.form.value)
     if (!this.form.valid || !this.RouteValid || this.disableCR) {
       alert('Please fix the errors before updating.');
-
-      // this.form.markAllAsTouched();
-
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
@@ -473,7 +465,7 @@ export class ChangeRequestComponent {
       const copy = {
         CR: {
           ...updateData,
-          
+
         },
         status: selectValue,
         orderId: this.orderId,
@@ -540,7 +532,7 @@ export class ChangeRequestComponent {
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+    this.coolOrderService.getLocation(this.selectedValue).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.location = response;
       },
@@ -548,7 +540,7 @@ export class ChangeRequestComponent {
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
         //.log(response.id, this.group)
@@ -564,7 +556,7 @@ export class ChangeRequestComponent {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         this.options = this.products.map((item) => item.name);
@@ -573,7 +565,7 @@ export class ChangeRequestComponent {
   }
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.temp = response;
         //console.log(this.temp)

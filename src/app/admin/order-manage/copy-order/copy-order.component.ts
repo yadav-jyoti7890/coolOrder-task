@@ -5,36 +5,27 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
-import { flight, form, ProductItem } from '../../interfaces/form-interface';
+import { CoolorderService } from '../../../services/coolorder.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   AbstractControl,
   FormArray,
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
-  
 } from '@angular/forms';
-import { CoolorderService } from '../../services/coolorder.service';
-import { debounceTime, forkJoin } from 'rxjs';
+import { flight, form, ProductItem } from '../../../interfaces/form-interface';
+import { debounceTime, forkJoin, takeUntil } from 'rxjs';
 import { CommonModule, formatDate } from '@angular/common';
-import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
-import { ValidateBorderDirective } from '../../validator';
-import { response } from 'express';
+import { ValidateBorderDirective } from '../../../validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
 
 @Component({
-  selector: 'app-update',
+  selector: 'app-copy-order',
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -45,20 +36,18 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterLink,
     TranslateModule
   ],
-  templateUrl: './update.component.html',
-  styleUrl: './update.component.css',
+  templateUrl: './copy-order.component.html',
+  styleUrl: './copy-order.component.css',
 })
-export class UpdateComponent {
+export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
   @ViewChildren('flightOrgInputs') flightOrgInputs!: QueryList<ElementRef>;
   @ViewChildren('flightDesInputs') flightDesInputs!: QueryList<ElementRef>;
 
   constructor(
     private coolOrderService: CoolorderService,
-    private fb: FormBuilder,
-    private el: ElementRef,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) { super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -76,7 +65,6 @@ export class UpdateComponent {
   public updateId!: string | null;
   public initialFormValues!: any;
   public RouteValid: boolean = false;
-  public showCommentPopup: boolean = false;
 
   ngOnInit(): void {
     forkJoin([
@@ -159,20 +147,12 @@ export class UpdateComponent {
         this.matchValues();
       });
     this.matchValues();
-
-    this.form.controls.productItems.valueChanges
-      .pipe(debounceTime(800))
-      .subscribe(() => {
-        this.matchValues();
-      });
-
-    this.matchValues();
   }
 
-  private createProductItemGroup(data: Partial<ProductItem> = {}): FormGroup<ProductItem> {
+  private createProductItemGroup(): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
-      product: new FormControl(data.product ?? null, Validators.required),
-      quantity2: new FormControl(data.quantity2 ?? null, [
+      product: new FormControl(null, Validators.required),
+      quantity2: new FormControl(null, [
         Validators.pattern('^[0-9]+$'),
         Validators.required,
       ]),
@@ -180,8 +160,6 @@ export class UpdateComponent {
   }
 
   private matchValues() {
-    // const flight = this.form.controls.flight as FormArray<FormGroup<flight>>;
-
     const org = this.form.controls.org.value;
     const des = this.form.controls.des.value;
     const flightArray = this.form.controls.flight.controls;
@@ -196,7 +174,7 @@ export class UpdateComponent {
 
     this.RouteValid = isCompleteRoute.valid;
 
-    this.flightOrgInputs.forEach((orgInputRef, index) => {
+    this.flightOrgInputs?.forEach((orgInputRef, index) => {
       const desInputRef = this.flightDesInputs.get(index);
       const color = isCompleteRoute.index.includes(index) ? 'red' : 'green';
 
@@ -278,15 +256,17 @@ export class UpdateComponent {
     }
   }
 
-   private createFlight(data: Partial<flight> = {}): FormGroup<flight> {
-    return new FormGroup<flight>({
-      flightId: new FormControl(data.flightId ?? null, Validators.required),
-      flightDate: new FormControl(data.flightDate ?? null, Validators.required),
-      flightOrg: new FormControl(data.flightOrg ?? null, Validators.required),
-      flightDes: new FormControl(data.flightDes ?? null, Validators.required),
-      flightProductType: new FormControl(data.flightProductType ?? null, Validators.required),
-      flightOldQty: new FormControl(data.flightOldQty ?? null, Validators.required),
+  private createFlight(data: any = {}): FormGroup {
+    const flight = new FormGroup({
+      flightId: new FormControl(data.flightId || '', Validators.required),
+      flightDate: new FormControl(data.flightDate || '', Validators.required),
+      flightOrg: new FormControl(data.flightOrg || '', Validators.required),
+      flightDes: new FormControl(data.flightDes || '', Validators.required),
+      flightProductType: new FormControl('', Validators.required),
+      flightOldQty: new FormControl('', Validators.required),
     });
+
+    return flight;
   }
 
   public addFlight(action: 'addFlight' | 'removeFlight', index?: number) {
@@ -376,6 +356,7 @@ export class UpdateComponent {
             productCode: response.productCode,
           });
           this.selectedValue = response.supplierId;
+
           const productArray = this.form.controls.productItems as FormArray<
             FormGroup<ProductItem>
           >;
@@ -385,7 +366,12 @@ export class UpdateComponent {
             : [];
 
           items.forEach((item: ProductItem) => {
-            productArray.push(this.createProductItemGroup(item)); // ✅ Correct
+            productArray.push(
+              new FormGroup({
+                product: new FormControl(item.product),
+                quantity2: new FormControl(item.quantity2),
+              })
+            );
           });
 
           const flightArray = this.form.controls.flight as FormArray<
@@ -396,94 +382,88 @@ export class UpdateComponent {
             ? response.flight
             : [];
 
-
           flightItems.forEach((f: flight) => {
-            flightArray.push(this.createFlight(f));
+            flightArray.push(
+              new FormGroup({
+                flightId: new FormControl(f.flightId),
+                flightDate: new FormControl(f.flightDate),
+                flightOrg: new FormControl(f.flightOrg),
+                flightDes: new FormControl(f.flightDes),
+                flightProductType: new FormControl(f.flightProductType),
+                flightOldQty: new FormControl(f.flightOldQty),
+              })
+            );
           });
-
         });
       },
     });
   }
 
-  public update(status: 'New' | 'draft') {
-    if (!this.form.valid || !this.RouteValid) {
-      alert('Please fix the errors before updating.');
+  public submit(status: 'New' | 'draft') {
+    const formData = {
+      ...this.form.value,
+      status,
+    };
 
+    this.calculateLeaseEndDate();
+    console.log(formData);
+
+    if (this.form.valid && this.RouteValid) {
+      const today = new Date();
+      const formattedDate = today.toISOString().substring(0, 10);
+
+      const formData = {
+        ...this.form.value,
+        status,
+        create_at: formattedDate,
+      };
+
+      this.coolOrderService.saveOrder(formData).pipe(takeUntil(this.subscriptions$)).subscribe({
+        next: (response) => {
+          const res: any = response
+          const orderLog = {
+            ...res,
+            orderId: res.id
+          }
+          this.coolOrderService.saveOrder_log(orderLog).pipe(takeUntil(this.subscriptions$)).subscribe({
+            next: (response) => {
+              this.router.navigate(['/order-list']);
+              this.form.reset();
+              this.form.controls.productItems.clear();
+              this.form.controls.productItems.push(this.createProductItemGroup());
+              this.form.controls.flight.clear();
+            }
+          })
+        }
+      })
+    } else {
       // this.form.markAllAsTouched();
+      alert('Please fix the errors before updating.');
 
       Object.keys(this.form.controls).forEach((key: string) => {
         const control = this.form.get(key);
 
         if (control instanceof FormControl) {
+          // console.log(`Field '${key}' touched:`, control.touched);
           if (control.invalid) {
             control.markAsTouched();
             control.updateValueAndValidity({ onlySelf: true });
           }
         } else if (control instanceof FormArray) {
-          control.controls.forEach((row: AbstractControl) => {
+          control.controls.forEach((row: AbstractControl, index: number) => {
             if (row instanceof FormGroup) {
               Object.keys(row.controls).forEach((fieldName) => {
                 const field = row.get(fieldName) as FormControl;
-                if (field.invalid) {
+                if (field && field.invalid) {
                   field.markAsTouched();
-                  field.updateValueAndValidity({ onlySelf: true });
+                  field.updateValueAndValidity({
+                    onlySelf: true,
+                  });
                 }
               });
             }
           });
         }
-      });
-    } else {
-      const updateData: any = {}; // STORE DIRTY DATA!
-      //CONVERT OBJECT INTO ARRAY !
-      Object.keys(this.form.controls).forEach((key: string) => {
-        const control = this.form.get(key);
-
-        if (control instanceof FormControl) {
-          if (control.dirty) {
-            updateData[key] = control.value;
-          }
-        } else if (control instanceof FormArray) {
-          const dirtyArray: any[] = [];
-          control.controls.forEach((row: AbstractControl, index: number) => {
-            if (row instanceof FormGroup) {
-              const dirtyGroup: any = {};
-
-              Object.keys(row.controls).forEach((fieldName) => {
-                const field = row.controls[fieldName];
-
-                if (field?.dirty) {
-                  dirtyGroup[fieldName] = field.value;
-                }
-              });
-
-              if (Object.keys(dirtyGroup).length > 0) {
-                dirtyArray[index] = dirtyGroup;
-              }
-            }
-          });
-
-          if (dirtyArray.length > 0) {
-            updateData[key] = dirtyArray;
-          }
-        }
-      });
-
-      const copy = {
-        ...updateData,
-        status,
-      };
-      console.log(copy, 'copy data');
-      console.log('Dirty updated data:', copy, this.updateId);
-      this.coolOrderService.updateOrder(copy, this.updateId).subscribe({
-        next: (response) => {
-          alert('update successfully');
-          this.router.navigate(['/order-list']);
-        },
-        error: (err) => {
-          alert('something went wrong');
-        },
       });
     }
   }
@@ -523,7 +503,7 @@ export class UpdateComponent {
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).subscribe({
+    this.coolOrderService.getLocation(this.selectedValue).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.location = response;
       },
@@ -531,7 +511,7 @@ export class UpdateComponent {
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).subscribe({
+    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.group = response;
         //.log(response.id, this.group)
@@ -547,7 +527,7 @@ export class UpdateComponent {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).subscribe({
+    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.products = response;
         this.options = this.products.map((item) => item.name);
@@ -556,10 +536,10 @@ export class UpdateComponent {
   }
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).subscribe({
+    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: (response) => {
         this.temp = response;
-        console.log(this.temp)
+        console.log(this.temp);
       },
     });
   }
@@ -577,5 +557,9 @@ export class UpdateComponent {
     return false;
   }
 
-  public reset() { }
+  public reset() {
+    this.form.reset({
+      supplierId: this.selectedValue,
+    });
+  }
 }
