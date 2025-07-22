@@ -1,113 +1,87 @@
 <div class="header" style="display: flex; justify-content: space-between; padding: 2vw 2vw 0px 2vw; ">
   <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
-    Order List
+    {{ 'ORDER_LIST.ORDER_LIST_TITLE' | translate }}
   </h2>
   <div>
-    <button class="view" [routerLink]="['/coolorder']">Create Order</button>
+    <button class="view" [routerLink]="['/coolorder']">{{ 'ORDER_LIST.CREATE_ORDER' | translate }}</button>
     <div class="dropdown">
       <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        📥 Download Options
+        📥 {{ 'ORDER_LIST.DOWNLOAD_OPTIONS' | translate }}
       </button>
       <ul class="dropdown-menu">
         <li>
           <button class="dropdown-item excel-btn" (click)="exportToExcel()">
-            <i class="ri-file-excel-2-fill"></i> Download Excel
+            <i class="ri-file-excel-2-fill"></i> {{ 'ORDER_LIST.DOWNLOAD_EXCEL' | translate }}
           </button>
         </li>
         <li>
           <button class="dropdown-item csv-btn" (click)="csv()">
-            <i class="ri-file-download-fill"></i> Download CSV
+            <i class="ri-file-download-fill"></i> {{ 'ORDER_LIST.DOWNLOAD_CSV' | translate }}
           </button>
         </li>
-          <!-- <li class="file-input-container">
-            <div class="file-input-wrapper">
-              <span class="file-input-label">Excel File</span>
-              <input type="file" class="file-input" accept=".xlsx,.xls,.csv" placeholder="Choose Excel file"
-                (change)="onFileChange($event)">
-            </div>
-          </li> -->
       </ul>
     </div>
   </div>
-
 </div>
+
 <div class="order-detail-container">
-  <!-- Member List Table -->
   <table class="member-table">
     <thead>
       <tr>
-        <th>SN</th>
-        <th>Origin
+        <th>{{ 'ORDER_LIST.SN' | translate }}</th>
+        <th>{{ 'ORDER_LIST.ORIGIN' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'asc'"
-              (click)="short('org', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'desc'"
-              (click)="short('org', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'asc'" (click)="short('org', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'org' && sortType === 'desc'" (click)="short('org', 'desc')"></i>
           </div>
         </th>
-
-        <th>Destination
+        <th>{{ 'ORDER_LIST.DESTINATION' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'asc'"
-              (click)="short('des', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'desc'"
-              (click)="short('des', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'asc'" (click)="short('des', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'des' && sortType === 'desc'" (click)="short('des', 'desc')"></i>
           </div>
         </th>
-
-        <th>pickupport
+        <th>{{ 'ORDER_LIST.PICKUP_PORT' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'asc'"
-              (click)="short('pickUpPort', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'desc'"
-              (click)="short('pickUpPort', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'asc'" (click)="short('pickUpPort', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'pickUpPort' && sortType === 'desc'" (click)="short('pickUpPort', 'desc')"></i>
           </div>
         </th>
-
-        <th>Lease Start
+        <th>{{ 'ORDER_LIST.LEASE_START' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'asc'"
-              (click)="short('leaseStart', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'desc'"
-              (click)="short('leaseStart', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'asc'" (click)="short('leaseStart', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseStart' && sortType === 'desc'" (click)="short('leaseStart', 'desc')"></i>
           </div>
         </th>
-        <th>Lease End
+        <th>{{ 'ORDER_LIST.LEASE_END' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'asc'"
-              (click)="short('leaseEnd', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'desc'"
-              (click)="short('leaseEnd', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'asc'" (click)="short('leaseEnd', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'leaseEnd' && sortType === 'desc'" (click)="short('leaseEnd', 'desc')"></i>
           </div>
         </th>
-        <th>Rental-Days
+        <th>{{ 'ORDER_LIST.RENTAL_DAYS' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'asc'"
-              (click)="short('rentalDays', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'desc'"
-              (click)="short('rentalDays', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'asc'" (click)="short('rentalDays', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'rentalDays' && sortType === 'desc'" (click)="short('rentalDays', 'desc')"></i>
           </div>
         </th>
-        <th>Product Code
+        <th>{{ 'ORDER_LIST.PRODUCT_CODE' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'asc'"
-              (click)="short('productCode', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'desc'"
-              (click)="short('productCode', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'asc'" (click)="short('productCode', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'productCode' && sortType === 'desc'" (click)="short('productCode', 'desc')"></i>
           </div>
         </th>
-        <th>Create_At
+        <th>{{ 'ORDER_LIST.CREATED_AT' | translate }}
           <div class="arrow">
-            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'asc'"
-              (click)="short('create_at', 'asc')"></i>
-            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'desc'"
-              (click)="short('create_at', 'desc')"></i>
+            <i class="ri-arrow-up-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'asc'" (click)="short('create_at', 'asc')"></i>
+            <i class="ri-arrow-down-s-fill" [class.active]="sortedFiled === 'create_at' && sortType === 'desc'" (click)="short('create_at', 'desc')"></i>
           </div>
         </th>
-        <th>status</th>
-        <th>Action</th>
+        <th>{{ 'ORDER_LIST.STATUS' | translate }}</th>
+        <th>{{ 'ORDER_LIST.ACTION' | translate }}</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let order of orderData; let i = index">
         <td>{{ i + 1 }}</td>
@@ -122,13 +96,16 @@
         <td>
           <div style="display: flex; align-items: center; gap: 0.5vw">
             <span [ngClass]="{
-               'status-draft': order.status === 'draft',
-               'status-new': order.status === 'New',
-               'status-approved': order.status === 'Approved'
-                }">{{ order.status | uppercase}}
+              'status-draft': order.status === 'draft',
+              'status-new': order.status === 'New',
+              'status-approved': order.status === 'Approved'
+            }">
+              {{ order.status | uppercase }}
             </span>
             <div *ngIf="order.status === 'New' && order.hasCR">
-              <span class="status-badge pending" (click)="showDialog(order.id)">Pending</span>
+              <span class="status-badge pending" (click)="showDialog(order.id)">
+                {{ 'ORDER_LIST.PENDING' | translate }}
+              </span>
             </div>
           </div>
         </td>
@@ -147,7 +124,7 @@
             <i class="ri-eye-fill" [routerLink]="['/read-order', order.id]"></i>
             <i class="ri-delete-bin-6-fill" (click)="delete(order.id)"></i>
             <button [routerLink]="['/change-request', order.id]" class="view">
-              CR
+              {{ 'ORDER_LIST.CR' | translate }}
             </button>
           </div>
         </td>
@@ -165,11 +142,11 @@
   </table>
 </div>
 
-<!-- display model -->
+<!-- Modal -->
 <div class="modal-overlay" *ngIf="openDioLog" style="padding: 1vw">
   <div class="comparison-dialog">
     <div class="dialog-header">
-      <span>Text Comparison</span>
+      <span>{{ 'ORDER_LIST.TEXT_COMPARISON' | translate }}</span>
       <button class="close-btn" (click)="closeBtn()">&times;</button>
     </div>
 
@@ -181,34 +158,32 @@
           <ng-container>
             <button class="approve-btn" *ngIf="!successLoader[crGroup.id] && !approved[crGroup.id]"
               (click)="approve(crGroup.id, crGroup.orderId)">
-              Approve Request
+              {{ 'ORDER_LIST.APPROVE_REQUEST' | translate }}
             </button>
 
             <div *ngIf="successLoader[crGroup.id]" class="spinner small"></div>
-
             <div class="approved" *ngIf="approved[crGroup.id]">
               <i class="ri-check-line approved-icon"></i>
             </div>
           </ng-container>
-
         </div>
 
         <div *ngFor="let CR of crGroup.changes" class="comparison-row">
           <div class="field-name">{{ CR.field }}</div>
           <div class="value-container">
             <div class="value-box old-value">
-              <span class="value-label">Old Value</span>
+              <span class="value-label">{{ 'ORDER_LIST.OLD_VALUE' | translate }}</span>
               {{ CR.oldValue }}
             </div>
             <div class="value-box new-value">
-              <span class="value-label">New Value</span>
+              <span class="value-label">{{ 'ORDER_LIST.NEW_VALUE' | translate }}</span>
               {{ CR.newValue }}
             </div>
           </div>
         </div>
 
         <div class="comment">
-          <textarea class="comment-box" readonly disabled>{{crGroup.comment}} </textarea>
+          <textarea class="comment-box" readonly disabled>{{ crGroup.comment }} </textarea>
         </div>
       </div>
     </ng-container>

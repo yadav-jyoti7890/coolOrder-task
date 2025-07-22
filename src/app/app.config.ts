@@ -16,7 +16,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/translation/', '.json');
+  return new TranslateHttpLoader(http, '/assets/translation/', '.json');
 }
 
 export const appConfig: ApplicationConfig = {
@@ -28,7 +28,7 @@ export const appConfig: ApplicationConfig = {
           useFactory: createTranslateLoader,
           deps: [HttpClient]
         },
-        defaultLanguage: 'hi'
+        defaultLanguage: 'en'
       })
     ),
 

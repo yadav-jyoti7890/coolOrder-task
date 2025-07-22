@@ -20,6 +20,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  
 } from '@angular/forms';
 import { CoolorderService } from '../../services/coolorder.service';
 import { debounceTime, forkJoin } from 'rxjs';
@@ -29,6 +30,7 @@ import { ValidateBorderDirective } from '../../validator';
 import { response } from 'express';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -41,7 +43,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
-
+    TranslateModule
   ],
   templateUrl: './update.component.html',
   styleUrl: './update.component.css',

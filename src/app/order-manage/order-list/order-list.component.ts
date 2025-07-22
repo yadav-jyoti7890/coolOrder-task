@@ -12,10 +12,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmBoxComponent } from '../../confirmation-dialog-box/confirm-box/confirm-box.component';
 import * as XLSX from 'xlsx';
 import { CsvService } from '../../services/csv.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-list',
-  imports: [CommonModule, RouterLink, ConfirmBoxComponent, MatDialogModule],
+  imports: [CommonModule, RouterLink, ConfirmBoxComponent, MatDialogModule, TranslateModule],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.css'
 })

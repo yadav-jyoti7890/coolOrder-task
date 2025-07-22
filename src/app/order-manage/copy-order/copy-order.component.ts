@@ -21,6 +21,7 @@ import { CommonModule, formatDate } from '@angular/common';
 import { ValidateBorderDirective } from '../../validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-copy-order',
@@ -32,6 +33,7 @@ import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.di
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
+    TranslateModule
   ],
   templateUrl: './copy-order.component.html',
   styleUrl: './copy-order.component.css',

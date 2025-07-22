@@ -17,6 +17,7 @@ import {
 import { CoolorderService } from '../../services/coolorder.service';
 import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-detail',
@@ -27,6 +28,7 @@ import { forkJoin } from 'rxjs';
     ValidateBorderDirective,
     RouterLink,
     RouterOutlet,
+    TranslateModule
   ],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css',

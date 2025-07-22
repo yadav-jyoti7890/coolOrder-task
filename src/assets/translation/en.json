@@ -107,7 +107,7 @@
     "ULD_QTY": "ULD Qty"
   },
   "COPY_UPDATE": {},
-  
+
   "EXCEL_FORM": {
     "UPDATE_EXCEL_DATA": "Update Excel Data",
     "CREATE_ORDER": "Create Order",
@@ -127,5 +127,114 @@
     "CREATED_AT": "Create At",
     "ACTION": "Action",
     "DELETE_ROW": "Delete"
+  },
+  "ORDER_LIST": {
+    "ORDER_LIST_TITLE": "Order List",
+    "CREATE_ORDER": "Create Order",
+    "DOWNLOAD_OPTIONS": "Download Options",
+    "DOWNLOAD_EXCEL": "Download Excel",
+    "DOWNLOAD_CSV": "Download CSV",
+    "SN": "SN",
+    "ORIGIN": "Origin",
+    "DESTINATION": "Destination",
+    "PICKUP_PORT": "Pickup port",
+    "LEASE_START": "Lease Start",
+    "LEASE_END": "Lease End",
+    "RENTAL_DAYS": "Rental Days",
+    "PRODUCT_CODE": "Product Code",
+    "CREATED_AT": "Created At",
+    "STATUS": "Status",
+    "ACTION": "Action",
+    "PENDING": "Pending",
+    "CR": "CR",
+    "TEXT_COMPARISON": "Text Comparison",
+    "APPROVE_REQUEST": "Approve Request",
+    "OLD_VALUE": "Old Value",
+    "NEW_VALUE": "New Value"
+  },
+  "FORM": {
+    "COMMERCIAL": "Commercial",
+    "CHOOSE_SUPPLIER": "Choose Supplier",
+    "RESET": "Reset",
+    "SAVE_DRAFT": "Save Draft",
+    "SUBMIT": "Submit",
+    "ORDER_DETAILS": "Order details",
+    "AWB_ORG": "AWB Org",
+    "AWB_ORG_PH": "Enter AWB origin",
+    "AWB_DEST": "AWB Dest",
+    "AWB_DEST_PH": "Enter AWB destination",
+    "CUST_PICKUP_PORT": "Customer Pickup Port",
+    "CUST_RETURN_PORT": "Customer Return Port",
+    "PLANNED_LEASE_START": "Planned Lease Start",
+    "PLANNED_LEASE_END": "Planned Lease End",
+    "BOOKED_RENTAL_DAYS": "Booked Rental Days",
+    "SELECT_LOCATION": "Select Location",
+    "OTHER_REQUIREMENTS": "Other Requirements",
+    "COMMODITY": "Commodity",
+    "COMMODITY_PH": "Enter commodity",
+    "PRECONDITIONING": "Preconditioning (By Supplier)",
+    "STRAPS": "Straps",
+    "PRODUCTS": "Products",
+    "GROUP": "Group",
+    "PRODUCT_CODE": "Product Code",
+    "FLIGHT_DETAILS": "Flight details",
+    "FLIGHT_ID": "Flight ID",
+    "FLIGHT_DATE": "Flight Date (LT)",
+    "ORIGIN": "Origin",
+    "DESTINATION": "Destination",
+    "PRODUCT_TYPE": "Product Type",
+    "ULD_QTY": "ULD Qty"
+  },
+  "OTHER_REQUIREMENTS": {
+    "TITLE": "Other Requirements",
+    "COMMODITY_LABEL": "Commodity",
+    "COMMODITY_PLACEHOLDER": "Enter commodity",
+    "PRECONDITION_LABEL": "Preconditioning (By Supplier)",
+    "PRECONDITION_SELECT_OPTION": "Select group first*",
+    "STRAPS_LABEL": "Straps"
+  },
+    "PRODUCT_SECTION": {
+      "HEADER": "Products",
+      "GROUP_LABEL": "Group",
+      "SELECT_SUPPLIER_FIRST": "Select supplier first*",
+      "PRODUCT_CODE_LABEL": "Product Code",
+      "PRODUCT_LABEL": "Product",
+      "SELECT_PRODUCT": "Select Product",
+      "QUANTITY_LABEL": "Quantity"
+    },
+    "FLIGHT_SECTION": {
+  "FLIGHT_DETAILS_HEADER": "Flight details",
+  "FLIGHT_ID_LABEL": "Flight Id",
+  "FLIGHT_ID_PLACEHOLDER": "Flight ID",
+  "FLIGHT_DATE_LABEL": "Flight Date (LT)",
+  "FLIGHT_DATE_PLACEHOLDER": "DD Mon YYYY",
+  "ORIGIN_LABEL": "Origin",
+  "ORIGIN_PLACEHOLDER": "Origin",
+  "DEST_LABEL": "Destination",
+  "DEST_PLACEHOLDER": "Destination",
+  "PRODUCT_TYPE_LABEL": "Product Type",
+  "SELECT_PRODUCT_OPTION": "Select Product",
+  "ULD_QTY_LABEL": "ULD Qty",
+  "ULD_QTY_PLACEHOLDER": "Quantity"
+},
+  "ORDER_SECTION": {
+    "HEADER": "Order details",
+    "AWB_ORG": "AWB Org",
+    "AWB_DEST": "AWB Dest",
+    "PICKUP_PORT": "Customer Pickup Port",
+    "RETURN_PORT": "Customer Return Port",
+    "LEASE_START": "Planned Lease Start",
+    "LEASE_END": "Planned Lease End",
+    "RENTAL_DAYS": "Booked Rental Days",
+    "LOCATION_LABEL": "Select Location",
+    "SELECT_LOCATION": "Choose Location"
+  },
+  "TABS": {
+    "OTHER_REQUIREMENT": "Other Requirement",
+    "PRODUCT_DETAIL": "Product Detail",
+    "FLIGHT_DETAIL": "Flight Detail",
+    "CHANGE_REQUEST": "Change Request"
   }
 }
+
+

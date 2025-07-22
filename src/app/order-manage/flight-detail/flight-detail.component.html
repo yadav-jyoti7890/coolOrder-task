@@ -1,79 +1,110 @@
 <div class="container1">
-    <form [formGroup]="form">
+  <form [formGroup]="form">
 
-        <!-- flight detail -->
-        <div class="form-container card">
-            <div class="header">
-                <h2>Flight details</h2>
-                <!-- <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
-                    [disabled]="flightDisable">
-                    +
-                </button> -->
-            </div>
+    <!-- flight detail -->
+    <div class="form-container card">
+      <div class="header">
+        <h2>{{ 'FLIGHT_SECTION.FLIGHT_DETAILS_HEADER' | translate }}</h2>
+        <!-- 
+        <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
+          [disabled]="flightDisable">
+          +
+        </button> 
+        -->
+      </div>
 
-            <div class="flight-rows-container" formArrayName="flight">
+      <div class="flight-rows-container" formArrayName="flight">
+        <div
+          class="flight-row"
+          *ngFor="let flightDetail of form.controls.flight.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="form-group">
+            <label for="flight-id-1">{{ 'FLIGHT_SECTION.FLIGHT_ID_LABEL' | translate }} *</label>
+            <input
+              type="text"
+              id="flight-id-1"
+              [placeholder]="'FORM.FLIGHT_SECTION.FLIGHT_ID_PLACEHOLDER' | translate"
+              formControlName="flightId"
+              [appValidateBorder]="flightDetail.controls.flightId"
+            />
+          </div>
 
-                <div class="flight-row" *ngFor="
-                let flightDetail of form.controls.flight.controls;
-                let i = index
-              " [formGroupName]="i">
+          <div class="form-group date-picker">
+            <label for="flight-date-1">{{ 'FLIGHT_SECTION.FLIGHT_DATE_LABEL' | translate }} *</label>
+            <input
+              type="date"
+              id="flight-date-1"
+              [placeholder]="'FORM.FLIGHT_SECTION.FLIGHT_DATE_PLACEHOLDER' | translate"
+              formControlName="flightDate"
+              [appValidateBorder]="flightDetail.controls.flightDate"
+            />
+            <i class="fas fa-calendar-alt"></i>
+          </div>
 
-                    <div class="form-group">
-                        <label for="flight-id-1">Flight Id *</label>
-                        <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
-                            [appValidateBorder]="flightDetail.controls.flightId" />
-                    </div>
-                    <div class="form-group date-picker">
-                        <label for="flight-date-1">Flight Date (LT) *</label>
-                        <input type="date" id="flight-date-1" placeholder="DD Mon YYYY" formControlName="flightDate"
-                            [appValidateBorder]="flightDetail.controls.flightDate" />
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="form-group">
-                        <label for="origin-1">Origin *</label>
-                        <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg"
-                            #flightOrgInputs />
-                    </div>
-                    <div class="form-group">
-                        <label for="destination-1">Destination *</label>
-                        <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
-                            #flightDesInputs />
-                    </div>
+          <div class="form-group">
+            <label for="origin-1">{{ 'FLIGHT_SECTION.ORIGIN_LABEL' | translate }} *</label>
+            <input
+              type="text"
+              id="origin-1"
+              [placeholder]="'FORM.FLIGHT_SECTION.ORIGIN_PLACEHOLDER' | translate"
+              formControlName="flightOrg"
+              #flightOrgInputs
+            />
+          </div>
 
-                    <div class="form-group">
-                        <label for="product-type-1">Product Type *</label>
-                        <select formControlName="flightProductType" class="input"
-                            [appValidateBorder]="flightDetail.controls.flightProductType">
-                            <option value disabled>Select Product</option>
-                            <option *ngFor="let product of products" [value]="product.id">
-                                {{ product.name }}
-                            </option>
-                        </select>
-                    </div>
+          <div class="form-group">
+            <label for="destination-1">{{ 'FLIGHT_SECTION.DEST_LABEL' | translate }} *</label>
+            <input
+              type="text"
+              id="destination-1"
+              [placeholder]="'FORM.FLIGHT_SECTION.DEST_PLACEHOLDER' | translate"
+              formControlName="flightDes"
+              #flightDesInputs
+            />
+          </div>
 
-                    <div class="form-group">
-                        <label for="uld-qty-1">ULD Qty *</label>
-                        <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
-                            [appValidateBorder]="flightDetail.controls.flightOldQty" />
-                    </div>
+          <div class="form-group">
+            <label for="product-type-1">{{ 'FLIGHT_SECTION.PRODUCT_TYPE_LABEL' | translate }} *</label>
+            <select
+              formControlName="flightProductType"
+              class="input"
+              [appValidateBorder]="flightDetail.controls.flightProductType"
+            >
+              <option value disabled>{{ 'FLIGHT_SECTION.SELECT_PRODUCT_OPTION' | translate }}</option>
+              <option *ngFor="let product of products" [value]="product.id">
+                {{ product.name }}
+              </option>
+            </select>
+          </div>
 
-                    <!-- <div class="row-actions">
-                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)"
-                            aria-label="Remove Row">
-                            <i class="ri-subtract-line"></i>
-                        </button>
-                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)"
-                            [disabled]="flightDisable">
-                            <i class="ri-file-copy-line"></i>
-                        </button>
-                        <button class="action-btn reorder-btn" id="move">
-                            <i class="ri-menu-line" cdkDragHandle></i>
-                        </button>
-                    </div> -->
+          <div class="form-group">
+            <label for="uld-qty-1">{{ 'FLIGHT_SECTION.ULD_QTY_LABEL' | translate }} *</label>
+            <input
+              type="text"
+              id="uld-qty-1"
+              [placeholder]="'FORM.FLIGHT_SECTION.ULD_QTY_PLACEHOLDER' | translate"
+              formControlName="flightOldQty"
+              [appValidateBorder]="flightDetail.controls.flightOldQty"
+            />
+          </div>
 
-                </div>
-            </div>
+          <!-- 
+          <div class="row-actions">
+            <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)" aria-label="Remove Row">
+              <i class="ri-subtract-line"></i>
+            </button>
+            <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)" [disabled]="flightDisable">
+              <i class="ri-file-copy-line"></i>
+            </button>
+            <button class="action-btn reorder-btn" id="move">
+              <i class="ri-menu-line" cdkDragHandle></i>
+            </button>
+          </div> 
+          -->
+
         </div>
-    </form>
-
+      </div>
+    </div>
+  </form>
 </div>

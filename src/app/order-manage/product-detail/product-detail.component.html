@@ -1,75 +1,78 @@
 <div class="container1">
-    <form [formGroup]="form">
-    
+  <form [formGroup]="form">
 
-        <div class="cards">
-            <div class="card">
-                <div style="display: flex; justify-content: space-between">
-                    <h3>Products</h3>
-                    <!-- <button type="button" style="padding: 0vw 1vw; font-size: 1vw" (click)="updateProductItems('add')">
-                        +
-                    </button> -->
+    <div class="cards">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between">
+          <h3>{{ 'PRODUCT_SECTION.HEADER' | translate }}</h3>
+          <!--
+          <button type="button" style="padding: 0vw 1vw; font-size: 1vw" (click)="updateProductItems('add')">
+            +
+          </button>
+          -->
+        </div>
+
+        <div class="form-group">
+          <div class="form-control">
+            <label>{{ 'PRODUCT_SECTION.GROUP_LABEL' | translate }}</label>
+            <select
+              formControlName="groupId"
+              (change)="getProductByGroupId($event)"
+              [appValidateBorder]="form.controls.groupId"
+            >
+              <option disabled selected>{{ 'PRODUCT_SECTION.SELECT_SUPPLIER_FIRST' | translate }}</option>
+              <option *ngFor="let g of group" [value]="g.id">
+                {{ g.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label>{{ 'PRODUCT_SECTION.PRODUCT_CODE_LABEL' | translate }}</label>
+            <input
+              type="text"
+              formControlName="productCode"
+              [appValidateBorder]="form.controls.productCode"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div formArrayName="productItems">
+            <div
+              *ngFor="let item of form.controls.productItems.controls; let i = index"
+              [formGroupName]="i"
+              class="product-item-row"
+            >
+              <div style="display: flex">
+                <div class="form-control">
+                  <label>{{ 'PRODUCT_SECTION.PRODUCT_LABEL' | translate }}*</label>
+                  <select
+                    formControlName="product"
+                    class="input"
+                    [appValidateBorder]="item.controls.product!"
+                  >
+                    <option value disabled>{{ 'PRODUCT_SECTION.SELECT_PRODUCT' | translate }}</option>
+                    <option *ngFor="let product of products" [value]="product.id">
+                      {{ product.name }}
+                    </option>
+                  </select>
                 </div>
 
-                <div class="form-group">
-                    <div class="form-control">
-                        <label>Group</label>
-                        <select formControlName="groupId" (change)="getProductByGroupId($event)"
-                            [appValidateBorder]="form.controls.groupId">
-                            <option disabled selected>select supplier
-                                first*</option>
-                            <option *ngFor="let g of group" [value]="g.id">
-                                {{ g.name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-control">
-                        <label>Product Code</label>
-                        <input type="text" formControlName="productCode"
-                            [appValidateBorder]="form.controls.productCode" />
-                    </div>
+                <div class="form-control">
+                  <label>{{ 'PRODUCT_SECTION.QUANTITY_LABEL' | translate }}*</label>
+                  <input
+                    type="text"
+                    formControlName="quantity2"
+                    [appValidateBorder]="item.controls.quantity2!"
+                  />
                 </div>
-
-                <div>
-                    <div formArrayName="productItems">
-                        <div *ngFor="
-                let item of form.controls.productItems.controls;
-                let i = index
-              " [formGroupName]="i" class="product-item-row">
-                            <!-- <p>{{i}}</p> -->
-                            <!-- 
-                            <div class="remove">
-                                <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                </button>
-                            </div> -->
-
-                            <div class style="display: flex">
-                                <div class="form-control">
-                                    <label>Product*</label>
-                                    <select formControlName="product" class="input"
-                                        [appValidateBorder]="item.controls.product!">
-                                        <option value disabled>Select
-                                            Product</option>
-                                        <option *ngFor="let product of products" [value]="product.id">
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-control">
-                                    <label>Quantity*</label>
-                                    <input type="text" formControlName="quantity2"
-                                        [appValidateBorder]="item.controls.quantity2!" />
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>  
-    </form>
+          </div>
+        </div>
 
-
+      </div>
+    </div>
+  </form>
 </div>

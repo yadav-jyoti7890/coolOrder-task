@@ -13,10 +13,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class AdminSidebarComponent {
    constructor(private translate: TranslateService) {
-    this.translate.use('hi');
+   
   }
 
   language(lang: string) {
+    console.log(lang)
     this.translate.use(lang)
+    localStorage.setItem('lang', lang);
   }
 }

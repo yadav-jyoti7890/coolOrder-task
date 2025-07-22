@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { CoolorderService } from '../../services/coolorder.service';
 import { flight, form, ProductItem } from '../../interfaces/form-interface';
 import { forkJoin } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-other-information',
@@ -15,7 +16,8 @@ import { forkJoin } from 'rxjs';
     ReactiveFormsModule,
     ValidateBorderDirective,
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
+    TranslateModule
   ],
   templateUrl: './other-information.component.html',
   styleUrl: './other-information.component.css'
