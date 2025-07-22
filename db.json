@@ -525,5 +525,18 @@
       "orderId": 10
     }
   ],
-  "CR": []
+  "CR": [
+    {
+      "CR": {
+        "rentalDays": 25,
+        "commodity": "bhopal",
+        "productCode": "8390"
+      },
+      "status": "draft",
+      "orderId": "9",
+      "comment": "test1",
+      "create_at": "2025-07-21",
+      "id": 1
+    }
+  ]
 }

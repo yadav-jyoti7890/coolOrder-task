@@ -1,43 +1,41 @@
+<div class="main-content">
+  <div class="header">
+    <h1>{{ 'ADMIN_DASHBOARD.TITLE' | translate }}</h1>
+    <p>{{ 'ADMIN_DASHBOARD.SUBTITLE' | translate }}</p>
+  </div>
 
+  <!-- Three Cards Side by Side -->
+  <div class="cards">
 
-    <div class="main-content">
-        <div class="header">
-            <h1>Admin Dashboard</h1>
-            <p>Manage your orders and requests</p>
-        </div>
-
-        <!-- Three Cards Side by Side -->
-        <div class="cards">
-            <!-- Card 1: Create Order -->
-            <div class="card"  [routerLink]="['/coolorder']">
-                <div class="card-icon order">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <h3>Create Order</h3>
-                <p>Add new customer orders to the system with all necessary details.</p>
-                <button class="card-btn">Create New</button>
-            </div>
-
-            <!-- Card 2: Order List -->
-            <div class="card"  [routerLink]="['/order-list']">
-                <div class="card-icon list">
-                    <i class="fas fa-list-ul"></i>
-                </div>
-                <h3>Order List</h3>
-                <p>View and manage all current orders in your system.</p>
-                <button class="card-btn">View Orders</button>
-            </div>
-
-            <!-- Card 3: Change Requests -->
-            <div class="card">
-                <div class="card-icon request">
-                    <i class="fas fa-exchange-alt"></i>
-                </div>
-                <h3>Change Requests</h3>
-                <p>Review and process customer change requests.</p>
-                <button class="card-btn">Manage Requests</button>
-            </div>
-        </div>
-
+    <!-- Card 1: Create Order -->
+    <div class="card" [routerLink]="['/coolorder']">
+      <div class="card-icon order">
+        <i class="fas fa-plus"></i>
+      </div>
+      <h3>{{ 'ADMIN_DASHBOARD.CREATE_ORDER_TITLE' | translate }}</h3>
+      <p>{{ 'ADMIN_DASHBOARD.CREATE_ORDER_DESC' | translate }}</p>
+      <button class="card-btn">{{ 'ADMIN_DASHBOARD.CREATE_ORDER_BTN' | translate }}</button>
     </div>
 
+    <!-- Card 2: Order List -->
+    <div class="card" [routerLink]="['/order-list']">
+      <div class="card-icon list">
+        <i class="fas fa-list-ul"></i>
+      </div>
+      <h3>{{ 'ADMIN_DASHBOARD.ORDER_LIST_TITLE' | translate }}</h3>
+      <p>{{ 'ADMIN_DASHBOARD.ORDER_LIST_DESC' | translate }}</p>
+      <button class="card-btn">{{ 'ADMIN_DASHBOARD.ORDER_LIST_BTN' | translate }}</button>
+    </div>
+
+    <!-- Card 3: Change Requests -->
+    <div class="card">
+      <div class="card-icon request">
+        <i class="fas fa-exchange-alt"></i>
+      </div>
+      <h3>{{ 'ADMIN_DASHBOARD.CHANGE_REQ_TITLE' | translate }}</h3>
+      <p>{{ 'ADMIN_DASHBOARD.CHANGE_REQ_DESC' | translate }}</p>
+      <button class="card-btn">{{ 'ADMIN_DASHBOARD.CHANGE_REQ_BTN' | translate }}</button>
+    </div>
+
+  </div>
+</div>

@@ -8,6 +8,7 @@ import { ValidateBorderDirective } from '../../validator';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 import { CoolorderService } from '../../services/coolorder.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -21,6 +22,7 @@ import { CoolorderService } from '../../services/coolorder.service';
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
+    TranslateModule
   ],
   templateUrl: './change-request-list.component.html',
   styleUrl: './change-request-list.component.css'

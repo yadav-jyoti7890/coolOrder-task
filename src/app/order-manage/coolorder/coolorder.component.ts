@@ -25,6 +25,7 @@ import { ValidateBorderDirective } from '../../validator';
 import { ValidateTotalQuantityDirective } from '../../validate-total-quantity.directive';
 import { debounceTime, forkJoin } from 'rxjs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-coolorder',
@@ -37,6 +38,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
     ValidateTotalQuantityDirective,
     RouterLink,
     RouterOutlet,
+    TranslateModule
   ],
   templateUrl: './coolorder.component.html',
   styleUrl: './coolorder.component.css',

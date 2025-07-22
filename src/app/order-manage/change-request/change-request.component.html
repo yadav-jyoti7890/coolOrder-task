@@ -1,304 +1,219 @@
 <div class="container1">
-    <form [formGroup]="form">
-        <div class="top-bar">
-            <div class="select-bar">
-                <select formControlName="orderType">
-                    <option selected disabled>Commercial</option>
-                    <option *ngFor="let ot of orderType" [value]="ot.name">
-                        {{ ot.name }}
-                    </option>
-                </select>
+  <form [formGroup]="form">
+    <div class="top-bar">
+      <div class="select-bar">
+        <select formControlName="orderType">
+          <option selected disabled>{{ 'ORDER_FORM.ORDER_TYPE' | translate }}</option>
+          <option *ngFor="let ot of orderType" [value]="ot.name">
+            {{ ot.name }}
+          </option>
+        </select>
 
-                <select formControlName="supplierId" (change)="getSupplierId($event)">
-                    <option selected disabled>choose supplier</option>
-                    <option *ngFor="let s of supplier" [value]="s.id">
-                        {{ s.name }}
-                    </option>
-                </select>
-            </div>
+        <select formControlName="supplierId" (change)="getSupplierId($event)">
+          <option selected disabled>{{ 'ORDER_FORM.SUPPLIER' | translate }}</option>
+          <option *ngFor="let s of supplier" [value]="s.id">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
 
-            <!-- <div class="action-buttons">
-        <button type="button" class="orange" (click)="submit()" [disabled]="!form.valid || !RouteValid">
-          submit
+      <div class="action-buttons">
+        <button type="button" (click)="reset()" title="{{ 'ORDER_FORM.RESET' | translate }}">⟳</button>
+        <button type="button" (click)="openPopUp('draft')" [disabled]="disableCR">
+          <i class="ri-draft-line" title="{{ 'ORDER_FORM.SAVE_DRAFT' | translate }}"></i>
         </button>
-      </div> -->
+        <button type="button" class="orange" [disabled]="disableCR" (click)="openPopUp('New')">
+          <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
 
-            <div class="action-buttons">
-                <button type="button" (click)="reset()" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                    title="Reset">
-                    ⟳
-                </button>
+      <div class="modal" *ngIf="showCommentPopup">
+        <div class="modal-content">
+          <h3>{{ 'ORDER_FORM.ADD_COMMENT' | translate }}</h3>
+          <textarea rows="6" cols="40" [placeholder]="'ORDER_FORM.ENTER_COMMENT' | translate" [formControl]="comment" [appValidateBorder]="comment"></textarea>
+          <div class="modal-actions">
+            <button (click)="checkAndSubmit()">{{ 'ORDER_FORM.OK' | translate }}</button>
+            <button (click)="cancel()">{{ 'ORDER_FORM.CANCEL' | translate }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                <button type="button" (click)="openPopUp('draft')" [disabled]="disableCR">
-                    <!-- (click)="openPopUp()" -->
-                    <i class="ri-draft-line" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Save Draft"></i>
-                </button>
+    <div class="cards">
+      <div class="card">
+        <h3>{{ 'ORDER_FORM.ORDER_DETAILS' | translate }}</h3>
+        <div class="form-group">
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.AWB_ORG' | translate }}</label>
+            <input type="text" formControlName="org" [appValidateBorder]="form.controls.org" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.AWB_DEST' | translate }}</label>
+            <input type="text" formControlName="des" [appValidateBorder]="form.controls.des" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.PICKUP_PORT' | translate }}</label>
+            <input type="text" formControlName="pickUpPort" [appValidateBorder]="form.controls.pickUpPort" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.RETURN_PORT' | translate }}</label>
+            <input type="text" formControlName="returnPort" [appValidateBorder]="form.controls.returnPort" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.LEASE_START' | translate }}</label>
+            <input type="date" formControlName="leaseStart" [appValidateBorder]="form.controls.leaseStart" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.LEASE_END' | translate }}</label>
+            <input type="date" formControlName="leaseEnd" />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.RENTAL_DAYS' | translate }}</label>
+            <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays" readonly />
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.SELECT_LOCATION' | translate }}</label>
+            <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
+              <option selected disabled>{{ 'ORDER_FORM.CHOOSE_LOCATION' | translate }}</option>
+              <option *ngFor="let location of location" [value]="location.id">
+                {{ location.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-                <button type="button" class="orange" [disabled]="disableCR" (click)="openPopUp('New')">
-                    <!-- (click)="openPopUp()" -->
-                    <i class="ri-arrow-right-line"></i>
-                </button>
+      <div class="card">
+        <h3>{{ 'ORDER_FORM.OTHER_REQ' | translate }}</h3>
+        <div class="form-group">
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.COMMODITY' | translate }}</label>
+            <input type="text" placeholder="{{ 'ORDER_FORM.COMMODITY' | translate }}" formControlName="commodity" [appValidateBorder]="form.controls.commodity" />
+
+            <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
+              <div class="checkbox-option">
+                <input type="checkbox" id="preconditioning" [formControl]="form.controls['precondition']" />
+                <label for="preconditioning">{{ 'ORDER_FORM.PRECONDITIONING' | translate }}</label>
+              </div>
+
+              <div *ngIf="form.controls['precondition'].value && selectedValue == 1">
+                <select [formControl]="form.controls.preconditionDropDownValue" [appValidateBorder]="form.controls.preconditionDropDownValue">
+                  <option disabled>{{ 'ORDER_FORM.GROUP' | translate }}</option>
+                  <option *ngFor="let t of temp" [value]="t.id">{{ t.name }}</option>
+                </select>
+              </div>
+
+              <div *ngIf="form.controls['precondition'].value && selectedValue == 3" style="width: 100%">
+                <input type="text" formControlName="preconditionInputValue" [appValidateBorder]="form.controls.preconditionInputValue" />
+              </div>
+
+              <div class="checkbox-option">
+                <input type="checkbox" id="straps" [formControl]="form.controls['straps']" [appValidateBorder]="form.controls.straps" />
+                <label for="straps">{{ 'ORDER_FORM.STRAPS' | translate }}</label>
+              </div>
+
+              <div *ngIf="form.controls['straps'].value" style="width: 100%">
+                <input type="text" formControlName="strapsValue" [appValidateBorder]="form.controls.strapsValue" />
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="modal" *ngIf="showCommentPopup">
-                <div class="modal-content">
-                    <h3>Add Comment Before Submit</h3>
-                    <textarea rows="6" cols="40" placeholder="Enter comment..." [formControl]="comment"
-                        [appValidateBorder]="comment"></textarea>
-                    <!-- <input type="text" placeholder="Create By...!" formControlName="createBy"> -->
-
-                    <div class="modal-actions">
-                        <button (click)="checkAndSubmit()">OK</button>
-                        <button (click)="cancel()">Cancel</button>
-                    </div>
-                </div>
-            </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between">
+          <h3>{{ 'ORDER_FORM.PRODUCTS' | translate }}</h3>
+          <button type="button" (click)="updateProductItems('add')">+</button>
         </div>
 
-        <div class="cards">
-            <div class="card">
-                <h3>Order details</h3>
-                <div class="form-group">
-                    <div class="form-control">
-                        <label>AWB Org</label>
-                        <input type="text" formControlName="org" [appValidateBorder]="form.controls.org" />
-                    </div>
-                    <div class="form-control">
-                        <label>AWB Dest</label>
-                        <input type="text" formControlName="des" [appValidateBorder]="form.controls.des" />
-                    </div>
-                    <div class="form-control">
-                        <label>Customer Pickup Port</label>
-                        <input type="text" formControlName="pickUpPort"
-                            [appValidateBorder]="form.controls.pickUpPort" />
-                    </div>
-
-                    <div class="form-control">
-                        <label>Customer Return Port</label>
-                        <input type="text" formControlName="returnPort"
-                            [appValidateBorder]="form.controls.returnPort" />
-                    </div>
-                    <div class="form-control">
-                        <label>Planned Lease Start</label>
-                        <input type="date" name id formControlName="leaseStart"
-                            [appValidateBorder]="form.controls.leaseStart" />
-                    </div>
-                    <div class="form-control">
-                        <label>Planned Lease End</label>
-                        <input type="date" formControlName="leaseEnd" />
-                    </div>
-                    <div class="form-control">
-                        <label>Booked Rental Days</label>
-                        <input type="text" formControlName="rentalDays" [appValidateBorder]="form.controls.rentalDays"
-                            readonly />
-                    </div>
-                    <div class="form-control">
-                        <label>Select Location</label>
-                        <select formControlName="locationId" [appValidateBorder]="form.controls.locationId">
-                            <option selected disabled>choose Location</option>
-                            <option *ngFor="let location of location" [value]="location.id">
-                                {{ location.name }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Other Requirements</h3>
-                <div class="form-group">
-                    <div class="form-control">
-                        <label>Commodity</label>
-                        <input type="text" placeholder="Enter commodity" formControlName="commodity"
-                            [appValidateBorder]="form.controls.commodity" />
-
-                        <div class="checkbox-container" *ngIf="selectedValue == 1 || selectedValue == 3">
-                            <!-- Preconditioning -->
-                            <div class="checkbox-option">
-                                <input type="checkbox" id="preconditioning"
-                                    [formControl]="form.controls['precondition']" />
-                                <label for="preconditioning">Preconditioning (By Supplier)</label>
-                            </div>
-
-                            <!-- Show dropdown only if preconditioning is true -->
-
-                            <div *ngIf="
-                  form.controls['precondition'].value && selectedValue == 1
-                ">
-                                <!-- //leaseEnd -->
-
-                                <select [formControl]="form.controls.preconditionDropDownValue"
-                                    [appValidateBorder]="form.controls.preconditionDropDownValue">
-                                    <option disabled>select group first*</option>
-                                    <option *ngFor="let t of temp" [value]="t.id">
-                                        {{ t.name }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <!-- Show index input if preconditioning and selectedValue == 3 -->
-
-                            <div *ngIf="
-                  form.controls['precondition'].value && selectedValue == 3
-                " style="width: 100%">
-                                <!-- <app-validation [type]="'text'" [control]="form.controls.preconditionInputValue"></app-validation> -->
-                                <input type="text" formControlName="preconditionInputValue"
-                                    [appValidateBorder]="form.controls.preconditionInputValue" />
-                            </div>
-
-                            <!-- Straps -->
-                            <div class="checkbox-option">
-                                <input type="checkbox" id="straps" [formControl]="form.controls['straps']"
-                                    [appValidateBorder]="form.controls.straps" />
-                                <label for="straps">Straps</label>
-                            </div>
-
-                            <!-- Show input if straps is checked -->
-                            <div *ngIf="form.controls['straps'].value" style="width: 100%">
-                                <input type="text" formControlName="strapsValue"
-                                    [appValidateBorder]="form.controls.strapsValue" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="display: flex; justify-content: space-between">
-                    <h3>Products</h3>
-                    <button type="button" style="padding: 0vw 1vw; font-size: 1vw" (click)="updateProductItems('add')">
-                        +
-                    </button>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-control">
-                        <label>Group</label>
-                        <select formControlName="groupId" (change)="getProductByGroupId($event)"
-                            [appValidateBorder]="form.controls.groupId">
-                            <option disabled selected>select supplier first*</option>
-                            <option *ngFor="let g of group" [value]="g.id">
-                                {{ g.name }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="form-control">
-                        <label>Product Code</label>
-                        <input type="text" formControlName="productCode"
-                            [appValidateBorder]="form.controls.productCode" />
-                    </div>
-                </div>
-
-                <div>
-                    <div formArrayName="productItems">
-                        <div *ngFor="
-                let item of form.controls.productItems.controls;
-                let i = index
-              " [formGroupName]="i" class="product-item-row">
-                            <!-- <p>{{i}}</p> -->
-
-                            <div class="remove">
-                                <button *ngIf="i != 0" (click)="updateProductItems('remove', i)">
-                                    <i class="ri-subtract-line"></i>
-                                </button>
-                            </div>
-
-                            <div class style="display: flex">
-                                <div class="form-control">
-                                    <label>Product*</label>
-                                    <select formControlName="product" class="input"
-                                        [appValidateBorder]="item.controls.product!">
-                                        <option value disabled>Select Product</option>
-                                        <option *ngFor="let product of products" [value]="product.id"
-                                            [disabled]="disabled(product.id, i)">
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="form-control">
-                                    <label>Quantity*</label>
-                                    <input type="text" formControlName="quantity2"
-                                        [appValidateBorder]="item.controls.quantity2!" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.GROUP' | translate }}</label>
+            <select formControlName="groupId" (change)="getProductByGroupId($event)" [appValidateBorder]="form.controls.groupId">
+              <option disabled selected>{{ 'ORDER_FORM.SUPPLIER' | translate }}</option>
+              <option *ngFor="let g of group" [value]="g.id">{{ g.name }}</option>
+            </select>
+          </div>
+          <div class="form-control">
+            <label>{{ 'ORDER_FORM.PRODUCT_CODE' | translate }}</label>
+            <input type="text" formControlName="productCode" [appValidateBorder]="form.controls.productCode" />
+          </div>
         </div>
 
-        <!-- flight detail -->
-        <div class="form-container">
-            <div class="header">
-                <h2>Flight details</h2>
-                <button class="add-row-btn" aria-label="Add Flight Details Row" (click)="addFlight('addFlight')"
-                    [disabled]="flightDisable">+</button>
+        <div formArrayName="productItems">
+          <div *ngFor="let item of form.controls.productItems.controls; let i = index" [formGroupName]="i" class="product-item-row">
+            <div class="remove">
+              <button *ngIf="i != 0" (click)="updateProductItems('remove', i)"><i class="ri-subtract-line"></i></button>
             </div>
 
-            <div class="flight-rows-container" formArrayName="flight" cdkDropList
-                [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
-                <div class="flight-row" *ngFor="
-            let flightDetail of form.controls.flight.controls;
-            let i = index
-          " style="padding: 10px" [formGroupName]="i" cdkDrag cdkDragLockAxis="y"
-                    [cdkDragBoundary]="'.flight-rows-container'">
-                    <div class="form-group">
-                        <label for="flight-id-1">Flight Id *</label>
-                        <input type="text" id="flight-id-1" placeholder="Flight ID" formControlName="flightId"
-                            [appValidateBorder]="flightDetail.controls.flightId" />
-                    </div>
-                    <div class="form-group date-picker">
-                        <label for="flight-date-1">Flight Date (LT) *</label>
-                        <input type="date" id="flight-date-1" placeholder="DD Mon YYYY" formControlName="flightDate"
-                            [appValidateBorder]="flightDetail.controls.flightDate" />
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="form-group">
-                        <label for="origin-1">Origin *</label>
-                        <input type="text" id="origin-1" placeholder="Origin" formControlName="flightOrg"
-                            #flightOrgInputs [appValidateBorder]="flightDetail.controls.flightOrg" />
-                    </div>
-                    <div class="form-group">
-                        <label for="destination-1">Destination *</label>
-                        <input type="text" id="destination-1" placeholder="Destination" formControlName="flightDes"
-                            #flightDesInputs [appValidateBorder]="flightDetail.controls.flightDes" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="product-type-1">Product Type *</label>
-                        <select formControlName="flightProductType" class="input"
-                            [appValidateBorder]="flightDetail.controls.flightProductType">
-                            <option value="" disabled>Select Product</option>
-                            <option *ngFor="let product of products" [value]="product.id">
-                                {{ product.name }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="uld-qty-1">ULD Qty *</label>
-                        <input type="text" id="uld-qty-1" placeholder="Quantity" formControlName="flightOldQty"
-                            [appValidateTotalQuantity]="{
-                productArray: form.controls.productItems,
-                flightArray: form.controls.flight,
-                currentGroup: flightDetail
-              }" [appValidateBorder]="flightDetail.controls.flightOldQty!" />
-                    </div>
-
-                    <div class="row-actions">
-                        <button class="action-btn remove-btn" (click)="addFlight('removeFlight', i)">
-                            <i class="ri-subtract-line"></i>
-                        </button>
-                        <button class="action-btn duplicate-btn" aria-label="Duplicate Row" (click)="copyValue(i)">
-                            <i class="ri-file-copy-line"></i>
-                        </button>
-                        <button class="action-btn reorder-btn" id="move">
-                            <i class="ri-menu-line" cdkDragHandle></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="form-control">
+              <label>{{ 'ORDER_FORM.PRODUCT' | translate }}</label>
+              <select formControlName="product" class="input" [appValidateBorder]="item.controls.product!">
+                <option value disabled>{{ 'ORDER_FORM.PRODUCT' | translate }}</option>
+                <option *ngFor="let product of products" [value]="product.id" [disabled]="disabled(product.id, i)">
+                  {{ product.name }}
+                </option>
+              </select>
             </div>
+
+            <div class="form-control">
+              <label>{{ 'ORDER_FORM.QUANTITY' | translate }}</label>
+              <input type="text" formControlName="quantity2" [appValidateBorder]="item.controls.quantity2!" />
+            </div>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+
+    <!-- Flight Detail Section -->
+    <div class="form-container">
+      <div class="header">
+        <h2>{{ 'ORDER_FORM.FLIGHT_DETAILS' | translate }}</h2>
+        <button class="add-row-btn" (click)="addFlight('addFlight')" [disabled]="flightDisable">+</button>
+      </div>
+
+      <div class="flight-rows-container" formArrayName="flight" cdkDropList [cdkDropListData]="form.controls.flight.controls" (cdkDropListDropped)="drop($event)">
+        <div class="flight-row" *ngFor="let flightDetail of form.controls.flight.controls; let i = index" [formGroupName]="i" cdkDrag>
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.FLIGHT_ID' | translate }}</label>
+            <input type="text" formControlName="flightId" [appValidateBorder]="flightDetail.controls.flightId" />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.FLIGHT_DATE' | translate }}</label>
+            <input type="date" formControlName="flightDate" [appValidateBorder]="flightDetail.controls.flightDate" />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.ORIGIN' | translate }}</label>
+            <input type="text" formControlName="flightOrg" [appValidateBorder]="flightDetail.controls.flightOrg" />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.DESTINATION' | translate }}</label>
+            <input type="text" formControlName="flightDes" [appValidateBorder]="flightDetail.controls.flightDes" />
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.PRODUCT_TYPE' | translate }}</label>
+            <select formControlName="flightProductType" class="input" [appValidateBorder]="flightDetail.controls.flightProductType">
+              <option value="" disabled>{{ 'ORDER_FORM.PRODUCT' | translate }}</option>
+              <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>{{ 'ORDER_FORM.ULD_QTY' | translate }}</label>
+            <input type="text" formControlName="flightOldQty" [appValidateBorder]="flightDetail.controls.flightOldQty" />
+          </div>
+
+          <div class="row-actions">
+            <button (click)="addFlight('removeFlight', i)"><i class="ri-subtract-line"></i></button>
+            <button (click)="copyValue(i)"><i class="ri-file-copy-line"></i></button>
+            <button><i class="ri-menu-line" cdkDragHandle></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

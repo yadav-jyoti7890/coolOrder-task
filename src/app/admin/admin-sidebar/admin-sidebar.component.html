@@ -1,12 +1,32 @@
 <div class="sidebar">
-    <div class="logo">Admin Panel</div>
+    <div class="logo">{{'ADMIN_PANEL.TITLE' | translate}}</div>
     <div class="nav-menu">
-        <div class="nav-item active" [routerLink]="['./admin-dashboard']">Dashboard</div>
-        <div class="nav-item" [routerLink]="['./coolorder']">Create Order</div>
-        <div class="nav-item" [routerLink]="['./order-list']">Order List</div>
-        <div class="nav-item" [routerLink]="['./excel']">Import Excel</div>
+        <div class="nav-item active" [routerLink]="['./admin-dashboard']">{{ 'ADMIN_PANEL.DASHBOARD' | translate}}</div>
+        <div class="nav-item" [routerLink]="['./coolorder']">{{ 'ADMIN_PANEL.CREATE_ORDER' | translate}}</div>
+        <div class="nav-item" [routerLink]="['./order-list']">{{ 'ADMIN_PANEL.ORDER_LIST' | translate}}</div>
+        <div class="nav-item" [routerLink]="['./excel']">{{ 'ADMIN_PANEL.IMPORT_EXCEL' | translate}}</div>
         <div class="nav-item">
-            <i class="fas fa-cog"></i> Settings
+            <i class="fas fa-cog"></i> 
+        </div>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+               {{ 'ADMIN_PANEL.CHOOSE_LANGUAGE' | translate}}
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <button class="dropdown-item excel-btn" (click)="language('en')">
+                        <i class="ri-file-excel-2-fill"></i> {{ 'ADMIN_PANEL.ENGLISH' | translate}}
+                     
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item csv-btn" (click)="language('hi')">
+                        <i class="ri-file-download-fill"></i> {{ 'ADMIN_PANEL.HINDI' | translate}}
+                    </button>
+                   
+                </li>
+              
+            </ul>
         </div>
     </div>
 </div>
@@ -15,3 +35,8 @@
 <div class="main-content">
     <router-outlet></router-outlet>
 </div>
+
+
+
+
+<!-- End of admin sidebar component -->

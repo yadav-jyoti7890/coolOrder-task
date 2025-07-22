@@ -1,58 +1,65 @@
 <div class="container1">
-    <h1>Order Change Requests</h1>
+  <h1>{{ 'ORDER_REQUEST.TITLE' | translate }}</h1>
 
-    @if(changeRequest?.length > 0){
-        <table class="requests-table card">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Comment</th>
-                    <th>Created By</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody style="width: 100%;">
-                <!-- Row 1 -->
-                <tr *ngFor="let changeRequest of changeRequest">
-                    <td class="order-id">#{{changeRequest.id}} </td>
-                    <td class="comment">{{changeRequest.comment}} </td>
-                    <td class="created-by">John Doe<br><small>2025-07-04 14:30</small></td>
-                    <td><span class="status status-pending">{{changeRequest.status}}</span></td>
-                    <td><button class="compare-btn" (click)="compareData(changeRequest.id, changeRequest.orderId)">Compare</button></td>
-                </tr>
-            </tbody>
-        </table>
-    }
+  <ng-container *ngIf="changeRequest?.length > 0; else noData">
+    <table class="requests-table card">
+      <thead>
+        <tr>
+          <th>{{ 'ORDER_REQUEST.ORDER_ID' | translate }}</th>
+          <th>{{ 'ORDER_REQUEST.COMMENT' | translate }}</th>
+          <th>{{ 'ORDER_REQUEST.CREATED_BY' | translate }}</th>
+          <th>{{ 'ORDER_REQUEST.STATUS' | translate }}</th>
+          <th>{{ 'ORDER_REQUEST.ACTION' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cr of changeRequest">
+          <td class="order-id">#{{ cr.id }}</td>
+          <td class="comment">{{ cr.comment }}</td>
+          <td class="created-by">
+            John Doe<br />
+            <small>2025-07-04 14:30</small>
+          </td>
+          <td>
+            <span class="status status-pending">{{ cr.status }}</span>
+          </td>
+          <td>
+            <button class="compare-btn" (click)="compareData(cr.id, cr.orderId)">
+              {{ 'ORDER_REQUEST.COMPARE' | translate }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
 
-    @else{
-        <h5 style="text-align: center;">
-            Data Is Not Available
-        </h5>
-    }
+  <ng-template #noData>
+    <h5 style="text-align: center;">
+      {{ 'ORDER_REQUEST.NO_DATA' | translate }}
+    </h5>
+  </ng-template>
 
-    <div class="modal-overlay" *ngIf="openDioLog">
-        <div class="comparison-dialog">
-            <div class="dialog-header">
-                <span>Text Comparison</span>
-                <button class="close-btn" id="closeBtn" (click)="closeBtn()">&times;</button>
+  <div class="modal-overlay" *ngIf="openDioLog">
+    <div class="comparison-dialog">
+      <div class="dialog-header">
+        <span>{{ 'ORDER_REQUEST.TEXT_COMPARISON' | translate }}</span>
+        <button class="close-btn" (click)="closeBtn()">&times;</button>
+      </div>
+      <div class="dialog-body">
+        <div class="comparison-row" *ngFor="let CR of changeData">
+          <div class="field-name">{{ CR.field }}</div>
+          <div class="value-container">
+            <div class="value-box old-value">
+              <span class="value-label">{{ 'ORDER_REQUEST.OLD_VALUE' | translate }}</span>
+              {{ CR.preValue }}
             </div>
-            <div class="dialog-body">
-                <div class="comparison-row" *ngFor="let CR of changeData">
-                    <div class="field-name">{{CR.field}}</div>
-                    <div class="value-container">
-                        <div class="value-box old-value">
-                            <span class="value-label">Old Value</span>
-                            {{CR.preValue}}
-                        </div>
-                        <div class="value-box new-value">
-                            <span class="value-label">New Value</span>
-                            {{CR.newValue}}
-                        </div>
-                    </div>
-                </div>
-
+            <div class="value-box new-value">
+              <span class="value-label">{{ 'ORDER_REQUEST.NEW_VALUE' | translate }}</span>
+              {{ CR.newValue }}
             </div>
-           
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+</div>

@@ -1,72 +1,79 @@
 <div class="header" style="display: flex; justify-content: space-between; padding: 2vw 2vw 0px 2vw; ">
-    <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
-        Update Excel Data
-    </h2>
-    <div>
-        <button class="view" [routerLink]="['/coolorder']">Create Order</button>
-        <div class="dropdown">
-            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                📥 Download Options
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <button class="dropdown-item excel-btn" (click)="exportToExcel()">
-                        <i class="ri-file-excel-2-fill"></i> Download Excel
-                        <!-- (click)="exportToExcel()" -->
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item csv-btn" (click)="CSV()" >
-                        <i class="ri-file-download-fill"></i> Download CSV
-                    </button>
-                    <!-- (click)="csv()" -->
-                </li>
-                <li class="file-input-container">
-                    <div class="file-input-wrapper">
-                        <span class="file-input-label">Excel File</span>
-                        <input type="file" class="file-input" accept=".xlsx,.xls,.csv" placeholder="Choose Excel file"
-                            (change)="onFileChange($event)">
-                    </div>
-                </li>
-            </ul>
-        </div>
+  <h2 style="font-size: 1.2vw; font-family: helvetica; font-weight: 900">
+    {{ 'EXCEL_FORM.UPDATE_EXCEL_DATA' | translate }}
+  </h2>
+  <div>
+    <button class="view" [routerLink]="['/coolorder']">
+      {{ 'EXCEL_FORM.CREATE_ORDER' | translate }}
+    </button>
+    <div class="dropdown">
+      <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        📥 {{ 'EXCEL_FORM.DOWNLOAD_OPTIONS' | translate }}
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <button class="dropdown-item excel-btn" (click)="exportToExcel()">
+            <i class="ri-file-excel-2-fill"></i>
+            {{ 'EXCEL_FORM.DOWNLOAD_EXCEL' | translate }}
+          </button>
+        </li>
+        <li>
+          <button class="dropdown-item csv-btn" (click)="CSV()">
+            <i class="ri-file-download-fill"></i>
+            {{ 'EXCEL_FORM.DOWNLOAD_CSV' | translate }}
+          </button>
+        </li>
+        <li class="file-input-container">
+          <div class="file-input-wrapper">
+            <span class="file-input-label">{{ 'EXCEL_FORM.EXCEL_FILE' | translate }}</span>
+            <input
+              type="file"
+              class="file-input"
+              accept=".xlsx,.xls,.csv"
+              placeholder="{{ 'EXCEL_FORM.CHOOSE_EXCEL_FILE' | translate }}"
+              (change)="onFileChange($event)">
+          </div>
+        </li>
+      </ul>
     </div>
-
+  </div>
 </div>
+
 <div class="order-detail-container">
-    <!-- Member List Table -->
-    <form [formGroup]="orderForm">
-        <table class="member-table">
-            <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>Origin</th>
-                    <th>Destination</th>
-                    <th>pickupport</th>
-                    <th>Lease Start</th>
-                    <th>Lease End</th>
-                    <th>Rental-Days</th>
-                    <th>Product Code</th>
-                    <th>Create_At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+  <!-- Member List Table -->
+  <form [formGroup]="orderForm">
+    <table class="member-table">
+      <thead>
+        <tr>
+          <th>{{ 'EXCEL_FORM.SN' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.ORIGIN' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.DESTINATION' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.PICKUP_PORT' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.LEASE_START' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.LEASE_END' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.RENTAL_DAYS' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.PRODUCT_CODE' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.CREATED_AT' | translate }}</th>
+          <th>{{ 'EXCEL_FORM.ACTION' | translate }}</th>
+        </tr>
+      </thead>
 
-            <tbody formArrayName="orders">
-                <tr *ngFor="let order of orderForm.controls.orders.controls; let i = index" [formGroupName]="i">
-                    <td>{{ i + 1 }}</td>
-                    <td><input type="text" formControlName="org" /></td>
-                    <td><input type="text" formControlName="des" /></td>
-                    <td><input type="text" formControlName="pickUpPort" /></td>
-                    <td><input type="date" formControlName="leaseStart" /></td>
-                    <td><input type="date" formControlName="leaseEnd" /></td>
-                    <td><input type="number" formControlName="rentalDays" /></td>
-                    <td><input type="text" formControlName="productCode" /></td>
-                    <td><input type="date" formControlName="create_at" /></td>
-                    <td> <i class="ri-delete-bin-6-fill" (click)="deleteRow(i)"></i></td>              
-                </tr>
-            </tbody>
-
-        </table>
-    </form>
+      <tbody formArrayName="orders">
+        <tr *ngFor="let order of orderForm.controls.orders.controls; let i = index" [formGroupName]="i">
+          <td>{{ i + 1 }}</td>
+          <td><input type="text" formControlName="org" /></td>
+          <td><input type="text" formControlName="des" /></td>
+          <td><input type="text" formControlName="pickUpPort" /></td>
+          <td><input type="date" formControlName="leaseStart" /></td>
+          <td><input type="date" formControlName="leaseEnd" /></td>
+          <td><input type="number" formControlName="rentalDays" /></td>
+          <td><input type="text" formControlName="productCode" /></td>
+          <td><input type="date" formControlName="create_at" /></td>
+          <td>
+            <i class="ri-delete-bin-6-fill" title="{{ 'EXCEL_FORM.DELETE_ROW' | translate }}" (click)="deleteRow(i)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
 </div>

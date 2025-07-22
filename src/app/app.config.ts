@@ -1,20 +1,40 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
+
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateStore
+} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { routes } from './app.routes';
-import { loaderInterceptor } from './order-manage/interceptor/loader-interceptor';
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/translation/', '.json');
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
-    provideClientHydration(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: createTranslateLoader,
+          deps: [HttpClient]
+        },
+        defaultLanguage: 'hi'
+      })
+    ),
 
-    // ✅ Functional loader interceptor
-    provideHttpClient(
-      withInterceptors([loaderInterceptor])
-    )
+    TranslateStore, 
+
+    provideRouter(routes),
+    provideHttpClient(withInterceptorsFromDi())
   ]
 };

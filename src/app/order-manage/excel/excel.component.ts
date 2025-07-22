@@ -10,11 +10,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ExcelService } from '../../services/excel.service';
 import { CsvService } from '../../services/csv.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-excel',
-  imports: [CommonModule, RouterLink, ConfirmBoxComponent, MatDialogModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ConfirmBoxComponent, MatDialogModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './excel.component.html',
   styleUrl: './excel.component.css'
 })
