@@ -15,7 +15,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #4361ee;
+  background-color: #2C3E50;
   color: white;
   border-bottom: 1px solid #ddd;
    border-radius: 6px;
@@ -79,18 +79,18 @@ button[type="button"]:hover {
 }
 
 button.orange {
-  background-color: #ff8c00;
+  background-color: #3498DB;
   color: white;
 }
 
 button.orange:hover {
-  background-color: #e07b00;
+  background-color: #3498DB;
 }
 
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background-color: red;
+  background-color: #3498DB;
   color: white;
 }
 
@@ -175,7 +175,7 @@ input[type="date"] {
 .card > div:first-child button {
   padding: 5px 12px;
   font-size: 16px;
-  background-color: #ff8c00;
+  background-color: #3498DB;
   color: white;
   border-radius: 50%;
   width: 30px;
@@ -186,7 +186,7 @@ input[type="date"] {
 }
 
 .card > div:first-child button:hover {
-  background-color: #e07b00;
+  background-color: #3498DB;
 }
 
 /* app-validation placeholder */
@@ -232,7 +232,7 @@ app-validation select {
 .remove button {
   height: 30px;
   width: 30px;
-  background-color: rgb(169, 11, 11);
+  background-color: #3498DB;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -246,11 +246,12 @@ app-validation select {
 
 /* Form container */
 .form-container {
- max-width: 1800px;
+  max-width: 1800px;
   background-color: #fff !important;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 2vw 2vw;
+  padding: 1vw;
+  /* padding: 2vw 2vw; */
   /* max-width: 1400px; */
 }
 
@@ -270,7 +271,7 @@ app-validation select {
 }
 
 .add-row-btn {
-  background-color: #e65c00;
+  background-color: #3498DB;
   color: white;
   border: none;
   border-radius: 50%;
@@ -286,7 +287,7 @@ app-validation select {
 }
 
 .add-row-btn:hover {
-  background-color: #e65c00;
+  background-color: #3498DB;
   transform: translateY(-2px);
 }
 
@@ -327,10 +328,10 @@ app-validation select {
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #f4a106;
+  border-color: #3498DB;
   outline: none;
   border: none;
-  border-bottom: 1px solid #f4a106;
+  border-bottom: 1px solid #3498DB;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
@@ -347,12 +348,12 @@ app-validation select {
 }
 
 .form-group.required-highlight label {
-  color: #dc3545;
+  color: #3498DB;
 }
 
 .form-group.required-highlight select,
 .form-group.required-highlight input {
-  border-color: #dc3545;
+  border-color: #3498DB;
 }
 
 .row-actions {
@@ -388,7 +389,7 @@ app-validation select {
 }
 
 .duplicate-btn i {
-  color: #007bff;
+  color: #3498DB;
 }
 
 .reorder-btn i {

@@ -6,7 +6,6 @@ export class LoaderService {
 
   private isLocked = false;
 
- 
   lock() {
     this.isLocked = true;
   }
@@ -15,10 +14,8 @@ export class LoaderService {
     this.isLocked = false;
   }
 
- 
   get shouldBlockNewRequests(): boolean {
     return this.isLocked;
   }
-
 
 }

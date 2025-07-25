@@ -1,8 +1,9 @@
 .container1{
-
+  width: 100%;
   min-height: auto;
-  background-color: red;
-  padding: 2vw;
+  /* background-color: red; */
+  /* padding: 2vw; */
+  padding: 1vw;
   margin: 0 auto;
   background-color: #fff;
   border-radius: 8px;
@@ -244,7 +245,7 @@ app-validation select {
 
 /* Form container */
 .form-container {
-  max-width: 1800px;
+  width: 100%;
   background-color: #fff !important;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -431,7 +432,7 @@ textarea:disabled {
   height: 60px;
   background-color: #36454F;
   color: #fff;
-  padding: 0.4vw !important;
+  /* padding: 0.4vw !important; */
 }
 
 .display-sections h3 {
@@ -448,10 +449,11 @@ textarea:disabled {
   gap: 20px;
   /* padding: 10px 1vw; */
   border-bottom: 1px solid #ddd;
-  background-color: #36454F;
-  padding: 1vw;
+  background-color: #2C3E50;
+  padding: 1vw 1vw;
   border-radius: 5px;
-  /* margin: 1vw; */
+  /* width: 100%; */
+  margin: 0vw 1vw;
 }
 
 .tab {
@@ -476,7 +478,7 @@ textarea:disabled {
 }
 
 .tab.active {
-  background-color: #3f51b5;
+  background-color: #3498DB;
   ;
   color: white;
   font-weight: bold;

@@ -117,12 +117,11 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
       groupId: new FormControl(null, Validators.required),
       locationId: new FormControl(null, Validators.required),
       productCode: new FormControl(
-        null, // initial value
+        null,
         {
           validators: [
             Validators.required,
             validateUtility.regexValiDator(/^\d+$/, 'Only numbers (0–9) are allowed.'),
-            Validators.min(10)
           ],
           asyncValidators: [
             this.asyncValidation.asyncValidator('productCode', 'Product code already exists')
@@ -130,7 +129,6 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
           // updateOn: 'blur'
         }
       ),
-
       // create form array for multiple product
       productItems: new FormArray<FormGroup<ProductItem>>([
         this.createProductItemGroup(),
@@ -426,8 +424,6 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
     };
 
     this.calculateLeaseEndDate();
-    console.log(formData);
-
     if (this.form.valid && this.RouteValid) {
       const today = new Date();
       const formattedDate = today.toISOString().substring(0, 10);
@@ -465,7 +461,7 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
           },
         });
     } else {
-      // this.form.markAllAsTouched();
+      this.form.markAllAsTouched();
       alert('Please fix the errors before updating.');
 
       Object.keys(this.form.controls).forEach((key: string) => {

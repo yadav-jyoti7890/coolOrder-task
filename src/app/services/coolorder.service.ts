@@ -2,7 +2,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { form, order, ProductItem } from '../interfaces/form-interface';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { developMentMode } from '../../assets/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class CoolorderService {
 
 
   // This is base url for all request 
-  private apiUrl = 'http://localhost:3000/'; 
+  private apiUrl = developMentMode.apiUrl;
   constructor(private http: HttpClient) { }
 
   // first get all supplier

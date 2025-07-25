@@ -1,9 +1,13 @@
-.container {
-  width: 100%;
+.container1 {
+  width: 90%;
+  padding: 1vw;
+  margin: 1vw;
   margin: 0 auto;
   border-radius: 8px;
   overflow: hidden;
-  background-color: purple;
+  background-color: #fff;
+  border: 1px solid rgb(199, 197, 197);
+  margin-top: 1vw;
 }
 
 /* Top Bar */

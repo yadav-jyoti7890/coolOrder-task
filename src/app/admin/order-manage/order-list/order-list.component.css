@@ -8,7 +8,7 @@
 .member-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
+  /* background-color: rgb(194, 22, 22); */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 40px;
   border-radius: 8px;
@@ -16,7 +16,7 @@
 }
 
 .member-table th {
-  background-color: #4361ee;
+  background-color: #2c3e50;
   color: white;
   padding: 15px;
   text-align: left;
@@ -43,7 +43,7 @@
 }
 
 .login-btn {
-  background-color: #4361ee;
+  background-color: #3498DB;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -73,7 +73,7 @@
 .section-title {
   font-size: 18px;
   font-weight: 600;
-  color: #4361ee;
+  color: #3498DB;
   margin: 25px 0 15px 0;
 }
 
@@ -97,7 +97,7 @@ i {
 }
 
 .view {
-  background-color: #4361ee;
+  background-color: #3498DB;
   color: white;
   padding: 8px 16px;
   border: none;
@@ -184,8 +184,8 @@ i {
 .dialog-header {
   width: 60vw;
   position: fixed;
-  padding: 16px 24px;
-  background-color: #4361EE;
+  /* padding: 16px 24px; */
+  background-color: #3498DB;
   color: white;
   font-size: 18px;
   font-weight: 600;
@@ -384,7 +384,7 @@ i {
 }
 
 .approve-btn {
-  background-color: #4361EE;
+  background-color: #3498DB;
   color: white;
   border: none;
   padding: 10px 20px;

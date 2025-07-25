@@ -6,20 +6,31 @@ import { AbstractControl } from '@angular/forms';
   selector: '[appCustomValidator]'
 })
 
-export class CustomValidatorDirective implements AfterViewInit {
+export class CustomValidatorDirective implements AfterViewInit, DoCheck {
 
-  @Input('appCustomValidator') control: AbstractControl | null = null;
+  @Input('appCustomValidator') control!: AbstractControl | null
   private errorElement: HTMLElement | null = null;
   public message!: string;
 
   constructor(private el: ElementRef, private render: Renderer2) { }
 
+
   ngAfterViewInit(): void {
     this.createContainer();
   }
 
+  ngDoCheck(): void {
+    // console.log(this.render,"render")
+    // console.log(this.errorElement)
+    // console.log(this.control && this.errorElement)
+    if(this.control && this.errorElement){
+     this.disPlayErrorMessage();
+    }
+  //  this.disPlayErrorMessage();
+  }
+
   private createContainer() {
-    console.log(this.control, "control")
+    // //console.log(this.control, "control")
     if (this.control) {
       this.errorElement = this.render.createElement('div');
       this.render.addClass(this.errorElement, 'error');
@@ -29,23 +40,25 @@ export class CustomValidatorDirective implements AfterViewInit {
       this.render.setStyle(this.errorElement, 'display', 'none');
       this.render.appendChild(this.el.nativeElement.parentNode, this.errorElement);
     }
-    this.control?.statusChanges.subscribe(() => {
-      this.disPlayErrorMessage();
-    }
-    );
+    // this.control?.statusChanges.subscribe(() => {
+    //   this.disPlayErrorMessage();
+    // }
+    // );
   }
 
   private disPlayErrorMessage() {
+    // console.log("call", this.render)
+    // console.log(this.control && this.errorElement)
     if (this.control) {
       const control = this.control;
-      console.log(control, "control")
+      // //console.log(control, "control")
       const isValid = control.invalid && (control.dirty || control.touched);
-      // console.log(isValid, "isValid")
+      console.log(isValid, "isValid")
       if (isValid) {
         const errMsg = this.getMessage(this.control)
         if (errMsg) {
-          this.render.setStyle(this.errorElement, 'display', 'block');
-          this.render.setProperty(this.errorElement, 'textContent', errMsg);
+          this.render?.setStyle(this.errorElement, 'display', 'block');
+          this.render?.setProperty(this.errorElement, 'textContent', errMsg);
         }
       }
       else {
@@ -58,7 +71,7 @@ export class CustomValidatorDirective implements AfterViewInit {
     let msg = '';
     if (this.control) {
       const control = this.control;
-      // console.log(control, "control")
+      console.log(control, "control")
       for (const errorKey in control.errors) {
         console.log(errorKey, "errorKey")
         if (control.errors.hasOwnProperty(errorKey)) {
@@ -79,10 +92,10 @@ export class CustomValidatorDirective implements AfterViewInit {
               msg = `Minimum value is ${control.errors['min'].min}`;
               break;
             case 'pattern':
-              msg = control.errors['pattern'].message || 'Invalid format';
+              msg = control.errors['pattern'].message || 'Please match the correct format';
               break;
             case 'asyncError':
-              msg = control.errors['asyncError']|| 'Invalid format';
+              msg = control.errors['asyncError'] || 'Invalid format';
               break;
             default:
               msg = 'Invalid input';

@@ -1,4 +1,4 @@
-.order-detail-container {
+.Excel-detail-container {
   width: 100%;
   margin: 0 auto;
   padding: 1vw;
@@ -16,7 +16,7 @@
 }
 
 .member-table th {
-  background-color: #4361ee;
+  background-color: #2C3E50;
   color: white;
   padding: 15px;
   text-align: left;
@@ -43,7 +43,7 @@
 }
 
 .login-btn {
-  background-color: #4361ee;
+  background-color: #3498DB;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -97,7 +97,7 @@ i {
 }
 
 .view {
-  background-color: #4361ee;
+  background-color: #3498DB;
   color: white;
   padding: 8px 16px;
   border: none;
