@@ -1,8 +1,8 @@
-<div class="container1">
+<div class="container">
   <h1>{{ 'ORDER_REQUEST.TITLE' | translate }}</h1>
 
   <ng-container *ngIf="changeRequest?.length > 0; else noData">
-    <table class="requests-table card">
+    <table class="requests-table table table-bordered">
       <thead>
         <tr>
           <th>{{ 'ORDER_REQUEST.ORDER_ID' | translate }}</th>

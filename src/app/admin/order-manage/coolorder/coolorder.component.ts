@@ -53,7 +53,7 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
     private fb: FormBuilder,
     private el: ElementRef,
     private router: Router
-  ) {super(); }
+  ) { super(); }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -73,6 +73,7 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
   ngOnInit(): void {
     this.getSupplier();
     this.getOrderType();
+
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
       org: new FormControl(null, [Validators.required]),
@@ -109,8 +110,6 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
       flight: new FormArray<FormGroup<flight>>([this.createFlight()]),
     });
 
-    console.log(this.form.controls, 'controls');
-
     this.form.controls.leaseStart?.valueChanges.subscribe(() =>
       this.calculateLeaseEndDate()
     );
@@ -125,12 +124,6 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
         this.matchValues();
       });
 
-    // this.form.controls.flight.valueChanges
-    //   .pipe(debounceTime(500))
-    //   .subscribe(() => {
-    //     this.matchValues();
-    //   });
-
     this.form.controls.org.valueChanges
       .pipe(debounceTime(800))
       .subscribe(() => {
@@ -143,17 +136,6 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
         this.matchValues();
       });
 
-    // this.form.controls.flight.valueChanges
-    //   .pipe(debounceTime(500)) // Wait 500ms after typing stops
-    //   .subscribe(() => {
-    //     this.validateAndStyle();
-    //   });
-
-    // this.form.controls.productItems.valueChanges
-    //   .pipe(debounceTime(500))
-    //   .subscribe(() => {
-    //     this.validateAndStyle();
-    //   });
   }
 
   private createProductItemGroup(): FormGroup {
@@ -389,8 +371,6 @@ export class CoolorderComponent extends SubscriptionCleaner implements OnInit {
   }
 
   public submit(status: 'New' | 'draft') {
-
-    // console.log(status)
     console.log(this.form.value, "click submit")
 
     const formData = {

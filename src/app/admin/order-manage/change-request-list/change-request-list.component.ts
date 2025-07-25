@@ -112,8 +112,6 @@ export class ChangeRequestListComponent extends SubscriptionCleaner {
     });
   }
 
-
-
   private createProductItemGroup(): FormGroup<ProductItem> {
     return new FormGroup<ProductItem>({
       product: new FormControl(null, Validators.required),
@@ -339,7 +337,7 @@ export class ChangeRequestListComponent extends SubscriptionCleaner {
 
     const previousFlight = preViousValue.flight || [];
     const currentFlight = CR.flight || [];
-   
+
 
     previousFlight.forEach((oldItem: any, index: number) => {
       const newItem = currentFlight[index] || {};

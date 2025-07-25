@@ -23,6 +23,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidateTotalQuantityDirective } from '../../../validate-total-quantity.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cleaner';
+import { CustomValidatorDirective } from '../../../centralize-validation/custom-validator.directive';
+import { validateUtility } from '../../../centralize-validation/validate-utility';
+import { asyncValidation } from '../../../centralize-validation/async-validation';
+
 
 @Component({
   selector: 'app-copy-order',
@@ -34,7 +38,8 @@ import { SubscriptionCleaner } from '../../../shared/unsubscribe/subscription-cl
     DragDropModule,
     ValidateTotalQuantityDirective,
     RouterLink,
-    TranslateModule
+    TranslateModule,
+    CustomValidatorDirective,
   ],
   templateUrl: './copy-order.component.html',
   styleUrl: './copy-order.component.css',
@@ -45,9 +50,11 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
 
   constructor(
     private coolOrderService: CoolorderService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) { super(); }
+    private router: Router,
+    private asyncValidation: asyncValidation
+  ) {
+    super();
+  }
 
   public supplier: any[] = [];
   public group: any[] = [];
@@ -78,21 +85,25 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
 
     this.getGroupBySupplierId(this.selectedValue);
     this.getLocation();
-    // this.fetchData()
-    this.updateId = this.route.snapshot.paramMap.get('id');
-    console.log(this.updateId);
-    console.log('Raw ID:', this.route.snapshot.paramMap.get('id'));
 
     this.form = new FormGroup<form>({
       orderType: new FormControl(null, [Validators.required]),
-      org: new FormControl(null, [Validators.required]),
-      des: new FormControl(null, Validators.required),
-      pickUpPort: new FormControl(null, Validators.required),
-      rentalDays: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(3),
-        Validators.pattern('^[0-9]*$'),
-      ]),
+      org: new FormControl(null, {
+        validators: [Validators.required,
+        validateUtility.regexValiDator(
+          /^[a-zA-Z]+$/,
+          'Only letters are allowed (A–Z, a–z). No numbers or special characters.'
+        )],
+      }),
+      des: new FormControl(null, {
+        validators: [Validators.required,
+        validateUtility.regexValiDator(
+          /^[a-zA-Z]+$/,
+          'Only letters are allowed (A–Z, a–z). No numbers or special characters.'
+        )],
+      }),
+      pickUpPort: new FormControl(null, Validators.required,),
+      rentalDays: new FormControl(null, [Validators.required]),
       returnPort: new FormControl(null, Validators.required),
       leaseStart: new FormControl(null, Validators.required),
       leaseEnd: new FormControl(null, Validators.required),
@@ -105,11 +116,20 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
       strapsValue: new FormControl(null),
       groupId: new FormControl(null, Validators.required),
       locationId: new FormControl(null, Validators.required),
-      productCode: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(5),
-        Validators.pattern('^[0-9]*$'),
-      ]),
+      productCode: new FormControl(
+        null, // initial value
+        {
+          validators: [
+            Validators.required,
+            validateUtility.regexValiDator(/^\d+$/, 'Only numbers (0–9) are allowed.'),
+            Validators.min(10)
+          ],
+          asyncValidators: [
+            this.asyncValidation.asyncValidator('productCode', 'Product code already exists')
+          ],
+          // updateOn: 'blur'
+        }
+      ),
 
       // create form array for multiple product
       productItems: new FormArray<FormGroup<ProductItem>>([
@@ -301,15 +321,15 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
     const end = this.form.controls.leaseEnd.value;
 
     if (start && end) {
-      const startDate = new Date(start)
-      const endDate = new Date(end)
+      const startDate = new Date(start);
+      const endDate = new Date(end);
       // const endDate = new Date(end)
 
-      const startDay = startDate.getDate()
-      const endDay = endDate.getDate()
-      console.log(startDay, "start", endDay, "enddate")
+      const startDay = startDate.getDate();
+      const endDay = endDate.getDate();
+      console.log(startDay, 'start', endDay, 'enddate');
 
-      this.form.controls.rentalDays.setValue((endDay - startDay) + 1)
+      this.form.controls.rentalDays.setValue(endDay - startDay + 1);
     }
   }
 
@@ -418,24 +438,32 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
         create_at: formattedDate,
       };
 
-      this.coolOrderService.saveOrder(formData).pipe(takeUntil(this.subscriptions$)).subscribe({
-        next: (response) => {
-          const res: any = response
-          const orderLog = {
-            ...res,
-            orderId: res.id
-          }
-          this.coolOrderService.saveOrder_log(orderLog).pipe(takeUntil(this.subscriptions$)).subscribe({
-            next: (response) => {
-              this.router.navigate(['/order-list']);
-              this.form.reset();
-              this.form.controls.productItems.clear();
-              this.form.controls.productItems.push(this.createProductItemGroup());
-              this.form.controls.flight.clear();
-            }
-          })
-        }
-      })
+      this.coolOrderService
+        .saveOrder(formData)
+        .pipe(takeUntil(this.subscriptions$))
+        .subscribe({
+          next: (response) => {
+            const res: any = response;
+            const orderLog = {
+              ...res,
+              orderId: res.id,
+            };
+            this.coolOrderService
+              .saveOrder_log(orderLog)
+              .pipe(takeUntil(this.subscriptions$))
+              .subscribe({
+                next: (response) => {
+                  this.router.navigate(['/order-list']);
+                  this.form.reset();
+                  this.form.controls.productItems.clear();
+                  this.form.controls.productItems.push(
+                    this.createProductItemGroup()
+                  );
+                  this.form.controls.flight.clear();
+                },
+              });
+          },
+        });
     } else {
       // this.form.markAllAsTouched();
       alert('Please fix the errors before updating.');
@@ -503,21 +531,27 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
   }
 
   private getLocation() {
-    this.coolOrderService.getLocation(this.selectedValue).pipe(takeUntil(this.subscriptions$)).subscribe({
-      next: (response) => {
-        this.location = response;
-      },
-    });
+    this.coolOrderService
+      .getLocation(this.selectedValue)
+      .pipe(takeUntil(this.subscriptions$))
+      .subscribe({
+        next: (response) => {
+          this.location = response;
+        },
+      });
   }
 
   public getGroupBySupplierId(supplierId: any) {
-    this.coolOrderService.getGroup(supplierId).pipe(takeUntil(this.subscriptions$)).subscribe({
-      next: (response) => {
-        this.group = response;
-        //.log(response.id, this.group)
-        this.groupId = response.id;
-      },
-    });
+    this.coolOrderService
+      .getGroup(supplierId)
+      .pipe(takeUntil(this.subscriptions$))
+      .subscribe({
+        next: (response) => {
+          this.group = response;
+          //.log(response.id, this.group)
+          this.groupId = response.id;
+        },
+      });
   }
 
   public getProductByGroupId(event: any) {
@@ -527,21 +561,27 @@ export class CopyOrderComponent extends SubscriptionCleaner implements OnInit {
   }
 
   public getProductsById() {
-    this.coolOrderService.getProduct(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
-      next: (response) => {
-        this.products = response;
-        this.options = this.products.map((item) => item.name);
-      },
-    });
+    this.coolOrderService
+      .getProduct(this.groupId)
+      .pipe(takeUntil(this.subscriptions$))
+      .subscribe({
+        next: (response) => {
+          this.products = response;
+          this.options = this.products.map((item) => item.name);
+        },
+      });
   }
 
   private getTemp() {
-    this.coolOrderService.getTemp(this.groupId).pipe(takeUntil(this.subscriptions$)).subscribe({
-      next: (response) => {
-        this.temp = response;
-        console.log(this.temp);
-      },
-    });
+    this.coolOrderService
+      .getTemp(this.groupId)
+      .pipe(takeUntil(this.subscriptions$))
+      .subscribe({
+        next: (response) => {
+          this.temp = response;
+          console.log(this.temp);
+        },
+      });
   }
 
   public disabled(productName: string, currentIndex: number): boolean {

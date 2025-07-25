@@ -1,13 +1,9 @@
-.container1 {
-  width: 100% !important;
+.container {
+  width: 100%;
   margin: 0 auto;
-  /* background-color: #bf2d2d; */
   border-radius: 8px;
   overflow: hidden;
-}
-
-.container1 h1 {
-  padding-top: 1vw;
+  background-color: purple;
 }
 
 /* Top Bar */
@@ -499,7 +495,7 @@ h1 {
 }
 
 .requests-table {
-  width: 100vw;
+  width: 100%;
   border-collapse: collapse;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
